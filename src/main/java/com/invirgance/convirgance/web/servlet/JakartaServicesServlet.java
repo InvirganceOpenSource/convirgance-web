@@ -75,7 +75,16 @@ public class JakartaServicesServlet extends HttpServlet
     {
         if(!allowGet) throw new ConvirganceException("GET requests are not allowed");
         
-        handleRequest(request, response);
+        try
+        {
+            handleRequest(request, response);
+        }
+        catch(Throwable t)
+        {
+            t.printStackTrace();
+            
+            throw new ServletException(t);
+        }
     }
 
     @Override

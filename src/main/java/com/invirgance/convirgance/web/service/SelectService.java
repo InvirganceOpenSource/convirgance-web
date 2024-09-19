@@ -91,20 +91,30 @@ public class SelectService implements Service
         if(this.parameters == null) this.parameters = new ArrayList<>();
         if(this.transformers == null) this.transformers = new ArrayList<>();
         
+        // Obtain the parameters for binding
         for(Parameter parameter : this.parameters)
         {
             params.put(parameter.getName(), parameter.getValue(request));
         }
         
+        // Record the bindings to a thread local so it can be referenced deep in the heirarchy
+        BindingParameter.bindings.set(params);
+        
+        // Generate the source of information by binding the parameters
         iterable = binding.getBinding(params);
         
+        // Perform tranformatipons on the data
         for(Transformer transformer : transformers)
         {
             iterable = transformer.transform(iterable);
         }
         
+        // Write out the response
         response.setContentType(output.getContentType());
         
         output.write(new OutputStreamTarget(response.getOutputStream()), iterable);
+        
+        // Clean up after ourselves
+        BindingParameter.bindings.remove();
     }
 }
