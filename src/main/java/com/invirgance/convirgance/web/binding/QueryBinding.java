@@ -90,8 +90,7 @@ public class QueryBinding implements Binding
         DataSource source = getDataSource();
         DBMS dbms = new DBMS(source);
         Query query = new Query(sql, parameters);
-System.err.println(parameters);
-System.err.println(query.getDatabaseSQL());
+        
         return dbms.query(query);
     }
 }
