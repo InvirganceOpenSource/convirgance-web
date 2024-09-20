@@ -25,12 +25,18 @@ import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.web.service.Service;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -45,6 +51,61 @@ public class JavaEEServicesServlet extends HttpServlet
     private boolean allowPost = true;
     private boolean allowPut = false;
     private boolean allowDelete = false;
+
+    private void initMethods(String list) throws ServletException
+    {
+        String[] methods = list.split(",");
+        
+        if(methods.length < 1) return;
+        
+        // Reset the allows
+        allowGet = false;
+        allowPost = false;
+        allowPut = false;
+        allowDelete = false;
+        
+        for(String method : methods)
+        {
+            switch(method.trim().toLowerCase())
+            {
+                case "get":
+                    allowGet = true;
+                    break;
+                    
+                case "post":
+                    allowPost = true;
+                    break;
+                    
+                case "put":
+                    allowPut = true;
+                    break;
+                    
+                case "delete":
+                    allowDelete = true;
+                    break;
+                    
+                default:
+                    throw new ServletException("Unsupported HTTP method " + method);
+            }
+        }
+    }
+    
+    @Override
+    public void init() throws ServletException
+    {
+        ServletConfig config = getServletConfig();
+        List<String> names = Collections.list(config.getInitParameterNames());
+        
+        for(String name : names)
+        {
+            switch(name.toLowerCase())
+            {
+                case "methods":
+                    initMethods(config.getInitParameter(name));
+                    break;
+            }
+        }
+    }
     
     public Service load(HttpServletRequest request)
     {
@@ -58,7 +119,6 @@ public class JavaEEServicesServlet extends HttpServlet
         
         // Transform URI path to file path
         path = request.getServletContext().getRealPath(path);
-        resource = new FileSystemResource(path);
         
         if(path == null || !new File(path).exists()) return null;
         
