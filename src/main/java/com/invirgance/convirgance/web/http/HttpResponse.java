@@ -23,6 +23,8 @@ package com.invirgance.convirgance.web.http;
 
 import com.invirgance.convirgance.ConvirganceException;
 import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Locale;
 
 /**
  *
@@ -37,25 +39,122 @@ public class HttpResponse
         this.response = response;
     }
     
-    public void setContentType(String name)
+    private Object execResponseMethod(String methodName, Object... parameters)
     {
         Class clazz = response.getClass();
+        Class[] types = new Class[parameters.length];
+        
+        for(int i=0; i<parameters.length; i++) types[i] = parameters[i].getClass();
         
         try
         {
-            clazz.getMethod("setContentType", String.class).invoke(response, name);
+            return clazz.getMethod(methodName, types).invoke(response, parameters);
         }
         catch(Exception e) { throw new ConvirganceException(e); }
     }
     
+    // TODO: addCookie
+    
+    public boolean containsHeader(String name)
+    {
+        return (boolean)execResponseMethod("containsHeader", name);
+    }
+    
+    // TODO: encodeURL
+    // TODO: encodeRedirectURL
+    
+    public void sendError(int code, String message)
+    {
+        execResponseMethod("sendError", code, message);
+    }
+    
+    public void sendRedirect(String location)
+    {
+        execResponseMethod("sendRedirect", location);
+    }
+    
+    public void addDateHeader(String name, long time)
+    {
+        execResponseMethod("addDateHeader", name, time);
+    }
+    
+    public void setDateHeader(String name, long time)
+    {
+        execResponseMethod("setDateHeader", name, time);
+    }
+    
+    public void addHeader(String name, String value)
+    {
+        execResponseMethod("addHeader", name, value);
+    }
+    
+    public void setHeader(String name, String value)
+    {
+        execResponseMethod("setHeader", name, value);
+    }
+    
+    public void addIntHeader(String name, int value)
+    {
+        execResponseMethod("addIntHeader", name, value);
+    }
+    
+    public void setIntHeader(String name, int value)
+    {
+        execResponseMethod("setIntHeader", name, value);
+    }
+    
+    public void addLongHeader(String name, long value)
+    {
+        addHeader(name, Long.toString(value));
+    }
+    
+    public void setLongHeader(String name, long value)
+    {
+        setHeader(name, Long.toString(value));
+    }
+    
+    public int getStatus()
+    {
+        return (int)execResponseMethod("getStatus");
+    }
+    
+    public void setStatus(int code)
+    {
+        execResponseMethod("setStatus", code);
+    }
+    
+    public String getHeader(String name)
+    {
+        return (String)execResponseMethod("getHeader", name);
+    }
+    
+    public Iterable<String> getHeaders(String name)
+    {
+        return (Collection<String>)execResponseMethod("getHeaders", name);
+    }
+    
+    public Iterable<String> getHeaderNames()
+    {
+        return (Collection<String>)execResponseMethod("getHeaderNames");
+    }
+    
+    public void setContentType(String name)
+    {
+        execResponseMethod("setContentType", name);
+    }
+    
     public OutputStream getOutputStream()
     {
-        Class clazz = response.getClass();
-        
-        try
-        {
-            return (OutputStream)clazz.getMethod("getOutputStream").invoke(response);
-        }
-        catch(Exception e) { throw new ConvirganceException(e); }
+        return (OutputStream)execResponseMethod("getOutputStream");
+    }
+    
+    public Locale getLocale()
+    {
+        return (Locale)execResponseMethod("getLocale");
+    }
+    
+    public void setLocale(Locale locale)
+    {
+        execResponseMethod("setLocale");
     }
 }

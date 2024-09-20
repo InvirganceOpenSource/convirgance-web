@@ -50,7 +50,7 @@ public class HttpRequest
         
         try
         {
-            return (String)clazz.getMethod(methodName, types).invoke(request, parameters);
+            return clazz.getMethod(methodName, types).invoke(request, parameters);
         }
         catch(Exception e) { throw new ConvirganceException(e); }
     }
