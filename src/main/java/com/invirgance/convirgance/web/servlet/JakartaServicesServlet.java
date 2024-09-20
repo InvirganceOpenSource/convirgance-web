@@ -30,7 +30,7 @@ import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.io.File;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -58,14 +58,21 @@ public class JakartaServicesServlet extends HttpServlet
         
         // Transform URI path to file path
         path = request.getServletContext().getRealPath(path);
-        resource = new FileSystemResource(path);
-
-        return new GenericXmlApplicationContext(resource).getBean(Service.class);
+        
+        if(path == null || !new File(path).exists()) return null;
+        
+        return new GenericXmlApplicationContext(new FileSystemResource(path)).getBean(Service.class);
     }
     
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Service service = load(request);
+        
+        if(service == null)
+        {
+            response.sendError(404, "Service not found");
+            return;
+        }
         
         service.execute(new HttpRequest(request), new HttpResponse(response));
     }

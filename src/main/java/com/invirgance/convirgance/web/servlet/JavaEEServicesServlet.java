@@ -25,6 +25,7 @@ import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.web.service.Service;
+import java.io.File;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -59,12 +60,20 @@ public class JavaEEServicesServlet extends HttpServlet
         path = request.getServletContext().getRealPath(path);
         resource = new FileSystemResource(path);
         
-        return new GenericXmlApplicationContext(resource).getBean(Service.class);
+        if(path == null || !new File(path).exists()) return null;
+        
+        return new GenericXmlApplicationContext(new FileSystemResource(path)).getBean(Service.class);
     }
     
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Service service = load(request);
+        
+        if(service == null)
+        {
+            response.sendError(404, "Service not found");
+            return;
+        }
         
         service.execute(new HttpRequest(request), new HttpResponse(response));
     }
@@ -74,7 +83,16 @@ public class JavaEEServicesServlet extends HttpServlet
     {
         if(!allowGet) throw new ConvirganceException("GET requests are not allowed");
         
+        try
+        {
         handleRequest(request, response);
+    }
+        catch(Throwable t)
+        {
+            t.printStackTrace();
+
+            throw new ServletException(t);
+        }
     }
 
     @Override
