@@ -135,7 +135,22 @@ public class JakartaServicesServlet extends HttpServlet
             return;
         }
         
-        service.execute(new HttpRequest(request), new HttpResponse(response));
+        try
+        {
+            service.execute(new HttpRequest(request), new HttpResponse(response));
+        }
+        catch(Throwable t)
+        {
+            t.printStackTrace();
+            
+            if(!response.isCommitted()) 
+            {
+                response.resetBuffer();
+                response.reset();
+            }
+            
+            throw new ServletException(t);
+        }
     }
     
     @Override
@@ -143,16 +158,7 @@ public class JakartaServicesServlet extends HttpServlet
     {
         if(!allowGet) throw new ConvirganceException("GET requests are not allowed");
         
-        try
-        {
-            handleRequest(request, response);
-        }
-        catch(Throwable t)
-        {
-            t.printStackTrace();
-            
-            throw new ServletException(t);
-        }
+        handleRequest(request, response);
     }
 
     @Override

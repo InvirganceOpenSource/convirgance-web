@@ -135,24 +135,30 @@ public class JavaEEServicesServlet extends HttpServlet
             return;
         }
         
-        service.execute(new HttpRequest(request), new HttpResponse(response));
-    }
-    
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        if(!allowGet) throw new ConvirganceException("GET requests are not allowed");
-        
         try
         {
-        handleRequest(request, response);
+            service.execute(new HttpRequest(request), new HttpResponse(response));
     }
         catch(Throwable t)
         {
             t.printStackTrace();
 
+            if(!response.isCommitted()) 
+            {
+                response.resetBuffer();
+                response.reset();
+            }
+            
             throw new ServletException(t);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        if(!allowGet) throw new ConvirganceException("GET requests are not allowed");
+        
+        handleRequest(request, response);
     }
 
     @Override
