@@ -145,7 +145,7 @@ public class HttpResponse
     
     public OutputStream getOutputStream()
     {
-        return (OutputStream)execResponseMethod("getOutputStream");
+        return new CloseInterceptOutputStream((OutputStream)execResponseMethod("getOutputStream"));
     }
     
     public Locale getLocale()
