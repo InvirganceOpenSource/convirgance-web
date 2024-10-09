@@ -52,6 +52,8 @@ public class JakartaServicesServlet extends HttpServlet
     private boolean allowPut = false;
     private boolean allowDelete = false;
     
+    private ServiceLoader loader = new ServiceLoader();
+    
     private void initMethods(String list) throws ServletException
     {
         String[] methods = list.split(",");
@@ -107,27 +109,9 @@ public class JakartaServicesServlet extends HttpServlet
         }
     }
     
-    public Service load(HttpServletRequest request)
-    {
-        String path = request.getServletPath();
-        Resource resource;
-        
-        if(path == null) path = "/";
-        
-        if(path.endsWith("/")) path += "spring.xml";
-        else path += ".xml";
-        
-        // Transform URI path to file path
-        path = request.getServletContext().getRealPath(path);
-        
-        if(path == null || !new File(path).exists()) return null;
-        
-        return new GenericXmlApplicationContext(new FileSystemResource(path)).getBean(Service.class);
-    }
-    
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Service service = load(request);
+        Service service = loader.get(request);
         
         if(service == null)
         {
