@@ -58,37 +58,11 @@ public class QueryBinding implements Binding
     {
         this.sql = sql;
     }
-    
-    private DataSource getDataSource()
-    {
-        Context context;
-        DataSource source;
-        
-        try
-        {
-            context = new InitialContext();
-            source = (DataSource)context.lookup(this.jndiName);
-            
-            if(source != null) return source;
-            
-            // Tomcat prefixes java:/comp/env/ to database registrations
-            source = (DataSource)context.lookup("java:/comp/env/" + this.jndiName);
-            
-            if(source != null) return source;
-            
-            throw new ConvirganceException("No DataSource configured at JNDI location " + jndiName);
-        }
-        catch(NamingException e)
-        {
-            throw new ConvirganceException(e);
-        }
-    }
 
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {
-        DataSource source = getDataSource();
-        DBMS dbms = new DBMS(source);
+        DBMS dbms = DBMS.lookup(jndiName);
         Query query = new Query(sql, parameters);
         
         return dbms.query(query);
