@@ -41,17 +41,18 @@ class ServiceLoader
     public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor descriptor;
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
+        String context = request.getContextPath();
         String filePath;
         
-        if(path == null) path = "/";
+        if(path.startsWith(context)) path = path.substring(context.length());
         
         if(path.endsWith("/")) path += "spring.xml";
         else path += ".xml";
         
         // Transform URI path to file path
         filePath = request.getServletContext().getRealPath(path);
-        
+
         if(filePath == null || !new File(filePath).exists()) return null;
         
         descriptor = new ServiceDescriptor(new File(filePath), path);
@@ -64,9 +65,10 @@ class ServiceLoader
     public Service get(jakarta.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor loaded;
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
+        String context = request.getContextPath();
         
-        if(path == null) path = "/";
+        if(path.startsWith(context)) path = path.substring(context.length());
         
         if(path.endsWith("/")) path += "spring.xml";
         else path += ".xml";
@@ -86,17 +88,18 @@ class ServiceLoader
     public ServiceDescriptor load(javax.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor descriptor;
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
+        String context = request.getContextPath();
         String filePath;
         
-        if(path == null) path = "/";
+        if(path.startsWith(context)) path = path.substring(context.length());
         
         if(path.endsWith("/")) path += "spring.xml";
         else path += ".xml";
         
         // Transform URI path to file path
         filePath = request.getServletContext().getRealPath(path);
-        
+
         if(filePath == null || !new File(filePath).exists()) return null;
         
         descriptor = new ServiceDescriptor(new File(filePath), path);
@@ -109,9 +112,10 @@ class ServiceLoader
     public Service get(javax.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor loaded;
-        String path = request.getServletPath();
+        String path = request.getRequestURI();
+        String context = request.getContextPath();
         
-        if(path == null) path = "/";
+        if(path.startsWith(context)) path = path.substring(context.length());
         
         if(path.endsWith("/")) path += "spring.xml";
         else path += ".xml";

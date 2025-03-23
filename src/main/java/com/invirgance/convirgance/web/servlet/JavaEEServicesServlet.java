@@ -115,6 +115,7 @@ public class JavaEEServicesServlet extends HttpServlet
         
         if(service == null)
         {
+            System.err.println("Unable to find service XML file at " + request.getPathInfo() + ".xml");
             response.sendError(404, "Service not found");
             return;
         }
