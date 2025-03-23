@@ -1,5 +1,5 @@
 # Convirgance (Web Services)
 
-Brings Convirgance technology to web services using IoC containers for rapid development and deployment.
+![Version](https://img.shields.io/badge/Version-pre&dash;release-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Repository](https://img.shields.io/badge/Platform-Java-gold) ![Repository](https://img.shields.io/badge/Repository-n/a-red)
 
-Requires the [Convirgance](https://github.com/InvirganceOpenSource/convirgance/) base library.
+Brings Convirgance technology to web services using IoC containers for rapid development and deployment.
