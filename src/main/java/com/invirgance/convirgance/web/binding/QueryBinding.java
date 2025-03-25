@@ -21,14 +21,9 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.web.binding;
 
-import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 /**
  *

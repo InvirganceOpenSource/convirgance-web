@@ -83,7 +83,7 @@ public class SelectService implements Service
         this.output = output;
     }
     
-    public void execute(HttpRequest request, HttpResponse response)
+    public Iterable<JSONObject> process(HttpRequest request)
     {
         JSONObject params = new JSONObject();
         Iterable<JSONObject> iterable;
@@ -103,11 +103,19 @@ public class SelectService implements Service
         // Generate the source of information by binding the parameters
         iterable = binding.getBinding(params);
         
-        // Perform tranformatipons on the data
+        // Perform tranformations on the data
         for(Transformer transformer : transformers)
         {
             iterable = transformer.transform(iterable);
         }
+        
+        return iterable;
+    }
+    
+    @Override
+    public void execute(HttpRequest request, HttpResponse response)
+    {
+        Iterable<JSONObject> iterable = process(request);
         
         // Write out the response
         response.setContentType(output.getContentType());
