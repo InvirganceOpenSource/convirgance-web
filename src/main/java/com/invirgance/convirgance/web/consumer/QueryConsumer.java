@@ -23,11 +23,15 @@
  */
 package com.invirgance.convirgance.web.consumer;
 
+import com.invirgance.convirgance.CloseableIterator;
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.AtomicOperation;
 import com.invirgance.convirgance.dbms.BatchOperation;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
+import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.transform.IdentityTransformer;
 
 /**
  *
@@ -37,6 +41,11 @@ public class QueryConsumer implements Consumer
 {
     private String jndiName;
     private String sql;
+    
+    private Query sequenceSql;
+    private String sequenceId;
+    
+    private String cachedKey;
 
     public String getJndiName()
     {
@@ -57,21 +66,74 @@ public class QueryConsumer implements Consumer
     {
         this.sql = sql;
     }
+
+    public String getSequenceSql()
+    {
+        return sequenceSql.getSQL();
+    }
+
+    public void setSequenceSql(String sequenceSql)
+    {
+        this.sequenceSql = new Query(sequenceSql);
+    }
+
+    public String getSequenceId()
+    {
+        return sequenceId;
+    }
+
+    public void setSequenceId(String sequenceId)
+    {
+        this.sequenceId = sequenceId;
+    }
     
-    public AtomicOperation getOperation(Iterable<JSONObject> iterable)
+    private String getKey(JSONObject next)
+    {
+        if(this.cachedKey == null) this.cachedKey = (String)next.keySet().toArray()[0];
+        
+        return this.cachedKey;
+    }
+    
+    public AtomicOperation getOperation(Iterable<JSONObject> iterable, DBMS dbms, JSONArray keys)
     {
         Query query = new Query(sql);
-        BatchOperation operation = new BatchOperation(query, iterable);
         
-        return operation;
+        if(sequenceSql != null)
+        {
+            if(sequenceId == null) throw new ConvirganceException("Property sequenceId must be set when using sequenceSql");
+            
+            iterable = new IdentityTransformer() {
+                @Override
+                public JSONObject transform(JSONObject record) throws ConvirganceException
+                {
+                    try(var result = (CloseableIterator<JSONObject>)dbms.query(sequenceSql).iterator())
+                    {
+                        JSONObject next = result.next();
+                        String key = getKey(next);
+                        Object value = next.get(key);
+                        
+                        record.put(sequenceId, value);
+                        keys.add(value);
+                        
+                        return record;
+                    }
+                    catch(Exception e) { throw new ConvirganceException(e); }
+                }
+            }.transform(iterable);
+        }
+
+        return new BatchOperation(query, iterable);
     }
     
     @Override
-    public void consume(Iterable<JSONObject> iterable, JSONObject parameters)
+    public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters)
     {
         DBMS dbms = DBMS.lookup(jndiName);
+        JSONArray keys = new JSONArray();
         
-        dbms.update(getOperation(iterable));
+        dbms.update(getOperation(iterable, dbms, keys));
+        
+        return keys;
     }
     
 }

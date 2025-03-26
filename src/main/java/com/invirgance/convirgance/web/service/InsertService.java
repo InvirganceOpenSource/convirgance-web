@@ -23,14 +23,20 @@
  */
 package com.invirgance.convirgance.web.service;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.input.Input;
+import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.json.JSONWriter;
 import com.invirgance.convirgance.transform.Transformer;
 import com.invirgance.convirgance.web.consumer.Consumer;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.origin.Origin;
 import com.invirgance.convirgance.web.parameter.Parameter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +111,9 @@ public class InsertService implements Service
         JSONObject params = new JSONObject();
         Iterable<JSONObject> iterable;
         
+        JSONObject result = new JSONObject("{\"success\":true}");
+        JSONArray keys;
+        
         if(this.parameters == null) this.parameters = new ArrayList<>();
         if(this.transformers == null) this.transformers = new ArrayList<>();
         
@@ -124,6 +133,17 @@ public class InsertService implements Service
         }
         
         // Consume the uploaded stream of data
-        consumer.consume(iterable, params);
+        keys = consumer.consume(iterable, params);
+        
+        // Write out keys if they exist
+        try 
+        {
+            if(keys != null)
+            {
+                response.setContentType("application/json");
+                response.getOutputStream().write(keys.toString().getBytes("UTF-8"));
+            }
+        }
+        catch(IOException e) { throw new ConvirganceException(e); }
     }
 }

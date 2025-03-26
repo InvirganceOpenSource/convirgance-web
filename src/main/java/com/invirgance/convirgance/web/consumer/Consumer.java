@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.web.consumer;
 
+import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 
 /**
@@ -31,5 +32,5 @@ import com.invirgance.convirgance.json.JSONObject;
  */
 public interface Consumer
 {
-    public void consume(Iterable<JSONObject> iterable, JSONObject parameters);
+    public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters);
 }
