@@ -17,4 +17,23 @@
           <name>scope</name>
         </attribute>
     </tag>
+    <tag>
+        <name>query</name>
+        <tag-class>com.invirgance.convirgance.web.tag.QueryTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <attribute>
+          <name>var</name>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+        </attribute>
+        <attribute>
+          <name>jndi</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>binding</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>
