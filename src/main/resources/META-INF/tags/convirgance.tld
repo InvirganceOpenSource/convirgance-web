@@ -36,4 +36,31 @@
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>object</name>
+        <tag-class>com.invirgance.convirgance.web.tag.ObjectTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>var</name>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+        </attribute>
+    </tag>
+    <tag>
+        <name>key</name>
+        <tag-class>com.invirgance.convirgance.web.tag.KeyTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>name</name>
+        </attribute>
+        <attribute>
+          <name>value</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>default</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>
