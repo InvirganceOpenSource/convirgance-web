@@ -102,9 +102,9 @@ public class ObjectTag extends TagSupport
     @Override
     public int doEndTag() throws JspException
     {
-        if(getParent() instanceof KeyTag)
+        if(getParent() instanceof ValueTag)
         {
-            ((KeyTag)getParent()).setValue(object);
+            ((ValueTag)parent).setValue(object);
         }
         
         if(variable != null) 

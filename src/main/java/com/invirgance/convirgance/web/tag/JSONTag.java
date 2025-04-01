@@ -43,7 +43,10 @@ public class JSONTag implements BodyTag
     
     private String variable;
     private String scope = "page";
-
+    
+    private Object value;
+    
+    
     private int getScopeInt() throws JspException
     {
         switch(scope)
@@ -104,6 +107,13 @@ public class JSONTag implements BodyTag
     @Override
     public int doEndTag() throws JspException
     {
+        if(parent instanceof ValueTag)
+        {
+            ((ValueTag)parent).setValue(value);
+        }
+        
+        this.value = null;
+        
         return EVAL_PAGE;
     }
 
@@ -112,7 +122,7 @@ public class JSONTag implements BodyTag
     {
         this.content = null;
         this.context = null;
-        this.parent = null;
+        this.value = null;
     }
 
     @Override
@@ -129,17 +139,18 @@ public class JSONTag implements BodyTag
     @Override
     public int doAfterBody() throws JspException
     {
-        Object value;
-        
         try
         {
-            value = new JSONParser(content.getReader()).parse();
+            this.value = new JSONParser(content.getReader()).parse();
 
-            context.setAttribute(this.variable, value, getScopeInt());
+            if(this.variable != null) 
+            {
+                context.setAttribute(this.variable, this.value, getScopeInt());
+            }
         }
         catch(IOException e) { throw new JspException(e); }
 
-        return SKIP_BODY;
+        return EVAL_BODY_INCLUDE;
     }
     
 }

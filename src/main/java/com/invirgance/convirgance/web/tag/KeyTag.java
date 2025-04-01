@@ -31,7 +31,7 @@ import jakarta.servlet.jsp.tagext.TagSupport;
  *
  * @author jbanes
  */
-public class KeyTag extends TagSupport
+public class KeyTag extends TagSupport implements ValueTag
 {
     private String name;
     private Object value;
@@ -82,9 +82,15 @@ public class KeyTag extends TagSupport
     }
 
     @Override
+    public int doStartTag() throws JspException
+    {
+        return EVAL_BODY_INCLUDE;
+    }
+    
+    @Override
     public int doEndTag() throws JspException
     {
-        if(getParent() instanceof ObjectTag)
+        if(parent instanceof ObjectTag)
         {
             ((ObjectTag)getParent()).set(name, value != null ? value : defaultValue);
         }

@@ -100,7 +100,6 @@ public class QueryTag extends BodyTagSupport
     {
         DBMS dbms = DBMS.lookup(jndi);
         Query query = new Query(bodyContent.getString());
-        Object value;
 
         if(this.binding != null)
         {
@@ -110,11 +109,7 @@ public class QueryTag extends BodyTagSupport
         {
             for(String name : query.getParameterNames())
             {
-                value = pageContext.findAttribute(name);
-                
-                if(value == null) value = pageContext.getRequest().getParameter(name);
-
-                query.setBinding(name, value);
+                query.setBinding(name, pageContext.findAttribute(name));
             }
         }
         
