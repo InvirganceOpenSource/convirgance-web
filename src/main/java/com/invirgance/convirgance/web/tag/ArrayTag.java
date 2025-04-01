@@ -23,7 +23,10 @@
  */
 package com.invirgance.convirgance.web.tag;
 
+import com.invirgance.convirgance.json.JSONArray;
+import com.invirgance.convirgance.json.JSONObject;
 import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.Tag;
 import jakarta.servlet.jsp.tagext.TagSupport;
 
@@ -31,42 +34,55 @@ import jakarta.servlet.jsp.tagext.TagSupport;
  *
  * @author jbanes
  */
-public class KeyTag extends TagSupport implements ValueTypeTag
+public class ArrayTag extends TagSupport implements ValueTypeTag
 {
-    private String name;
-    private Object value;
-    private Object defaultValue;
+    private String variable;
+    private String scope = "page";
+    private JSONArray array;
     
     private Tag parent;
 
-    public String getName()
+    private int getScopeInt() throws JspException
     {
-        return name;
+        switch(scope)
+        {
+            case "page": return PageContext.PAGE_SCOPE;
+            case "request": return PageContext.REQUEST_SCOPE;
+            case "session": return PageContext.SESSION_SCOPE;
+            case "application": return PageContext.APPLICATION_SCOPE;
+        }
+        
+        throw new JspException("Invalid scope: " + scope);
+    }
+    
+    public String getVar()
+    {
+        return variable;
     }
 
-    public void setName(String name)
+    public void setVar(String variable)
     {
-        this.name = name;
+        this.variable = variable;
     }
 
+    public String getScope()
+    {
+        return scope;
+    }
+
+    public void setScope(String scope)
+    {
+        this.scope = scope;
+    }
+    
     public Object getValue()
-    {   
-        return value;
+    {
+        return this.array;
     }
-
+    
     public void setValue(Object value)
     {
-        this.value = value;
-    }
-
-    public Object getDefault()
-    {
-        return defaultValue;
-    }
-
-    public void setDefault(Object defaultValue)
-    {
-        this.defaultValue = defaultValue;
+        this.array.add(value);
     }
 
     @Override
@@ -84,30 +100,35 @@ public class KeyTag extends TagSupport implements ValueTypeTag
     @Override
     public int doStartTag() throws JspException
     {
+        this.array = new JSONArray();
+        
         return EVAL_BODY_INCLUDE;
     }
-    
+
     @Override
     public int doEndTag() throws JspException
     {
-        if(parent instanceof KeyValueTypeTag)
+        if(getParent() instanceof ValueTypeTag)
         {
-            ((KeyValueTypeTag)getParent()).set(name, value != null ? value : defaultValue);
+            ((ValueTypeTag)parent).setValue(array);
         }
         
-        this.name = null;
-        this.value = null;
-        this.defaultValue = null;
+        if(variable != null) 
+        {
+            pageContext.setAttribute(this.variable, array, getScopeInt());
+        }
+        
+        this.variable = null;
+        this.array = null;
         
         return EVAL_PAGE;
     }
-    
+
     @Override
     public void release()
     {
-        this.name = null;
-        this.value = null;
-        this.defaultValue = null;
+        this.variable = null;
+        this.array = null;
         
         super.release();
     }

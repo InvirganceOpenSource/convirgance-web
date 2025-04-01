@@ -33,7 +33,7 @@ import jakarta.servlet.jsp.tagext.TagSupport;
  *
  * @author jbanes
  */
-public class ObjectTag extends TagSupport implements KeyValueTag
+public class ObjectTag extends TagSupport implements KeyValueTypeTag
 {
     private String variable;
     private String scope = "page";
@@ -99,7 +99,7 @@ public class ObjectTag extends TagSupport implements KeyValueTag
     @Override
     public int doStartTag() throws JspException
     {
-        this.object = new JSONObject();
+        this.object = new JSONObject(true);
         
         return EVAL_BODY_INCLUDE;
     }
@@ -107,15 +107,18 @@ public class ObjectTag extends TagSupport implements KeyValueTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(getParent() instanceof ValueTag)
+        if(getParent() instanceof ValueTypeTag)
         {
-            ((ValueTag)parent).setValue(object);
+            ((ValueTypeTag)parent).setValue(object);
         }
         
         if(variable != null) 
         {
             pageContext.setAttribute(this.variable, object, getScopeInt());
         }
+        
+        this.object = null;
+        this.variable = null;
         
         return EVAL_PAGE;
     }
@@ -124,6 +127,7 @@ public class ObjectTag extends TagSupport implements KeyValueTag
     public void release()
     {
         this.object = null;
+        this.variable = null;
         
         super.release();
     }

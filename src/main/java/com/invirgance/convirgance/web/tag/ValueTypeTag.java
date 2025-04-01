@@ -27,10 +27,9 @@ package com.invirgance.convirgance.web.tag;
  *
  * @author jbanes
  */
-public interface KeyValueTag
+public interface ValueTypeTag
 {
+    public Object getValue();
     
-    public Object get(String key);
-    
-    public void set(String key, Object value);
+    public void setValue(Object value);
 }

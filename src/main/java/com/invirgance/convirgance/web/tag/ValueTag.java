@@ -23,13 +23,79 @@
  */
 package com.invirgance.convirgance.web.tag;
 
+import jakarta.servlet.jsp.JspException;
+import jakarta.servlet.jsp.tagext.Tag;
+import jakarta.servlet.jsp.tagext.TagSupport;
+
 /**
  *
  * @author jbanes
  */
-public interface ValueTag
+public class ValueTag extends TagSupport implements ValueTypeTag
 {
-    public Object getValue();
+    private Object value;
+    private Object defaultValue;
     
-    public void setValue(Object value);
+    private Tag parent;
+
+    public Object getValue()
+    {   
+        return value;
+    }
+
+    public void setValue(Object value)
+    {
+        this.value = value;
+    }
+
+    public Object getDefault()
+    {
+        return defaultValue;
+    }
+
+    public void setDefault(Object defaultValue)
+    {
+        this.defaultValue = defaultValue;
+    }
+
+    @Override
+    public Tag getParent()
+    {
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(Tag parent)
+    {
+        this.parent = parent;
+    }
+
+    @Override
+    public int doStartTag() throws JspException
+    {
+        return EVAL_BODY_INCLUDE;
+    }
+    
+    @Override
+    public int doEndTag() throws JspException
+    {
+        if(parent instanceof ValueTypeTag)
+        {
+            ((ValueTypeTag)parent).setValue(value != null ? value : defaultValue);
+        }
+        
+        this.value = null;
+        this.defaultValue = null;
+        
+        return EVAL_PAGE;
+    }
+    
+    @Override
+    public void release()
+    {
+        this.value = null;
+        this.defaultValue = null;
+        
+        super.release();
+    }
 }

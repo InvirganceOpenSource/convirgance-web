@@ -107,9 +107,9 @@ public class JSONTag implements BodyTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(parent instanceof ValueTag)
+        if(parent instanceof ValueTypeTag)
         {
-            ((ValueTag)parent).setValue(value);
+            ((ValueTypeTag)parent).setValue(value);
         }
         
         this.value = null;

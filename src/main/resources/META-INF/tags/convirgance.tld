@@ -63,4 +63,28 @@
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>array</name>
+        <tag-class>com.invirgance.convirgance.web.tag.ArrayTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>var</name>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+        </attribute>
+    </tag>
+    <tag>
+        <name>value</name>
+        <tag-class>com.invirgance.convirgance.web.tag.ValueTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>value</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>default</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>
