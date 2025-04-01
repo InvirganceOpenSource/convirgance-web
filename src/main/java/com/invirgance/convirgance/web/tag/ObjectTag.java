@@ -33,7 +33,7 @@ import jakarta.servlet.jsp.tagext.TagSupport;
  *
  * @author jbanes
  */
-public class ObjectTag extends TagSupport
+public class ObjectTag extends TagSupport implements KeyValueTag
 {
     private String variable;
     private String scope = "page";
@@ -84,6 +84,11 @@ public class ObjectTag extends TagSupport
     public void setParent(Tag parent)
     {
         this.parent = parent;
+    }
+    
+    public Object get(String key)
+    {
+        return this.object.get(key);
     }
     
     public void set(String key, Object value)

@@ -90,9 +90,9 @@ public class KeyTag extends TagSupport implements ValueTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(parent instanceof ObjectTag)
+        if(parent instanceof KeyValueTag)
         {
-            ((ObjectTag)getParent()).set(name, value != null ? value : defaultValue);
+            ((KeyValueTag)getParent()).set(name, value != null ? value : defaultValue);
         }
         
         return EVAL_PAGE;
