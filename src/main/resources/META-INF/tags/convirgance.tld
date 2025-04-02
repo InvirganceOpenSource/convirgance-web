@@ -104,5 +104,9 @@
           <name>items</name>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+          <name>limit</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 </taglib>

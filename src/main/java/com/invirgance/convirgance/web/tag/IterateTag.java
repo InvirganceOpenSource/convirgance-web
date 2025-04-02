@@ -160,7 +160,7 @@ public class IterateTag extends BodyTagSupport
     @Override
     public int doAfterBody() throws JspException
     {
-        if(!iterator.hasNext()) return SKIP_BODY;
+        if((limit > 0 && count+1 >= limit) || !iterator.hasNext()) return SKIP_BODY;
         
         item = iterator.next();
         
@@ -183,6 +183,15 @@ public class IterateTag extends BodyTagSupport
     @Override
     public int doEndTag() throws JspException
     {
+        if(iterator.hasNext() && iterator instanceof AutoCloseable)
+        {
+            try
+            {
+                ((AutoCloseable)iterator).close();
+            }
+            catch(Exception e) { e.printStackTrace(); }
+        }
+        
         iterator = null;
         item = null;
         variable = null;
