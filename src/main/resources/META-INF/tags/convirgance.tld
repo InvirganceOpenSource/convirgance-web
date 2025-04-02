@@ -98,6 +98,9 @@
           <name>scope</name>
         </attribute>
         <attribute>
+          <name>status</name>
+        </attribute>
+        <attribute>
           <name>items</name>
           <rtexprvalue>true</rtexprvalue>
         </attribute>

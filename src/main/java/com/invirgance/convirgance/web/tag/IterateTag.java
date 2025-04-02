@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.web.tag;
 
+import com.invirgance.convirgance.json.JSONObject;
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.BodyTagSupport;
@@ -36,11 +37,13 @@ public class IterateTag extends BodyTagSupport
 {
     private String variable;
     private String scope = "page";
+    private String status;
     private Iterable items;
     private int limit = 0;
     private int skip = 0;
     
     private int index;
+    private int count;
     private Object item;
     private Iterator iterator;
     
@@ -56,6 +59,18 @@ public class IterateTag extends BodyTagSupport
         }
         
         throw new JspException("Invalid scope: " + scope);
+    }
+    
+    private JSONObject getLoopStatus()
+    {
+        JSONObject status = new JSONObject();
+        
+        status.put("count", count);
+        status.put("index", index);
+        status.put("first", (index == 0));
+        status.put("last", !iterator.hasNext());
+        
+        return status;
     }
     
     public String getVar()
@@ -76,6 +91,16 @@ public class IterateTag extends BodyTagSupport
     public void setScope(String scope)
     {
         this.scope = scope;
+    }
+
+    public String getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(String status)
+    {
+        this.status = status;
     }
 
     public Iterable getItems()
@@ -113,6 +138,7 @@ public class IterateTag extends BodyTagSupport
     {
         iterator = items.iterator();
         index = 0;
+        count = 0;
         
         if(!iterator.hasNext()) return SKIP_BODY;
         
@@ -121,6 +147,11 @@ public class IterateTag extends BodyTagSupport
         if(variable != null)
         {
             pageContext.setAttribute(variable, item, getScopeInt());
+        }
+        
+        if(status != null)
+        {
+            pageContext.setAttribute(status, getLoopStatus());
         }
         
         return EVAL_BODY_INCLUDE;
@@ -133,12 +164,18 @@ public class IterateTag extends BodyTagSupport
         
         item = iterator.next();
         
+        index++;
+        count++;
+        
         if(variable != null)
         {
             pageContext.setAttribute(variable, item, getScopeInt());
         }
         
-        index++;
+        if(status != null)
+        {
+            pageContext.setAttribute(status, getLoopStatus());
+        }
         
         return EVAL_BODY_AGAIN;
     }
@@ -150,6 +187,7 @@ public class IterateTag extends BodyTagSupport
         item = null;
         variable = null;
         scope = "page";
+        status = null;
         limit = 0;
         skip = 0;
         
