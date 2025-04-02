@@ -87,4 +87,19 @@
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>iterate</name>
+        <tag-class>com.invirgance.convirgance.web.tag.IterateTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>var</name>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+        </attribute>
+        <attribute>
+          <name>items</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>
