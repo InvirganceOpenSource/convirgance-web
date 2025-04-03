@@ -1,0 +1,102 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2025 jbanes.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.invirgance.convirgance.web.servlet;
+
+import com.invirgance.convirgance.json.JSONArray;
+import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.web.service.SelectService;
+import com.invirgance.convirgance.web.service.Service;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *
+ * @author jbanes
+ */
+public class ServiceCaller
+{
+    public static Iterable<JSONObject> select(HttpServletRequest request, String path, JSONObject parameters)
+    {
+        ServiceLoader loader = ServiceLoader.getInstance();
+        Service service = loader.get(request, path);
+
+        if(service == null) throw new IllegalArgumentException(path + " is not found.");
+        if(!(service instanceof SelectService)) throw new IllegalArgumentException(path + " is not a Select Service and thus cannot return data.");
+        
+        return ((SelectService)service).process(new RequestHttpService(request, parameters));
+    }
+    
+    private static class RequestHttpService extends HttpRequest
+    {
+        private JSONObject parameters;
+
+        public RequestHttpService(HttpServletRequest request, JSONObject parameters)
+        {
+            super(request);
+            
+            this.parameters = parameters;
+        }
+
+        @Override
+        public String getParameter(String name)
+        {
+            return parameters.getString(name);
+        }
+
+        @Override
+        public Map<String, String[]> getParameterMap()
+        {
+            HashMap<String, String[]> map = new HashMap<>();
+            Object value;
+            
+            for(String key : this.parameters.keySet())
+            {
+                value = this.parameters.get(key);
+                
+                if(value instanceof String[]) map.put(key, (String[])value);
+                else if(value instanceof List) map.put(key, ((List<String>)value).toArray(String[]::new));
+                else map.put(key, new String[]{ value.toString() });
+            }
+            
+            return map;
+        }
+
+        @Override
+        public Iterable<String> getParameterNames()
+        {
+            return this.parameters.keySet();
+        }
+
+        @Override
+        public String[] getParameterValues(String name)
+        {
+            JSONArray<String> array = new JSONArray<>(this.parameters.values());
+            
+            return array.toArray(String[]::new);
+        }
+    }
+}

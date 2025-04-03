@@ -109,4 +109,35 @@
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>service</name>
+        <tag-class>com.invirgance.convirgance.web.tag.ServiceTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>var</name>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+        </attribute>
+        <attribute>
+          <name>path</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>parameter</name>
+        <tag-class>com.invirgance.convirgance.web.tag.KeyTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>name</name>
+        </attribute>
+        <attribute>
+          <name>value</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>default</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>

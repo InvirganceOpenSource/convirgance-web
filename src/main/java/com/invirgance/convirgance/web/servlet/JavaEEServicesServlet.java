@@ -26,7 +26,6 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.web.service.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -37,9 +36,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.support.GenericXmlApplicationContext;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 /**
  *
@@ -52,7 +48,7 @@ public class JavaEEServicesServlet extends HttpServlet
     private boolean allowPut = false;
     private boolean allowDelete = false;
 
-    private ServiceLoader loader = new ServiceLoader();
+    private ServiceLoader loader = ServiceLoader.getInstance();
     
     private void initMethods(String list) throws ServletException
     {

@@ -36,7 +36,39 @@ import org.springframework.core.io.FileSystemResource;
  */
 class ServiceLoader
 {
+    private static ServiceLoader instance;
+    
     private List<ServiceDescriptor> cache = new ArrayList<>();
+    
+    public static ServiceLoader getInstance()
+    {
+        if(instance == null) instance = new ServiceLoader();
+        
+        return instance;
+    }
+    
+    public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request, String path)
+    {
+        ServiceDescriptor descriptor;
+        String context = request.getContextPath();
+        String filePath;
+        
+        if(path.startsWith(context)) path = path.substring(context.length());
+        
+        if(path.endsWith("/")) path += "spring.xml";
+        else if(!path.endsWith(".xml")) path += ".xml";
+
+        // Transform URI path to file path
+        filePath = request.getServletContext().getRealPath(path);
+
+        if(filePath == null || !new File(filePath).exists()) return null;
+        
+        descriptor = new ServiceDescriptor(new File(filePath), path);
+        
+        this.cache.add(descriptor);
+        
+        return descriptor;
+    }
     
     public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request)
     {
@@ -60,6 +92,28 @@ class ServiceLoader
         this.cache.add(descriptor);
         
         return descriptor;
+    }
+    
+    public Service get(jakarta.servlet.http.HttpServletRequest request, String path)
+    {
+        ServiceDescriptor loaded;
+        String context = request.getContextPath();
+        
+        if(path.startsWith(context)) path = path.substring(context.length());
+        
+        if(path.endsWith("/")) path += "spring.xml";
+        else path += ".xml";
+        
+        for(ServiceDescriptor descriptor : this.cache)
+        {
+            if(descriptor.path.equals(path)) return descriptor.getService();
+        }
+        
+        loaded = load(request, path);
+
+        if(loaded == null) return null;
+
+        return loaded.getService();
     }
     
     public Service get(jakarta.servlet.http.HttpServletRequest request)
