@@ -144,4 +144,19 @@
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>set</name>
+        <tag-class>com.invirgance.convirgance.web.tag.SetTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+          <name>var</name>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+        </attribute>
+        <attribute>
+          <name>value</name>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>
