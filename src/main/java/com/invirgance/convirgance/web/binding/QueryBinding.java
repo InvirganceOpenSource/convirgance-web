@@ -24,6 +24,8 @@ package com.invirgance.convirgance.web.binding;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
+import javax.sql.DataSource;
 
 /**
  *
@@ -53,11 +55,20 @@ public class QueryBinding implements Binding
     {
         this.sql = sql;
     }
+    
+    private DBMS lookup()
+    {
+        DataSource source = ApplicationInitializer.lookup(this.jndiName);
+        
+        if(source == null) return DBMS.lookup(jndiName);
+        
+        return new DBMS(source);
+    }
 
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {
-        DBMS dbms = DBMS.lookup(jndiName);
+        DBMS dbms = lookup();
         Query query = new Query(sql, parameters);
         
         return dbms.query(query);

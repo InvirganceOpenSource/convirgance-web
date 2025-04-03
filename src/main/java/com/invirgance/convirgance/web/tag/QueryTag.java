@@ -26,10 +26,12 @@ package com.invirgance.convirgance.web.tag;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.BodyTagSupport;
 import static jakarta.servlet.jsp.tagext.Tag.SKIP_BODY;
+import javax.sql.DataSource;
 
 /**
  *
@@ -95,10 +97,19 @@ public class QueryTag extends BodyTagSupport
         this.binding = binding;
     }
 
+    private DBMS lookup()
+    {
+        DataSource source = ApplicationInitializer.lookup(this.jndi);
+        
+        if(source == null) return DBMS.lookup(jndi);
+        
+        return new DBMS(source);
+    }
+    
     @Override
     public int doAfterBody() throws JspException
     {
-        DBMS dbms = DBMS.lookup(jndi);
+        DBMS dbms = lookup();
         Query query = new Query(bodyContent.getString());
 
         if(this.binding != null)

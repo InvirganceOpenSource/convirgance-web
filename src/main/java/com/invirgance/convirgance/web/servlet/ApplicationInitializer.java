@@ -5,14 +5,15 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
+import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.ClasspathSource;
 import javax.sql.DataSource;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Properties;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.naming.*;
 
 /*
  * Copyright 2024 INVIRGANCE LLC
@@ -44,6 +45,13 @@ SOFTWARE.
  */
 public class ApplicationInitializer implements ServletContextListener
 {
+    private static HashMap<String,DataSource> jndiLookup = new HashMap<>();
+    
+    public static DataSource lookup(String path)
+    {
+        return jndiLookup.get(path);
+    }
+    
     private Properties getProperties()
     {
         Properties props = new Properties();
@@ -70,9 +78,14 @@ public class ApplicationInitializer implements ServletContextListener
     {
         try
         {
+            jndiLookup.put(path, source);
+            
             new InitialContext().rebind(path, source);
         }
-        catch(NamingException e) { throw new ConvirganceException(e); }
+        catch(NamingException naming) 
+        {
+            System.out.println("Unable to bind to " + path + ". JNDI lookup will not be available...");
+        }
     }
     
     @Override

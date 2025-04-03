@@ -32,6 +32,8 @@ import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.IdentityTransformer;
+import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
+import javax.sql.DataSource;
 
 /**
  *
@@ -125,10 +127,19 @@ public class QueryConsumer implements Consumer
         return new BatchOperation(query, iterable);
     }
     
+    private DBMS lookup()
+    {
+        DataSource source = ApplicationInitializer.lookup(this.jndiName);
+        
+        if(source == null) return DBMS.lookup(jndiName);
+        
+        return new DBMS(source);
+    }
+    
     @Override
     public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters)
     {
-        DBMS dbms = DBMS.lookup(jndiName);
+        DBMS dbms = lookup();
         JSONArray keys = new JSONArray();
         
         dbms.update(getOperation(iterable, dbms, keys));
