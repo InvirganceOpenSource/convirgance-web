@@ -140,6 +140,12 @@ public class IterateTag extends BodyTagSupport
         index = 0;
         count = 0;
         
+        while(index < skip && iterator.hasNext())
+        {
+            iterator.next();
+            index++;
+        }
+        
         if(!iterator.hasNext()) return SKIP_BODY;
         
         item = iterator.next();
