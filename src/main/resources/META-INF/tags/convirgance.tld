@@ -23,16 +23,19 @@
         <body-content>tagdependent</body-content>
         <attribute>
           <name>var</name>
+          <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
         </attribute>
         <attribute>
           <name>jndi</name>
+          <required>true</required>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>binding</name>
+          <type>com.invirgance.convirgance.json.JSONObject</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -53,13 +56,16 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>name</name>
+          <required>true</required>
         </attribute>
         <attribute>
           <name>value</name>
+          <type>java.lang.Object</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>default</name>
+          <type>java.lang.Object</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -80,10 +86,13 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>value</name>
+          <type>java.lang.Object</type>
+          <required>true</required>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>default</name>
+          <type>java.lang.Object</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -93,6 +102,7 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
@@ -102,14 +112,18 @@
         </attribute>
         <attribute>
           <name>items</name>
+          <type>java.lang.Iterable</type>
+          <required>true</required>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>limit</name>
+          <type>int</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>skip</name>
+          <type>int</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -119,12 +133,14 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
         </attribute>
         <attribute>
           <name>path</name>
+          <required>true</required>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -134,13 +150,16 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>name</name>
+          <required>true</required>
         </attribute>
         <attribute>
           <name>value</name>
+          <type>java.lang.Object</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>default</name>
+          <type>java.lang.Object</type>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -150,12 +169,15 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
         </attribute>
         <attribute>
           <name>value</name>
+          <type>java.lang.Object</type>
+          <required>true</required>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
@@ -182,11 +204,11 @@
     <function>
         <name>first</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
-        <function-signature>java.lang.String first(java.lang.Iterable)</function-signature>
+        <function-signature>java.lang.Object first(java.lang.Iterable)</function-signature>
     </function>
     <function>
         <name>last</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
-        <function-signature>java.lang.String last(java.lang.Iterable)</function-signature>
+        <function-signature>java.lang.Object last(java.lang.Iterable)</function-signature>
     </function>
 </taglib>
