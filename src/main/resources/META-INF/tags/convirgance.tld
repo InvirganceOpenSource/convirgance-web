@@ -164,4 +164,9 @@
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String json(java.lang.Object)</function-signature>
     </function>
+    <function>
+        <name>javascript</name>
+        <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
+        <function-signature>java.lang.String json(java.lang.Object)</function-signature>
+    </function>
 </taglib>
