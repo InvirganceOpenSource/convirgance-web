@@ -32,6 +32,7 @@ import jakarta.servlet.jsp.JspException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Iterator;
 
 /**
  *
@@ -90,5 +91,18 @@ public class UtilityFunctions
         {
             throw new JspException(e);
         }
+    }
+    
+    public static Object first(Iterable iterable) throws JspException
+    {
+        Iterator<JSONObject> iterator = iterable.iterator();
+        Object record = iterator.hasNext() ? iterator.next() : null;
+        
+        if(iterator instanceof AutoCloseable)
+        {
+            try { ((AutoCloseable)iterator).close(); } catch(Exception e) { throw new JspException(e); }
+        }
+        
+        return record;
     }
 }

@@ -179,4 +179,9 @@
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String urlparam(java.lang.Object)</function-signature>
     </function>
+    <function>
+        <name>first</name>
+        <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
+        <function-signature>java.lang.String first(java.lang.Iterable)</function-signature>
+    </function>
 </taglib>
