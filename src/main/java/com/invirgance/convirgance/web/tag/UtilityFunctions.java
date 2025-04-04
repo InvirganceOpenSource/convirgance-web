@@ -31,6 +31,7 @@ import com.invirgance.convirgance.target.ByteArrayTarget;
 import jakarta.servlet.jsp.JspException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  *
@@ -76,7 +77,18 @@ public class UtilityFunctions
                      .replaceAll("<", "&lt;")
                      .replaceAll(">", "&gt;")
                      .replaceAll("\"", "&quot;")
-                     .replaceAll("'", "&#39;")
-                     .replaceAll("\\ \\ ", "&nbsp;&nbsp;");
+                     .replaceAll("'", "&#39;");
+    }
+    
+    public static String urlparam(Object value) throws JspException
+    {
+        try
+        {
+            return URLEncoder.encode(String.valueOf(value), "UTF-8");
+        }
+        catch(IOException e)
+        {
+            throw new JspException(e);
+        }
     }
 }
