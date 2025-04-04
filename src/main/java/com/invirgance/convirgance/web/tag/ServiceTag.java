@@ -40,7 +40,7 @@ public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
     private String scope = "page";
     private String path;
     
-    private JSONObject parameters = new JSONObject();
+    private JSONObject parameters;
 
     
     private int getScopeInt() throws JspException
@@ -89,6 +89,8 @@ public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
     @Override
     public int doStartTag() throws JspException
     {
+        this.parameters = new JSONObject();
+        
         return EVAL_BODY_INCLUDE;
     }
 
@@ -101,6 +103,11 @@ public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
         {
             pageContext.setAttribute(variable, results, getScopeInt());
         }
+        
+        this.parameters = null;
+        this.path = null;
+        this.scope = "page";
+        this.variable = null;
         
         return EVAL_PAGE;
     }
