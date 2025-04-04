@@ -184,4 +184,9 @@
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String first(java.lang.Iterable)</function-signature>
     </function>
+    <function>
+        <name>last</name>
+        <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
+        <function-signature>java.lang.String last(java.lang.Iterable)</function-signature>
+    </function>
 </taglib>

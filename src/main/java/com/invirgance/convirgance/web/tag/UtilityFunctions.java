@@ -105,4 +105,14 @@ public class UtilityFunctions
         
         return record;
     }
+    
+    public static Object last(Iterable iterable) throws JspException
+    {
+        Iterator<JSONObject> iterator = iterable.iterator();
+        Object record = null;
+        
+        while(iterator.hasNext()) record = iterator.next();
+        
+        return record;
+    }
 }
