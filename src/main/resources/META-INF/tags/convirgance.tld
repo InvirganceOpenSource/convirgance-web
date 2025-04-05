@@ -4,23 +4,51 @@
     <short-name>convirgance</short-name>
     <uri>convirgance:web</uri>
     <description>
-        Exposing Convirgance services to JSP pages
+        Tags and functions for exposing Convirgance services to JSP pages
     </description>
     <tag>
         <name>json</name>
         <tag-class>com.invirgance.convirgance.web.tag.JSONTag</tag-class>
         <body-content>tagdependent</body-content>
+        <description>
+        <![CDATA[
+            Converts a raw JSON string into a JSONObject or JSONArray, which can
+            then be assigend to variable.
+            <br><br>
+            Example:<br><br>
+            <code>&lt;virge:json var="json"&gt;<br>
+            {"message": "Hello World!"}<br>
+            &lt;/virge:json&gt;</code>
+        ]]>
+        </description>
         <attribute>
           <name>var</name>
+          <description>Variable to assign the parsed object to</description>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
     </tag>
     <tag>
         <name>query</name>
         <tag-class>com.invirgance.convirgance.web.tag.QueryTag</tag-class>
         <body-content>tagdependent</body-content>
+        <description>
+        <![CDATA[
+            Executes a database query and assigns the resulting Iterable&lt;JSONObject&gt;
+            to the specified variable. Bind variables will be pulled from the JSP
+            scope heirarchy unless a bind object is defined. If a bind object is
+            defined, bind variables will be pulled from that instead.
+            <br><br>
+            Example:<br><br>
+            <code>
+            &lt;virge:set var="zipcode" value="12345"/&gt;<br>
+            &lt;virge:query var="customers" jndi="jdbc/example"&gt;<br>
+            select * from CUSTOMER where ZIP = :zipcode<br>
+            &lt;/virge:query&gt;</code>
+        ]]>
+        </description>
         <attribute>
           <name>var</name>
           <required>true</required>
