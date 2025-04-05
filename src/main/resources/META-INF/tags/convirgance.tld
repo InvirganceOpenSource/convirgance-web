@@ -275,30 +275,65 @@
         <name>json</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String json(java.lang.Object)</function-signature>
+        <description>
+        <![CDATA[
+            Formats the given object as valid JSON, properly escaping values to
+            prevent injection attacks
+        ]]>
+        </description>
     </function>
     <function>
         <name>javascript</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String json(java.lang.Object)</function-signature>
+        <description>
+        <![CDATA[
+            Formats the given object as valid Javascript, properly escaping values to
+            prevent injection attacks
+        ]]>
+        </description>
     </function>
     <function>
         <name>html</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String html(java.lang.Object)</function-signature>
+        <description>
+        <![CDATA[
+            Formats the given object as valid HTML, properly escaping values to
+            prevent injection attacks. Converts the following characters into
+            HTML entities: <big><code>&</code>, <code>&lt;</code>, <code>&gt;</code>, 
+            <code>"</code>, <code>'</code></big>
+        ]]>
+        </description>
     </function>
     <function>
         <name>urlparam</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.String urlparam(java.lang.Object)</function-signature>
+        <description>
+        <![CDATA[
+            Formats the given object as an escaped url parameter string
+        ]]>
+        </description>
     </function>
     <function>
         <name>first</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.Object first(java.lang.Iterable)</function-signature>
+        <description>
+        <![CDATA[
+            Returns the first item in the provided <code>Iterable</code>
+        ]]>
+        </description>
     </function>
     <function>
         <name>last</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
         <function-signature>java.lang.Object last(java.lang.Iterable)</function-signature>
+        <description>
+        <![CDATA[
+            Returns the last item in the provided <code>Iterable</code>
+        ]]>
+        </description>
     </function>
 </taglib>
