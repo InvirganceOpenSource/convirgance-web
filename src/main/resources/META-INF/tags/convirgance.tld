@@ -146,9 +146,20 @@
         <name>iterate</name>
         <tag-class>com.invirgance.convirgance.web.tag.IterateTag</tag-class>
         <body-content>scriptless</body-content>
+        <description>
+        <![CDATA[
+            Loops through the supplied <code>Iterable</code> object
+            <br><br>
+            Example:<br><br>
+            <code>
+            &lt;virge:iterate var="customer" items="customers" status="loop"&gt;<br>
+            &lt;div&gt;${loop.index+1}: ${virge:html(customer.name)}&lt;/div&gt;<br>
+            &lt;/virge:iterate&gt;</code>
+        ]]>
+        </description>
         <attribute>
           <name>var</name>
-          <description>Variable to assign the active record to</description>
+          <description>Variable to assign the active item to</description>
           <required>true</required>
         </attribute>
         <attribute>
@@ -157,21 +168,39 @@
         </attribute>
         <attribute>
           <name>status</name>
+          <description>
+          <![CDATA[
+          Sets the specified variable name to a <code>JSONObject</code> containing
+          the following loop information:<br>
+          <br>
+          <b><code>index</code></b>: the index of the item in the stream<br>
+          <b><code>count</code></b>: the number of items looped through so far, not including skipped items<br>
+          <b><code>first</code></b>: <code>true</code> if this is the first record in the <code>Iterable</code><br>
+          <b><code>last</code></b>: <code>true</code> if this is the last record in the <code>Iterable</code>
+          ]]>
+          </description>
         </attribute>
         <attribute>
           <name>items</name>
           <type>java.lang.Iterable</type>
+          <description>
+          <![CDATA[
+          An <code>Iterable</code> to iterate over
+          ]]>
+          </description>
           <required>true</required>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>limit</name>
           <type>int</type>
+          <description>End the iteration after this many items have been looped</description>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
           <name>skip</name>
           <type>int</type>
+          <description>Skip over this many items before starting to loop</description>
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
