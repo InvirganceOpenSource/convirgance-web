@@ -12,8 +12,8 @@
         <body-content>tagdependent</body-content>
         <description>
         <![CDATA[
-            Converts a raw JSON string into a JSONObject or JSONArray, which can
-            then be assigend to variable.
+            Converts a raw JSON string into a <code>JSONObject<code> or <code>JSONArray</code>, 
+            which can then be assigend to variable.
             <br><br>
             Example:<br><br>
             <code>&lt;virge:json var="json"&gt;<br>
@@ -36,7 +36,7 @@
         <body-content>tagdependent</body-content>
         <description>
         <![CDATA[
-            Executes a database query and assigns the resulting Iterable&lt;JSONObject&gt;
+            Executes a database query and assigns the resulting <code>Iterable&lt;JSONObject&gt;</code>
             to the specified variable. Bind variables will be pulled from the JSP
             scope heirarchy unless a bind object is defined. If a bind object is
             defined, bind variables will be pulled from that instead.
@@ -51,10 +51,16 @@
         </description>
         <attribute>
           <name>var</name>
+          <description>
+          <![CDATA[
+              Variable to assign the resulting <code>Iterable&lt;JSONObject&gt;</code> to
+          ]]>
+          </description>
           <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
         <attribute>
           <name>jndi</name>
@@ -73,9 +79,15 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <description>
+          <![CDATA[
+              (Optional) Variable to assign the <code>JSONObject</code> to
+          ]]>
+          </description>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
     </tag>
     <tag>
@@ -103,9 +115,15 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <description>
+          <![CDATA[
+              (Optional) Variable to assign the <code>JSONArray</code> to
+          ]]>
+          </description>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
     </tag>
     <tag>
@@ -130,10 +148,12 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <description>Variable to assign the active record to</description>
           <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
         <attribute>
           <name>status</name>
@@ -161,10 +181,16 @@
         <body-content>scriptless</body-content>
         <attribute>
           <name>var</name>
+          <description>
+          <![CDATA[
+              Variable to assign the resulting <code>Iterable&lt;JSONObject&gt;</code> to
+          ]]>
+          </description>
           <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
         <attribute>
           <name>path</name>
@@ -195,12 +221,19 @@
         <name>set</name>
         <tag-class>com.invirgance.convirgance.web.tag.SetTag</tag-class>
         <body-content>scriptless</body-content>
+        <description>
+        <![CDATA[
+            Sets the given value to the specified variable in scope
+        ]]>
+        </description>
         <attribute>
           <name>var</name>
+          <description>Variable to assign the value to</description>
           <required>true</required>
         </attribute>
         <attribute>
           <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
         <attribute>
           <name>value</name>
