@@ -38,6 +38,20 @@ public class KeyTag extends TagSupport implements ValueTypeTag
     private Object defaultValue;
     
     private Tag parent;
+    
+    private KeyValueTypeTag findParent()
+    {
+        Tag parent = getParent();
+        
+        while(parent != null)
+        {
+            if(parent instanceof KeyValueTypeTag) return (KeyValueTypeTag)parent;
+            
+            parent = parent.getParent();
+        }
+        
+        return null;
+    }
 
     public String getName()
     {
@@ -49,11 +63,13 @@ public class KeyTag extends TagSupport implements ValueTypeTag
         this.name = name;
     }
 
+    @Override
     public Object getValue()
     {   
         return value;
     }
 
+    @Override
     public void setValue(Object value)
     {
         this.value = value;
@@ -90,9 +106,11 @@ public class KeyTag extends TagSupport implements ValueTypeTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(parent instanceof KeyValueTypeTag)
+        KeyValueTypeTag parent = findParent();
+        
+        if(parent != null)
         {
-            ((KeyValueTypeTag)getParent()).set(name, value != null ? value : defaultValue);
+            parent.set(name, value != null ? value : defaultValue);
         }
         
         this.name = null;

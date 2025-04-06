@@ -60,6 +60,20 @@ public class JSONTag implements BodyTag
         throw new JspException("Invalid scope: " + scope);
     }
     
+    private ValueTypeTag findParent()
+    {
+        Tag parent = getParent();
+        
+        while(parent != null)
+        {
+            if(parent instanceof ValueTypeTag) return (ValueTypeTag)parent;
+            
+            parent = parent.getParent();
+        }
+        
+        return null;
+    }
+    
     public String getVar()
     {
         return variable;
@@ -139,6 +153,8 @@ public class JSONTag implements BodyTag
     @Override
     public int doAfterBody() throws JspException
     {
+        ValueTypeTag parent = findParent();
+        
         try
         {
             this.value = new JSONParser(content.getReader()).parse();
@@ -146,6 +162,11 @@ public class JSONTag implements BodyTag
             if(this.variable != null) 
             {
                 context.setAttribute(this.variable, this.value, getScopeInt());
+            }
+            
+            if(parent != null)
+            {
+                parent.setValue(this.value);
             }
         }
         catch(IOException e) { throw new JspException(e); }

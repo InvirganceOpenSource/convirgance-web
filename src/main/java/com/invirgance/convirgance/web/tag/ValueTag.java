@@ -37,6 +37,20 @@ public class ValueTag extends TagSupport implements ValueTypeTag
     private Object defaultValue;
     
     private Tag parent;
+    
+    private ValueTypeTag findParent()
+    {
+        Tag parent = getParent();
+        
+        while(parent != null)
+        {
+            if(parent instanceof ValueTypeTag) return (ValueTypeTag)parent;
+            
+            parent = parent.getParent();
+        }
+        
+        return null;
+    }
 
     public Object getValue()
     {   
@@ -79,9 +93,11 @@ public class ValueTag extends TagSupport implements ValueTypeTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(parent instanceof ValueTypeTag)
+        ValueTypeTag parent = findParent();
+        
+        if(parent != null)
         {
-            ((ValueTypeTag)parent).setValue(value != null ? value : defaultValue);
+            parent.setValue(value != null ? value : defaultValue);
         }
         
         this.value = null;

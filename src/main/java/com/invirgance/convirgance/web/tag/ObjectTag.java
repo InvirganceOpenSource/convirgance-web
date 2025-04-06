@@ -54,6 +54,20 @@ public class ObjectTag extends TagSupport implements KeyValueTypeTag
         throw new JspException("Invalid scope: " + scope);
     }
     
+    private ValueTypeTag findParent()
+    {
+        Tag parent = getParent();
+        
+        while(parent != null)
+        {
+            if(parent instanceof ValueTypeTag) return (ValueTypeTag)parent;
+            
+            parent = parent.getParent();
+        }
+        
+        return null;
+    }
+    
     public String getVar()
     {
         return variable;
@@ -107,9 +121,11 @@ public class ObjectTag extends TagSupport implements KeyValueTypeTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(getParent() instanceof ValueTypeTag)
+        ValueTypeTag parent = findParent();
+        
+        if(parent != null)
         {
-            ((ValueTypeTag)parent).setValue(object);
+            parent.setValue(object);
         }
         
         if(variable != null) 

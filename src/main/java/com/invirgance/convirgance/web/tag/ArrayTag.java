@@ -55,6 +55,20 @@ public class ArrayTag extends TagSupport implements ValueTypeTag
         throw new JspException("Invalid scope: " + scope);
     }
     
+    private ValueTypeTag findParent()
+    {
+        Tag parent = getParent();
+        
+        while(parent != null)
+        {
+            if(parent instanceof ValueTypeTag) return (ValueTypeTag)parent;
+            
+            parent = parent.getParent();
+        }
+        
+        return null;
+    }
+    
     public String getVar()
     {
         return variable;
@@ -108,9 +122,11 @@ public class ArrayTag extends TagSupport implements ValueTypeTag
     @Override
     public int doEndTag() throws JspException
     {
-        if(getParent() instanceof ValueTypeTag)
+        ValueTypeTag parent = findParent();
+        
+        if(parent != null)
         {
-            ((ValueTypeTag)parent).setValue(array);
+            parent.setValue(array);
         }
         
         if(variable != null) 
