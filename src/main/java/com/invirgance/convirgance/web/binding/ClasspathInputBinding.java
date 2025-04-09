@@ -26,34 +26,61 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.ClasspathSource;
 
 /**
- *
+ * Retrieves files from within the applications class path.
+ * 
  * @author jbanes
  */
 public class ClasspathInputBinding implements Binding
 {
     private Input<JSONObject> input;
     private String path;
-
+    
+    /**
+     * Returns the current file.
+     * 
+     * @return The {@link Input} of the {@link JSONObject}.
+     */
     public Input<JSONObject> getInput()
     {
         return input;
     }
 
+    /**
+     * Updates the type of {@link Input} expected for the JSONObject.
+     * 
+     * @param input The {@link Input} for a {@link JSONObject}.
+     */
     public void setInput(Input<JSONObject> input)
     {
         this.input = input;
     }
 
+    /**
+     * Returns the current path of the JSON file.
+     * 
+     * @return The path.
+     */
     public String getPath()
     {
         return path;
     }
 
+    /**
+     * Sets the path to load the JSON file from.
+     * 
+     * @param path The path.
+     */
     public void setPath(String path)
     {
         this.path = path;
     }
-
+    
+    /**
+     * Retrieves and parses the resource from the class path.
+     * 
+     * @param parameters _unused
+     * @return An {@link Iterable} JSONObject.
+     */
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {

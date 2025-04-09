@@ -24,7 +24,7 @@ package com.invirgance.convirgance.web.binding;
 import com.invirgance.convirgance.json.JSONObject;
 
 /**
- *
+ * 
  * @author jbanes
  */
 public interface Binding
