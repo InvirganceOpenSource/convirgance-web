@@ -30,7 +30,12 @@ import jakarta.servlet.jsp.tagext.BodyTagSupport;
 import java.util.Iterator;
 
 /**
- *
+ * A custom JSP tag that iterates over items in a collection.
+ * This tag processes each item in a provided {@link Iterable} collection and 
+ * makes the current item available as a page variable. Supports pagination 
+ * through skip and limit attributes and can provide status information about 
+ * the current iteration.
+ * 
  * @author jbanes
  */
 public class IterateTag extends BodyTagSupport
@@ -73,61 +78,131 @@ public class IterateTag extends BodyTagSupport
         return status;
     }
     
+    /**
+     * Gets the variable where this will be stored.
+     * 
+     * @return The variable
+     */
     public String getVar()
     {
         return variable;
     }
 
+    /**
+     * Sets the variable that will store this.
+     * @param variable The variable name.
+     */
     public void setVar(String variable)
     {
         this.variable = variable;
     }
 
+    /**
+     * Gets the current access scope.
+     * 
+     * @return Returns the scope this is accessible in.
+     */
     public String getScope()
     {
         return scope;
     }
 
+    /**
+     * Sets the scope where this will be accessible.
+     *<pre>
+     * Valid options are:
+     * - page
+     * - request
+     * - session
+     * - application
+     * </pre>
+     * 
+     * @param scope 
+     */
     public void setScope(String scope)
     {
         this.scope = scope;
     }
 
+    /**
+     * Returns the variable name where iteration status information is stored.
+     * Status includes index, count, first, and last properties.
+     * 
+     * @return The status variable.
+     */
     public String getStatus()
     {
         return status;
     }
-
+    
+    /**
+     * Sets the variable name where loop status information will be stored.
+     * When provided, each iteration will update this variable with current
+     * loop status (count, index, first, last).
+     * 
+     * @param status The status variable name.
+     */
     public void setStatus(String status)
     {
         this.status = status;
     }
 
+    /**
+     * Returns the items.
+     * 
+     * @return The items.
+     */
     public Iterable getItems()
     {
         return items;
     }
 
+    /**
+     * Sets the items that will be used by the tag.
+     * 
+     * @param items An iterable.
+     */
     public void setItems(Iterable items)
     {
         this.items = items;
     }
 
+    /**
+     * Gets the limit of the iterator.
+     * 
+     * @return The limit.
+     */
     public int getLimit()
     {
         return limit;
     }
 
+    /**
+     * Sets the item limit.
+     * Can be used for pagination.
+     * 
+     * @param limit The limit.
+     */
     public void setLimit(int limit)
     {
         this.limit = limit;
     }
 
+    /**
+     * Returns the item skip amount.
+     * 
+     * @return The items skip amount.
+     */
     public int getSkip()
     {
         return skip;
     }
 
+    /**
+     * Sets the amount of items to skip.
+     * 
+     * @param skip The amount.
+     */
     public void setSkip(int skip)
     {
         this.skip = skip;

@@ -30,7 +30,16 @@ import jakarta.servlet.jsp.tagext.Tag;
 import jakarta.servlet.jsp.tagext.TagSupport;
 
 /**
- *
+ * A custom JSP tag that creates and manages a JSON object.This tag creates
+ * a {@link JSONObject} that can be populated with key-value pairs using 
+ * nested {@link KeyTag} elements. 
+ * 
+ * <pre>
+ * The resulting object can be:
+ * - Stored in a page-scoped variable using the {@code var} attribute
+ * - Passed to a parent tag that implements {@link ValueTypeTag}
+ * </pre>
+ * 
  * @author jbanes
  */
 public class ObjectTag extends TagSupport implements KeyValueTypeTag
@@ -68,21 +77,41 @@ public class ObjectTag extends TagSupport implements KeyValueTypeTag
         return null;
     }
     
+    /**
+     * Gets the variable this is assigned to.
+     * 
+     * @return The variable name.
+     */
     public String getVar()
     {
         return variable;
     }
 
+    /**
+     * Sets the variable this is assigned to.
+     * 
+     * @param variable The name.
+     */
     public void setVar(String variable)
     {
         this.variable = variable;
     }
 
+    /**
+     * Gets the scope this is accessible in.
+     * 
+     * @return The scope.
+     */
     public String getScope()
     {
         return scope;
     }
 
+    /**
+     * Sets the scope this can be accessed from.
+     * 
+     * @param scope The scope.
+     */
     public void setScope(String scope)
     {
         this.scope = scope;
@@ -100,11 +129,23 @@ public class ObjectTag extends TagSupport implements KeyValueTypeTag
         this.parent = parent;
     }
     
+    /**
+     * Gets the value for the specified key from the JSON object.
+     * 
+     * @param key The key name.
+     * @return The value associated with the key.
+     */
     public Object get(String key)
     {
         return this.object.get(key);
     }
     
+    /**
+     * Sets a value for the specified key in the JSON object.
+     * 
+     * @param key The key name.
+     * @param value The value to associate with the key.
+     */
     public void set(String key, Object value)
     {
         this.object.put(key, value);

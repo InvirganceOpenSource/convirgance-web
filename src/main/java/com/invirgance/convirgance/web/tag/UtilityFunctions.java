@@ -23,7 +23,6 @@
  */
 package com.invirgance.convirgance.web.tag;
 
-import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.json.JSONWriter;
 import com.invirgance.convirgance.output.JSONOutput;
@@ -35,11 +34,21 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 
 /**
- *
+ * Utility functions for JSP tags, providing helpers for JSON conversion,
+ * HTML escaping, URL encoding, and collection operations.
+ * 
  * @author jbanes
  */
 public class UtilityFunctions
 {
+    
+    /**
+     * Converts a JSONObject iterable to a JSON string.
+     * 
+     * @param iterable An iterable of JSONObjects
+     * @return A JSON string representation
+     * @throws JspException If there is an encoding issue
+     */
     public static String json(Iterable<JSONObject> iterable) throws JspException
     {
         ByteArrayTarget target = new ByteArrayTarget();
@@ -57,6 +66,13 @@ public class UtilityFunctions
         }
     }
     
+    /**
+     * Renders out a Object as JSON to a string.
+     * 
+     * @param value The object.
+     * @return The string.
+     * @throws JspException If an encoding issues occurs.
+     */
     public static String json(Object value) throws JspException
     {
         if(value instanceof Iterable) return json((Iterable<JSONObject>)value);
@@ -71,6 +87,13 @@ public class UtilityFunctions
         }
     }
     
+    /**
+     * Escapes a value for safe HTML output, replacing special characters 
+     * with their HTML entity equivalents.
+     * 
+     * @param value The value to make HTML safe
+     * @return A string with HTML special characters escaped
+     */
     public static String html(Object value) 
     {
         return String.valueOf(value)
@@ -81,6 +104,13 @@ public class UtilityFunctions
                      .replaceAll("'", "&#39;");
     }
     
+    /**
+     * Makes the object URL safe.
+     * 
+     * @param value The value.
+     * @return The URL encoded version.
+     * @throws JspException If an encoding issue occurs.
+     */
     public static String urlparam(Object value) throws JspException
     {
         try
@@ -93,6 +123,14 @@ public class UtilityFunctions
         }
     }
     
+    /**
+     * Returns the first item in an iterable collection.
+     * Handles closing the iterator if it implements AutoCloseable.
+     * 
+     * @param iterable The collection
+     * @return The first item, or null if empty
+     * @throws JspException If an error occurs while iterating or closing
+     */
     public static Object first(Iterable iterable) throws JspException
     {
         Iterator<JSONObject> iterator = iterable.iterator();
@@ -106,6 +144,13 @@ public class UtilityFunctions
         return record;
     }
     
+    /**
+     * Gets the last item in a iterable.
+     * 
+     * @param iterable The iterable.
+     * @return The last item.
+     * @throws JspException _unused
+     */
     public static Object last(Iterable iterable) throws JspException
     {
         Iterator<JSONObject> iterator = iterable.iterator();

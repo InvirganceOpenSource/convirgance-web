@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2025 jbanes.
+ * Copyright 2025 tadghh.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.invirgance.convirgance.web.tag;
 
 /**
- * An interface that defines tags that can accept and store values.
- * This interface is implemented by tags that need to receive values
- * from child tags or other components in the tag hierarchy.
+ * Provides custom JSP tag implementations for building dynamic web applications.
+ * <pre>
+ * Contains a collection of JSP tags that facilitate 
+ * common tasks in web development:
+ * - Data manipulation (JSON objects, arrays, key-value pairs)
+ * - Database access and querying
+ * - Service integration
+ * - Collection iteration and processing
+ * - Variable management across different scopes
+ * </pre>
+ * 
+ * The tags in this package are designed to work together to create a cohesive and
+ * flexible system for developing JSP-based web applications. Container tags like
+ * {@link ObjectTag} and {@link ArrayTag} can be populated using nested child 
+ * tags like {@link KeyTag} and {@link ValueTag}.
+ * 
+ * Common interfaces like {@link ValueTypeTag} and {@link KeyValueTypeTag} 
+ * establish the communication patterns between parent and child tags in the hierarchy.
  * 
  * @author jbanes
  */
-public interface ValueTypeTag
-{
-    /**
-     * Gets the current value stored by the tag.
-     * 
-     * @return The value.
-     */
-    public Object getValue();
-    
-    /**
-     * Sets the value stored by the tag.
-     * 
-     * @param value The value.
-     */
-    public void setValue(Object value);
-}
+package com.invirgance.convirgance.web.tag;

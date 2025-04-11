@@ -28,7 +28,12 @@ import jakarta.servlet.jsp.tagext.Tag;
 import jakarta.servlet.jsp.tagext.TagSupport;
 
 /**
- *
+ * A custom JSP tag that sets a value on a parent tag implementing ValueTypeTag.
+ * This tag is designed to be used within parent tags that implement the 
+ * {@link ValueTypeTag} interface, such as {@link ArrayTag}. It passes a value
+ * to the parent tag, which can be provided either through its body content,
+ * the {@code value} attribute, or from nested tags.
+ * 
  * @author jbanes
  */
 public class ValueTag extends TagSupport implements ValueTypeTag
@@ -52,21 +57,41 @@ public class ValueTag extends TagSupport implements ValueTypeTag
         return null;
     }
 
+    /**
+     * Gets the value to be passed to the parent tag.
+     * 
+     * @return The stored value
+     */
     public Object getValue()
     {   
         return value;
     }
 
+    /**
+     * Sets the value to be passed to the parent tag.
+     * 
+     * @param value The value to store
+     */
     public void setValue(Object value)
     {
         this.value = value;
     }
 
+    /**
+     * Gets the default value to use when no value is provided.
+     * 
+     * @return The default value
+     */
     public Object getDefault()
     {
         return defaultValue;
     }
 
+    /**
+     * Sets the default value to use when no value is provided.
+     * 
+     * @param defaultValue The default value
+     */
     public void setDefault(Object defaultValue)
     {
         this.defaultValue = defaultValue;
@@ -83,13 +108,25 @@ public class ValueTag extends TagSupport implements ValueTypeTag
     {
         this.parent = parent;
     }
-
+    
+    /**
+     * Evaluates the tag body to potentially set the value.
+     * 
+     * @return EVAL_BODY_INCLUDE to process the tag body
+     * @throws JspException If evaluation fails
+     */
     @Override
     public int doStartTag() throws JspException
     {
         return EVAL_BODY_INCLUDE;
     }
-    
+
+    /**
+     * Passes the value (or default value if null) to the parent ValueTypeTag.
+     * 
+     * @return EVAL_PAGE to continue processing the page
+     * @throws JspException If passing the value fails
+     */
     @Override
     public int doEndTag() throws JspException
     {

@@ -34,7 +34,11 @@ import static jakarta.servlet.jsp.tagext.Tag.SKIP_BODY;
 import javax.sql.DataSource;
 
 /**
- *
+ * A custom JSP tag that executes a database query and stores the result in a variable.
+ * This tag processes its body content as an SQL query and executes it against a database
+ * specified by a JNDI data source name. The query results are stored in the specified
+ * variable and scope.
+ * 
  * @author jbanes
  */
 public class QueryTag extends BodyTagSupport
@@ -57,41 +61,83 @@ public class QueryTag extends BodyTagSupport
         throw new JspException("Invalid scope: " + scope);
     }
     
+    /**
+     * The variable this is assigned to.
+     * @return The name.
+     */
     public String getVar()
     {
         return variable;
     }
 
+    /**
+     * Sets the variable this is assigned to.
+     * 
+     * @param variable The name.
+     */
     public void setVar(String variable)
     {
         this.variable = variable;
     }
 
+    /**
+     * The scope this is accessible in.
+     * 
+     * @return The scope.
+     */
     public String getScope()
     {
         return scope;
     }
 
+    /**
+     * Sets the scope this can be accessed from.
+     * 
+     * @param scope The scope.
+     */
     public void setScope(String scope)
     {
         this.scope = scope;
     }
 
+    /**
+     * Gets the JDNI name.
+     * 
+     * @return The name.
+     */
     public String getJndi()
     {
         return jndi;
     }
 
+    /**
+     * Sets the connection name to use.
+     * 
+     * @param jndi The connection name.
+     */
     public void setJndi(String jndi)
     {
         this.jndi = jndi;
     }
 
+
+    /**
+     * Gets the binding object for SQL parameters.
+     * 
+     * @return The bindings object
+     */
     public JSONObject getBinding()
     {
         return binding;
     }
 
+    /**
+     * Sets the binding object to use for SQL query parameters.
+     * When provided, these bindings are used for parameter substitution
+     * in the SQL query.
+     * 
+     * @param binding The binding object
+     */
     public void setBinding(JSONObject binding)
     {
         this.binding = binding;
@@ -106,6 +152,13 @@ public class QueryTag extends BodyTagSupport
         return new DBMS(source);
     }
     
+    /**
+     * Executes the SQL query contained in the tag body after the body has
+     * been evaluated. The query results are stored in the specified variable.
+     * 
+     * @return SKIP_BODY to skip further body evaluation
+     * @throws JspException If a database error occurs
+     */    
     @Override
     public int doAfterBody() throws JspException
     {
