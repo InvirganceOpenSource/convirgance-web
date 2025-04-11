@@ -31,23 +31,49 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import java.io.IOException;
 
 /**
- *
+ * Origin implementation that extracts data from a specific HTTP request 
+ * parameter.
+ * 
+ * <pre>
+ * Use this origin when you need to:
+ * - Process data submitted in a specific request parameter
+ * - Handle form field submissions containing structured data
+ * - Extract and process URL-encoded parameter values
+ * </pre>
+ * 
  * @author jbanes
  */
 public class ParameterOrigin implements Origin
 {
     private String name;
 
+    /**
+     * The name of the parameter.
+     * 
+     * @return The current name.
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Sets the name of the parameter to retrieve.
+     * 
+     * @param name The parameter names
+     */
     public void setName(String name)
     {
         this.name = name;
     }
     
+    /**
+     * Gets the value of the parameter assigned with {@link #setName}.
+     * 
+     * @param request The {@link HttpRequest}. 
+     * @param parameters _unused.
+     * @return The ByteArraySource for the parameters value.
+     */
     @Override
     public Source getOrigin(HttpRequest request, JSONObject parameters)
     {
