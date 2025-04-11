@@ -21,24 +21,26 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.web.servlet;
 
-import com.invirgance.convirgance.web.http.HttpResponse;
-import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.service.Service;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
- *
+ * Servlet implementation for Jakarta EE environments that routes HTTP 
+ * requests to services. This servlet acts as the entry point for web requests 
+ * in Jakarta EE applications HTTP method support can be configured via 
+ * initialization parameters.
+ * 
  * @author jbanes
  */
 public class JakartaServicesServlet extends HttpServlet
@@ -88,6 +90,11 @@ public class JakartaServicesServlet extends HttpServlet
         }
     }
     
+    /**
+     * Initializes the servlet with the configuration.
+     * 
+     * @throws ServletException If an error occurs.
+     */
     @Override
     public void init() throws ServletException
     {
