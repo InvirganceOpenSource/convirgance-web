@@ -25,7 +25,17 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.filter.CoerciveComparator;
 
 /**
- *
+ * Provides access to request parameters within the data processing pipeline.
+ * BindingParameter acts as a reference to a specific request parameter stored
+ * in thread-local storage.
+ * 
+ * <pre>
+ * Common uses include:
+ * - Accessing request values in filter conditions
+ * - Referencing request parameters in transformers
+ * - Using request parameters as values in expressions
+ * </pre>
+ * 
  * @author jbanes
  */
 public class BindingParameter implements Comparable
@@ -38,22 +48,42 @@ public class BindingParameter implements Comparable
     public BindingParameter()
     {
     }
-
+    
+    /**
+     * Creates a new BindingParameter with the specified key.
+     *
+     * @param key The parameter key to retrieve from request parameters
+     */
     public BindingParameter(String key)
     {
         this.key = key;
     }
-
+    
+    /**
+     * Gets the parameter key.
+     *
+     * @return The parameter key
+     */
     public String getKey()
     {
         return key;
     }
-
+    
+    /**
+     * Sets the parameter key to retrieve from request parameters.
+     *
+     * @param key The parameter key
+     */
     public void setKey(String key)
     {
         this.key = key;
     }
     
+    /**
+     * Retrieves the value of the parameter from thread-local request parameters.
+     *
+     * @return The parameter value
+     */
     public Object getValue()
     {
         return bindings.get().get(key);
@@ -64,7 +94,13 @@ public class BindingParameter implements Comparable
     {
         return getValue().hashCode();
     }
-
+    
+    /**
+     * Compares the parameter value with another object for equality.
+     *
+     * @param obj The object to compare with
+     * @return {@code true} if the parameter value equals the object
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -77,6 +113,14 @@ public class BindingParameter implements Comparable
         return getValue().toString();
     }
 
+    /**
+     * This enables BindingParameter instances to be used directly in comparison
+     * operations with values of different types.
+     * 
+     * @param object The object to compare with
+     * @return A negative integer, zero, or a positive integer if this value 
+     * is less than, equal to, or greater than the specified object
+     */
     @Override
     public int compareTo(Object object)
     {

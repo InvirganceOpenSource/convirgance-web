@@ -25,7 +25,14 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
 
 /**
- *
+ * Core interface for all web service implementations in the framework.
+ * 
+ * <pre>
+ * Primary implementations include:
+ * - {@link SelectService}: Retrieves and returns data (GET operations)
+ * - {@link InsertService}: Accepts and persists data (POST operations)
+ * </pre>
+ * 
  * @author jbanes
  */
 public interface Service
