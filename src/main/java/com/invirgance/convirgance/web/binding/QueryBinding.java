@@ -29,13 +29,9 @@ import javax.sql.DataSource;
 
 /**
  * For retrieving data from SQL database.
- *
- * <p>The QueryBinding provides a mechanism to execute parameterized SQL queries against
- * a database and return the results as a stream of {@link JSONObject} instances. The database
- * connection is obtained through JNDI, making it suitable for use in application servers.</p>
- * 
- * <p>Query results are automatically converted to JSONObject instances, with column
- * names mapped to property names in the resulting objects.</p>
+ * QueryBinding executes parameterized SQL queries against a database and
+ * returns the results as JSON objects. It supports named parameter binding, 
+ * allowing request parameters to be safely used in SQL statements. 
  * 
  * @author jbanes
  */

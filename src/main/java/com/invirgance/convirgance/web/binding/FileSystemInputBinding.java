@@ -28,6 +28,10 @@ import java.io.File;
 
 /**
  * Retrieves files from the file system.
+ * FileSystemInputBinding allows services to access JSON files stored on the 
+ * server's file system. This is useful for data that may change without 
+ * redeploying the application, such as configuration files,
+ * external data feeds, or shared resources.
  * 
  * @author jbanes
  */

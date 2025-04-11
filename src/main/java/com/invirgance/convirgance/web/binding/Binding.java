@@ -24,6 +24,7 @@ package com.invirgance.convirgance.web.binding;
 import com.invirgance.convirgance.json.JSONObject;
 
 /**
+ * An interface for creating bindings for data sources.
  * 
  * @author jbanes
  */
