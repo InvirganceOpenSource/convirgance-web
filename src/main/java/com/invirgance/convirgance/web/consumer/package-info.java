@@ -23,18 +23,17 @@
  */
 
 /**
- * Data consumption and persistence API for the Convirgance framework.
- * 
- * <p>This package provides interfaces and implementations for persisting JSON data to
- * various storage backends. Components in this package handle the "write" side of data
- * processing workflows, typically receiving processed data and saving it to a destination.</p>
+ * This package provides interfaces and implementations for persisting JSON 
+ * data to various storage backends. Components in this package handle the 
+ * "write" side of data processing workflows, typically receiving processed data
+ * and saving it to a destination.
  * 
  * <p>Key components:</p>
  * <ul>
- *   <li>{@link Consumer} - Core interface for
- *       components that process JSON data and persist it to some destination</li>
- *   <li>{@link QueryConsumer} - SQL database
- *       implementation that executes parameterized queries with optional sequence ID generation</li>
+ *   <li>{@link Consumer} - Core interface for components that process JSON data
+ *       and persist it to some destination</li>
+ *   <li>{@link QueryConsumer} - SQL database implementation that executes 
+ *       parameterized queries with optional sequence ID generation</li>
  * </ul>
  * 
  * <p>Typical usage scenarios:</p>
@@ -45,7 +44,7 @@
  * </ul>
  * 
  * <p>These components are typically configured in Spring XML and used within
- * {@link com.invirgance.convirgance.web.service.InsertService} implementations.</p>
+ * {@link InsertService} implementations.</p>
  * 
  * @author jbanes
  */
