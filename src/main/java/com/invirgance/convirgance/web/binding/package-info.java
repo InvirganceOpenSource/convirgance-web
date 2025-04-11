@@ -30,14 +30,14 @@ SOFTWARE.
  * 
  * <p>Key components:</p>
  * <ul>
- *   <li>{@link Binding} - Core interface for
- *       components that retrieve JSON data from various sources</li>
- *   <li>{@link QueryBinding} - Database binding
- *       that executes SQL queries with parameter binding</li>
- *   <li>{@link FileSystemInputBinding} - Binding
- *       for reading JSON from files on the filesystem</li>
- *   <li>{@link ClasspathInputBinding} - Binding
- *       for reading JSON from the application classpath</li>
+ *   <li>{@link Binding} - Core interface for components that retrieve JSON data
+ *      from various sources</li>
+ *   <li>{@link QueryBinding} - Database binding that executes SQL queries with
+ *      parameter binding</li>
+ *   <li>{@link FileSystemInputBinding} - Binding for reading JSON from files on
+ *      the filesystem</li>
+ *   <li>{@link ClasspathInputBinding} - Binding for reading JSON from the 
+ *      application classpath</li>
  * </ul>
  * 
  * <p>Typical usage scenarios:</p>
