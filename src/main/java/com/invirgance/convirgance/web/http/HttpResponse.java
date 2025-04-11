@@ -30,11 +30,10 @@ import java.util.Locale;
  * Wrapper for HTTP servlet response objects.
  * 
  * <pre>
- * Provides access to common HTTP request elements:
- * - Request parameters and headers
- * - Request path information
- * - Client and server information
- * - Request body content
+ * Provides access to common HTTP response elements:
+ * - Status codes and headers
+ * - Response body output streams
+ * - Redirect and error handling
  * </pre>
  * 
  * @author jbanes
