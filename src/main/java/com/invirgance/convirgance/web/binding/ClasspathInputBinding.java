@@ -27,7 +27,6 @@ import com.invirgance.convirgance.source.ClasspathSource;
 
 /**
  * Retrieves files from within the applications class path.
- * 
  * Allows services to access JSON files packaged within the application's JAR or
  * WAR files or located in the classpath directories.
  * 

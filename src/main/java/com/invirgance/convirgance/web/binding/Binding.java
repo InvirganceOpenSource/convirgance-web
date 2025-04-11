@@ -25,7 +25,10 @@ import com.invirgance.convirgance.json.JSONObject;
 
 /**
  * An interface for creating bindings for data sources.
- * 
+ * The Binding interface represents a configurable data source that can retrieve
+ * JSON data based on request parameters. Implementations provide access to different
+ * data sources such as databases, files, or classpath resources.
+ *
  * @author jbanes
  */
 public interface Binding
