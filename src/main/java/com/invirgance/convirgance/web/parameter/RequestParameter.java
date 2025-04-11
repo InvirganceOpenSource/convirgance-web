@@ -24,7 +24,18 @@ package com.invirgance.convirgance.web.parameter;
 import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- *
+ * Parameter implementation that extracts values from HTTP request parameters.
+ * Provides access to URL query parameters or form field values from 
+ * HTTP requests. It supports default values when parameters are not present
+ * and allows mapping between internal parameter names and request parameter names.
+ * 
+ * <pre>
+ * This is the most commonly used Parameter implementation, used to:
+ * - Extract query string values from GET requests
+ * - Access form field values from POST requests
+ * - Provide default values for optional parameters
+ * </pre>
+ * 
  * @author jbanes
  */
 public class RequestParameter implements Parameter
@@ -40,7 +51,12 @@ public class RequestParameter implements Parameter
         
         return requestName;
     }
-
+    
+    /**
+     * Sets the name of the parameter to retrieve.
+     * 
+     * @param name The name.
+     */
     public void setName(String name)
     {
         this.name = name;
@@ -49,26 +65,52 @@ public class RequestParameter implements Parameter
         if(this.requestName == null) this.requestName = name;
     }
     
+    /**
+     * Returns the parameter names.
+     * 
+     * @return The name.
+     */
     public String getUrlParameterName()
     {
         return requestName;
     }
 
+    /**
+     * Sets the parameter name.
+     * 
+     * @param urlParamName The name.
+     */
     public void setUrlParameterName(String urlParamName)
     {
         this.requestName = urlParamName;
     }
 
+    /**
+     * Returns the fallback value if the parameter has none.
+     * 
+     * @return The default.
+     */
     public String getDefaultValue()
     {
         return defaultValue;
     }
 
+    /**
+     * Sets the fallback value when the parameter is null.
+     * 
+     * @param defaultValue The fallback value.
+     */
     public void setDefaultValue(String defaultValue)
     {
         this.defaultValue = defaultValue;
     }
 
+    /**
+     * Gets the value of a {@link HttpRequest} parameter.
+     * 
+     * @param request The request.
+     * @return The value of the parameter or default.
+     */
     @Override
     public Object getValue(HttpRequest request)
     {

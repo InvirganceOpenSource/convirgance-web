@@ -26,7 +26,15 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import java.util.Arrays;
 
 /**
- *
+ * Allows returning the parameters values of a {@link HttpRequest} as an array.
+ * 
+ * <pre>
+ * Use this parameter type when you need to:
+ * - Access multiple values for the same parameter name
+ * - Handle repeated query parameters
+ * - Process multi-select form fields
+ * </pre>
+ * 
  * @author jbanes
  */
 public class RequestArrayParameter implements Parameter
@@ -42,6 +50,11 @@ public class RequestArrayParameter implements Parameter
         return requestName;
     }
 
+    /**
+     * Sets the name of the parameter to retrieve.
+     * 
+     * @param name Parameter name.
+     */
     public void setName(String name)
     {
         this.name = name;
@@ -50,16 +63,32 @@ public class RequestArrayParameter implements Parameter
         if(this.requestName == null) this.requestName = name;
     }
     
+    /**
+     * Returns the parameter name.
+     * 
+     * @return The name.
+     */
     public String getUrlParameterName()
     {
         return requestName;
     }
 
+    /**
+     * Sets the URL parameter name to retrieve.
+     * 
+     * @param urlParamName The name.
+     */
     public void setUrlParameterName(String urlParamName)
     {
         this.requestName = urlParamName;
     }
 
+    /**
+     * Gets the parameter's values as a {@link JSONArray}.
+     * 
+     * @param request The request to get the values from.
+     * @return An array containing the values.
+     */
     @Override
     public Object getValue(HttpRequest request)
     {
