@@ -44,7 +44,7 @@
  * </ul>
  * 
  * <p>These components are typically configured in Spring XML and used within
- * {@link InsertService} implementations.</p>
+ * Service implementations.</p>
  * 
  * @author jbanes
  */
