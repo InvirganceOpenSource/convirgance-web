@@ -21,26 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.invirgance.convirgance.web.consumer;
-
-import com.invirgance.convirgance.json.JSONArray;
-import com.invirgance.convirgance.json.JSONObject;
 
 /**
- * Consumes JSON data for persistence operations. Used to store data in 
- * databases.
+ * Data consumption and persistence API for the Convirgance framework.
+ * 
+ * <p>This package provides interfaces and implementations for persisting JSON data to
+ * various storage backends. Components in this package handle the "write" side of data
+ * processing workflows, typically receiving processed data and saving it to a destination.</p>
+ * 
+ * <p>Key components:</p>
+ * <ul>
+ *   <li>{@link Consumer} - Core interface for
+ *       components that process JSON data and persist it to some destination</li>
+ *   <li>{@link QueryConsumer} - SQL database
+ *       implementation that executes parameterized queries with optional sequence ID generation</li>
+ * </ul>
+ * 
+ * <p>Typical usage scenarios:</p>
+ * <ul>
+ *   <li>Persisting web service data to databases</li>
+ *   <li>Writing processed JSON to external systems</li>
+ *   <li>Recording data with auto-generated IDs</li>
+ * </ul>
+ * 
+ * <p>These components are typically configured in Spring XML and used within
+ * {@link com.invirgance.convirgance.web.service.InsertService} implementations.</p>
  * 
  * @author jbanes
  */
-public interface Consumer
-{
-    /**
-     * Consumes the iterable of {@link JSONObject}s optionally modifying them
-     * based on the provided parameters.
-     * 
-     * @param iterable The JSONObjects to modify.
-     * @param parameters The request parameters.
-     * @return The modified JSONObjects
-     */
-    public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters);
-}
+package com.invirgance.convirgance.web.consumer;

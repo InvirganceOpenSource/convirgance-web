@@ -36,7 +36,14 @@ import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
 import javax.sql.DataSource;
 
 /**
- *
+ * Persists JSON data to a database using SQL. 
+ * <pre>
+ * Use this when you need to:
+ * - Insert web service data directly to a database
+ * - Auto-generate sequence IDs during insertion
+ * - Connect via JNDI with minimal configuration
+ * </pre>
+ * 
  * @author jbanes
  */
 public class QueryConsumer implements Consumer
@@ -49,41 +56,82 @@ public class QueryConsumer implements Consumer
     
     private String cachedKey;
 
+    /**
+     * Returns the JDNI name.
+     * 
+     * @return The name.
+     */
     public String getJndiName()
     {
         return jndiName;
     }
 
+    /**
+     * Updates the JDNI connection name to use.
+     * 
+     * @param jndiName The new connection.
+     */
     public void setJndiName(String jndiName)
     {
         this.jndiName = jndiName;
     }
 
+    /**
+     * Returns the SQL that will be executed.
+     * 
+     * @return The raw unbound SQL.
+     */
     public String getSql()
     {
         return sql;
     }
 
+    /**
+     * Sets the query to execute.
+     * Named bindings are supported.
+     * 
+     * @param sql The query.
+     */
     public void setSql(String sql)
     {
         this.sql = sql;
     }
 
+    /**
+     * Returns query used to get the next sequence id.
+     * 
+     * @return The query.
+     */
     public String getSequenceSql()
     {
         return sequenceSql.getSQL();
     }
 
+    /**
+     * Sets the query used to get the next sequence id.
+     * 
+     * @param sequenceSql The query.
+     */
     public void setSequenceSql(String sequenceSql)
     {
         this.sequenceSql = new Query(sequenceSql);
     }
 
+    /**
+     * The field name.
+     * 
+     * @return The name.
+     */
     public String getSequenceId()
     {
         return sequenceId;
     }
 
+    /**
+     * Sets the field name to store sequence ids.
+     * 
+     * @param sequenceId Field name.
+     */
     public void setSequenceId(String sequenceId)
     {
         this.sequenceId = sequenceId;
@@ -96,6 +144,16 @@ public class QueryConsumer implements Consumer
         return this.cachedKey;
     }
     
+    /**
+     * Creates an {@link AtomicOperation} for database insertion, optionally
+     * generating sequence values.
+     *
+     * @param iterable Data that will be transformed
+     * @param dbms The DBMS to get the sequence ids.
+     * @param keys Output collection where generated sequence values will be stored
+     * @return An {@link BatchOperation} with the transformed data to add to the database.
+     * @throws ConvirganceException if sequenceSql is set but sequenceId is not
+     */
     public AtomicOperation getOperation(Iterable<JSONObject> iterable, DBMS dbms, JSONArray keys)
     {
         Query query = new Query(sql);
@@ -136,6 +194,19 @@ public class QueryConsumer implements Consumer
         return new DBMS(source);
     }
     
+    /**
+     * Consumes a collection of JSONObject records, inserting them into the
+     * connected database.
+     *
+     * @param iterable Collection of JSONObject records to be inserted into the
+     * database
+     * @param parameters Additional parameters that might influence the
+     * operation (unused in this implementation)
+     * @return A JSONArray containing any generated sequence values, or an empty
+     * array if no sequences were used
+     * @throws ConvirganceException if database errors occur or if sequenceSql
+     * is set without sequenceId
+     */    
     @Override
     public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters)
     {
