@@ -37,5 +37,11 @@ import com.invirgance.convirgance.web.http.HttpResponse;
  */
 public interface Service
 {
+    /**
+     * Executes the service, processing the HTTP request and generating a response.
+     *
+     * @param request The HTTP request to process
+     * @param response The HTTP response to populate
+     */    
     public void execute(HttpRequest request, HttpResponse response);
 }

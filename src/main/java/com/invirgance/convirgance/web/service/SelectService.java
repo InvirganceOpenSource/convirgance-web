@@ -143,7 +143,8 @@ public class SelectService implements Service
     /**
      * Processes an HTTP request to retrieve data without generating a response.
      * <p>
-     * This method implements the core data retrieval pipeline:
+     * This method implements the core data retrieval pipeline and can be used
+     * by other components that need access to the data without writing to a response.
      * </p>
      * <ol>
      *   <li>Extract parameters from the HTTP request</li>
@@ -154,7 +155,7 @@ public class SelectService implements Service
      *
      * @param request The HTTP request containing the parameters
      * @return An iterable of JSONObjects containing the retrieved and transformed data
-     */    
+     */
     public Iterable<JSONObject> process(HttpRequest request)
     {
         JSONObject params = new JSONObject();

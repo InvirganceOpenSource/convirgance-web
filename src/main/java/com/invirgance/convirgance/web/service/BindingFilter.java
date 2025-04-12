@@ -44,6 +44,9 @@ public class BindingFilter implements Filter
 {
     private Filter filter;
     
+    /**
+     * Creates a new BindingFilter with no filter set.
+     */    
     public BindingFilter()
     {
     }
@@ -78,6 +81,13 @@ public class BindingFilter implements Filter
         this.filter = filter;
     }
     
+    /**
+     * Tests the filter against request parameters rather than the record.
+     * Redirects the test to evaluate the thread-local request parameters.
+     * 
+     * @param record Ignored in this implementation
+     * @return True if the request parameters pass the filter's test
+     */    
     @Override
     public boolean test(JSONObject record)
     {
