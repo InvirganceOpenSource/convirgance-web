@@ -43,7 +43,13 @@ public class RequestParameter implements Parameter
     private String name;
     private String requestName;
     private String defaultValue;
-
+    
+    /**
+     * Gets the name of this parameter.
+     * Returns the internal name if set, otherwise falls back to the request parameter name.
+     * 
+     * @return The parameter name
+     */
     @Override
     public String getName()
     {
