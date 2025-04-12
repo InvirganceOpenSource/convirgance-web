@@ -147,6 +147,9 @@ public class QueryConsumer implements Consumer
     /**
      * Creates an {@link AtomicOperation} for database insertion, optionally
      * generating sequence values.
+     * <p>
+     * If sequence generation is configured, this method will fetch sequence values 
+     * before building the batch operation.
      *
      * @param iterable Data that will be transformed
      * @param dbms The DBMS to get the sequence ids.

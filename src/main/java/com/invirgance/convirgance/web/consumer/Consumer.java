@@ -27,20 +27,20 @@ import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 
 /**
- * Consumes JSON data for persistence operations. Used to store data in 
- * databases.
+ * Interface for components that persist JSON data to storage backends.
+ * Implementations handle storing data in databases, files, or other 
+ * persistence targets.
  * 
  * @author jbanes
  */
 public interface Consumer
 {
     /**
-     * Consumes the iterable of {@link JSONObject}s optionally modifying them
-     * based on the provided parameters.
+     * Processes and persists a collection of JSON objects.
      * 
-     * @param iterable The JSONObjects to modify.
-     * @param parameters The request parameters.
-     * @return The modified JSONObjects
+     * @param iterable The collection of objects to persist
+     * @param parameters Additional parameters that may influence the operation
+     * @return A JSONArray containing generated keys or other metadata from the operation
      */
     public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters);
 }
