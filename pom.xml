@@ -6,6 +6,12 @@
     <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>Convirgance (Web Services)</name>
+    <description>
+        Convirgance (Web Services) provides a low-code / no-code
+        method for creating web service back-ends based upon
+        configuration files that use the Convirgance APIs.
+    </description>
+    <url>https://convirgance.invirgance.com</url>
     <licenses>
         <license>
           <name>MIT License</name>
@@ -40,7 +46,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>convirgance</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
