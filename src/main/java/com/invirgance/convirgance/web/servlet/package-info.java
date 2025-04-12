@@ -21,8 +21,22 @@ SOFTWARE.
  */
 
 /**
- * Contains Servlets and utility methods for calling/loading services.
- * Support for Jakarta and JavaEE servlets.
+ * Provides servlet components and service management utilities for web 
+ * applications.
+ * 
+ * 
+ * This package contains:
+ * <ul>
+ *   <li>Servlet implementations that serve as entry points for HTTP requests in both
+ *       Jakarta EE ({@link com.invirgance.convirgance.web.servlet.JakartaServicesServlet})
+ *       and Java EE ({@link com.invirgance.convirgance.web.servlet.JavaEEServicesServlet})
+ *       environments</li>
+ *   <li>Utility classes for invoking services ({@link ServiceCaller}) 
+ * programmatically from within web applications</li>
+ *   <li>Application initialization components ({@link ApplicationInitializer}) 
+ * for setting up database connections and performing startup tasks</li>
+ * </ul>
+ * 
  * 
  * @author jbanes
  */
