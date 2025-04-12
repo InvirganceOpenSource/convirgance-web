@@ -95,10 +95,11 @@ public class QueryBinding implements Binding
     }
 
     /**
-     * Binds the parameters to the SQL query's named binding.
+     * Executes the SQL query with the provided parameters.
+     * Parameter values are bound to named parameters in the SQL query.
      * 
-     * @param parameters A JSONObject containing the values.
-     * @return The data returned from the database.
+     * @param parameters JSON object containing parameter names and values
+     * @return Query results as an iterable of JSONObjects
      */
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)

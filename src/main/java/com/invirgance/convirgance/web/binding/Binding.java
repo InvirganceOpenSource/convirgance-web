@@ -33,5 +33,11 @@ import com.invirgance.convirgance.json.JSONObject;
  */
 public interface Binding
 {
+    /**
+     * Retrieves data from the configured source using the provided parameters.
+     * 
+     * @param parameters Request parameters that may influence data retrieval
+     * @return An iterable collection of JSON objects containing the retrieved data
+     */
     public Iterable<JSONObject> getBinding(JSONObject parameters);
 }

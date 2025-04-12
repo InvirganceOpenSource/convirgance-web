@@ -82,7 +82,13 @@ public class FileSystemInputBinding implements Binding
     {
         this.path = path;
     }
-
+    
+    /**
+     * Retrieves and parses the file from the configured file system path.
+     * 
+     * @param parameters Required by the Binding interface but not used in this implementation
+     * @return An {@link Iterable} of {@link JSONObject}s from the file
+     */
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {

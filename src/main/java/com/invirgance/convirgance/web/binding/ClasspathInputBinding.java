@@ -38,7 +38,7 @@ public class ClasspathInputBinding implements Binding
     private String path;
     
     /**
-     * Returns the current file.
+     * Returns the configured input processor.
      * 
      * @return The {@link Input} of the {@link JSONObject}.
      */
@@ -80,8 +80,8 @@ public class ClasspathInputBinding implements Binding
     /**
      * Retrieves and parses the resource from the class path.
      * 
-     * @param parameters _unused
-     * @return An {@link Iterable} JSONObject.
+     * @param parameters Required by the Binding interface but not used in this implementation
+     * @return An {@link Iterable} of {@link JSONObject}s from the classpath resource
      */
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
