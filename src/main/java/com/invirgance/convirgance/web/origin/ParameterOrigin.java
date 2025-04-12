@@ -70,9 +70,9 @@ public class ParameterOrigin implements Origin
     /**
      * Gets the value of the parameter assigned with {@link #setName}.
      * 
-     * @param request The {@link HttpRequest}. 
-     * @param parameters _unused.
-     * @return The ByteArraySource for the parameters value.
+     * @param request The {@link HttpRequest} containing the parameter value
+     * @param parameters Required by the Origin interface but not used in this implementation
+     * @return A ByteArraySource containing the parameter value's bytes
      */
     @Override
     public Source getOrigin(HttpRequest request, JSONObject parameters)

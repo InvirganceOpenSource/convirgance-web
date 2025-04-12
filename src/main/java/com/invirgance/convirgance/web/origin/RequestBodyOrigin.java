@@ -44,12 +44,13 @@ import java.io.InputStream;
  */
 public class RequestBodyOrigin implements Origin
 {
+    
     /**
-     * Gets a {@link Source} to the request's {@link InputStream}.
+     * Gets a {@link Source} that provides access to the request's {@link InputStream}.
      * 
-     * @param request The {@link HttpRequest}
-     * @param parameters _unused.
-     * @return A source to the requests input stream.
+     * @param request The {@link HttpRequest} containing the body content
+     * @param parameters Required by the Origin interface but not used in this implementation
+     * @return A Source wrapping the request's input stream
      */
     @Override
     public Source getOrigin(HttpRequest request, JSONObject parameters)

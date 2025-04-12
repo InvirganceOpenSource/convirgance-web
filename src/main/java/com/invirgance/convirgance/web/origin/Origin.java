@@ -35,5 +35,12 @@ import com.invirgance.convirgance.web.http.HttpRequest;
  */
 public interface Origin
 {
+    /**
+     * Extracts data from the HTTP request and returns it as a Source.
+     * 
+     * @param request The HTTP request to extract data from
+     * @param parameters Additional parameters that may influence extraction
+     * @return A Source providing access to the extracted data
+     */
     public Source getOrigin(HttpRequest request, JSONObject parameters);
 }
