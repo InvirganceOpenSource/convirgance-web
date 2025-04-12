@@ -60,6 +60,8 @@ public class RegExValidation implements Validation
 
     public String getRegex()
     {
+        if(regex == null) return null;
+        
         return regex.pattern();
     }
 
@@ -76,7 +78,7 @@ public class RegExValidation implements Validation
         
         // We dont' attempt to validate null values
         if(value == null) return;
-        
+
         if(!predicate.test(value))
         {
             throw new ValidationException(key + " does not match pattern " + regex.pattern() + "! Record:\n" + record.toString(4));
