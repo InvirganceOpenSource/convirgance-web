@@ -25,32 +25,69 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.filter.Filter;
 
 /**
- *
+ * Filter implementation that evaluates conditions against request parameters.
+ * While standard filters test against record data, BindingFilter redirects
+ * the test to evaluate against HTTP request parameters stored in thread-local
+ * storage. This enables conditional filtering based on request values rather
+ * than record content.
+ * 
+ * <pre>
+ * This filter is useful for:
+ * - Conditionally processing records based on request parameters
+ * - Implementing optional filtering in query interfaces
+ * - Creating dynamic filtering behavior controlled by request parameters
+ * </pre>
+ * 
  * @author jbanes
  */
 public class BindingFilter implements Filter
 {
     private Filter filter;
-
+    
+    /**
+     * Creates a new BindingFilter with no filter set.
+     */    
     public BindingFilter()
     {
     }
 
+    /**
+     * Creates a binding filter with the provided filter.
+     * 
+     * @param filter The filter.
+     */
     public BindingFilter(Filter filter)
     {
         this.filter = filter;
     }
 
+    /**
+     * Returns the current filter.
+     * 
+     * @return The filter.
+     */
     public Filter getFilter()
     {
         return filter;
     }
 
+    /**
+     * Updates or sets the filter.
+     * 
+     * @param filter The filter.
+     */
     public void setFilter(Filter filter)
     {
         this.filter = filter;
     }
     
+    /**
+     * Tests the filter against request parameters rather than the record.
+     * Redirects the test to evaluate the thread-local request parameters.
+     * 
+     * @param record Ignored in this implementation
+     * @return True if the request parameters pass the filter's test
+     */    
     @Override
     public boolean test(JSONObject record)
     {

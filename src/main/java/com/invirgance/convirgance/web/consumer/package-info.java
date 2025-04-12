@@ -21,28 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.invirgance.convirgance.web.tag;
 
 /**
- * An interface that defines tags that can accept and store values.
- * This interface is implemented by tags that need to receive values
- * from child tags or other components in the tag hierarchy.
+ * This package provides interfaces and implementations for persisting JSON 
+ * data to various storage backends. Components in this package handle the 
+ * "write" side of data processing workflows, typically receiving processed data
+ * and saving it to a destination.
+ * 
+ * <p>Key components:</p>
+ * <ul>
+ *   <li>{@link Consumer} - Core interface for components that process JSON data
+ *       and persist it to some destination</li>
+ *   <li>{@link QueryConsumer} - SQL database implementation that executes 
+ *       parameterized queries with optional sequence ID generation</li>
+ * </ul>
+ * 
+ * <p>Typical usage scenarios:</p>
+ * <ul>
+ *   <li>Persisting web service data to databases</li>
+ *   <li>Writing processed JSON to external systems</li>
+ *   <li>Recording data with auto-generated IDs</li>
+ * </ul>
+ * 
+ * <p>These components are typically configured in Spring XML and used within
+ * Service implementations.</p>
  * 
  * @author jbanes
  */
-public interface ValueTypeTag
-{
-    /**
-     * Gets the current value stored by the tag.
-     * 
-     * @return The value.
-     */
-    public Object getValue();
-    
-    /**
-     * Sets the value stored by the tag.
-     * 
-     * @param value The value.
-     */
-    public void setValue(Object value);
-}
+package com.invirgance.convirgance.web.consumer;

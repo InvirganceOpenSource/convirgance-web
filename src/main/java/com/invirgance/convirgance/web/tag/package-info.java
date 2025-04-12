@@ -19,29 +19,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
-
-import com.invirgance.convirgance.web.http.HttpRequest;
-import com.invirgance.convirgance.web.http.HttpResponse;
 
 /**
- * Core interface for all web service implementations in the framework.
- * 
+ * Provides custom JSP tag implementations for building dynamic web applications.
  * <pre>
- * Primary implementations include:
- * - {@link SelectService}: Retrieves and returns data (GET operations)
- * - {@link InsertService}: Accepts and persists data (POST operations)
+ * Contains a collection of JSP tags that facilitate 
+ * common tasks in web development:
+ * - Data manipulation (JSON objects, arrays, key-value pairs)
+ * - Database access and querying
+ * - Service integration
+ * - Collection iteration and processing
+ * - Variable management across different scopes
  * </pre>
+ * 
+ * The tags in this package are designed to work together to create a cohesive and
+ * flexible system for developing JSP-based web applications. Container tags like
+ * {@link ObjectTag} and {@link ArrayTag} can be populated using nested child 
+ * tags like {@link KeyTag} and {@link ValueTag}.
+ * 
+ * Common interfaces like {@link ValueTypeTag} and {@link KeyValueTypeTag} 
+ * establish the communication patterns between parent and child tags in the hierarchy.
  * 
  * @author jbanes
  */
-public interface Service
-{
-    /**
-     * Executes the service, processing the HTTP request and generating a response.
-     *
-     * @param request The HTTP request to process
-     * @param response The HTTP response to populate
-     */    
-    public void execute(HttpRequest request, HttpResponse response);
-}
+package com.invirgance.convirgance.web.tag;

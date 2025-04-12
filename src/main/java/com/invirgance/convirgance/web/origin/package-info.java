@@ -19,29 +19,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
-
-import com.invirgance.convirgance.web.http.HttpRequest;
-import com.invirgance.convirgance.web.http.HttpResponse;
 
 /**
- * Core interface for all web service implementations in the framework.
+ * Data source interfaces for processing HTTP request data.
+ * This package provides components that act as data sources for insertion operations,
+ * extracting raw data from HTTP requests.
+ * 
+ * <p>Key components:</p>
+ * <ul>
+ *   <li>{@link Origin} - Core interface for components that extract source data
+ *       from HTTP requests</li>
+ *   <li>{@link RequestBodyOrigin} - Provides access to the HTTP request body as
+ *       a data source</li>
+ *   <li>{@link ParameterOrigin} - Extracts data from a specific HTTP request 
+ *       parameter</li>
+ * </ul>
  * 
  * <pre>
- * Primary implementations include:
- * - {@link SelectService}: Retrieves and returns data (GET operations)
- * - {@link InsertService}: Accepts and persists data (POST operations)
+ * Typical usage scenarios:
+ * - Processing JSON or XML request bodies for persistence
+ * - Handling form submissions or file uploads
+ * - Extracting specific parameters for insertion operations
+ * - Creating data insertion endpoints with flexible data sources
  * </pre>
  * 
  * @author jbanes
  */
-public interface Service
-{
-    /**
-     * Executes the service, processing the HTTP request and generating a response.
-     *
-     * @param request The HTTP request to process
-     * @param response The HTTP response to populate
-     */    
-    public void execute(HttpRequest request, HttpResponse response);
-}
+package com.invirgance.convirgance.web.origin;

@@ -28,10 +28,19 @@ import com.invirgance.convirgance.source.Source;
 import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- *
+ * Extract raw data from HTTP requests in various ways and provide it as a 
+ * Source that can be processed.
+ * 
  * @author jbanes
  */
 public interface Origin
 {
+    /**
+     * Extracts data from the HTTP request and returns it as a Source.
+     * 
+     * @param request The HTTP request to extract data from
+     * @param parameters Additional parameters that may influence extraction
+     * @return A Source providing access to the extracted data
+     */
     public Source getOrigin(HttpRequest request, JSONObject parameters);
 }

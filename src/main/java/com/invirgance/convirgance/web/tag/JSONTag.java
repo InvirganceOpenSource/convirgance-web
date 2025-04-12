@@ -32,7 +32,12 @@ import jakarta.servlet.jsp.tagext.Tag;
 import java.io.IOException;
 
 /**
- *
+ * A custom JSP tag that parses JSON content and makes it available as a 
+ * variable. This tag processes its body content as JSON text, parses it into a
+ * Java object structure using {@link JSONParser}, and makes the resulting 
+ * object available as a page variable or passes it to a parent tag that 
+ * implements {@link ValueTypeTag}.
+ * 
  * @author jbanes
  */
 public class JSONTag implements BodyTag
@@ -74,21 +79,42 @@ public class JSONTag implements BodyTag
         return null;
     }
     
+    /**
+     * Gets the variable name where the parsed JSON will be stored.
+     * 
+     * @return The variable.
+     */
     public String getVar()
     {
         return variable;
     }
 
+    /**
+     * Sets the variable name where the parsed JSON will be stored.
+     * 
+     * @param variable The variable name
+     */
     public void setVar(String variable)
     {
         this.variable = variable;
     }
 
+    /**
+     * Gets the scope where the variable will be stored.
+     * 
+     * @return The scope name.
+     */
     public String getScope()
     {
         return scope;
     }
 
+    /**
+     * Sets the scope where the variable will be stored.
+     * Valid options are: page, request, session, application.
+     * 
+     * @param scope The scope name.
+     */
     public void setScope(String scope)
     {
         this.scope = scope;

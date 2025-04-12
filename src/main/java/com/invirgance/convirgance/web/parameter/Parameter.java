@@ -24,11 +24,24 @@ package com.invirgance.convirgance.web.parameter;
 import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- *
+ * Defines a parameter implementation that extracts values from HTTP requests.
+ * 
  * @author jbanes
  */
 public interface Parameter
 {
+    /**
+     * Gets the name of this parameter.
+     * 
+     * @return The parameter name
+     */
     public String getName();
+    
+    /**
+     * Extracts a value from the HTTP request.
+     * 
+     * @param request The HTTP request to extract values from
+     * @return The extracted value
+     */
     public Object getValue(HttpRequest request);
 }

@@ -24,14 +24,21 @@
 package com.invirgance.convirgance.web.tag;
 
 import com.invirgance.convirgance.json.JSONArray;
-import com.invirgance.convirgance.json.JSONObject;
 import jakarta.servlet.jsp.JspException;
 import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.Tag;
 import jakarta.servlet.jsp.tagext.TagSupport;
 
 /**
- *
+ * A JSP tag that creates and manages a JSON array.
+ * This tag creates a {@link JSONArray} object that can be populated with values
+ * by nested tags such as {@link ValueTag}. 
+ * 
+ * <pre>
+ * The resulting array can be:
+ * - Stored in a page-scoped variable using the {@code var} attribute
+ * - Passed to a parent tag that implements {@link ValueTypeTag}
+ * </pre>
  * @author jbanes
  */
 public class ArrayTag extends TagSupport implements ValueTypeTag
@@ -69,31 +76,69 @@ public class ArrayTag extends TagSupport implements ValueTypeTag
         return null;
     }
     
+    /**
+     * The name of the variable where this will be stored.
+     * 
+     * @return The variable.
+     */
     public String getVar()
     {
         return variable;
     }
 
+    /**
+     * Sets the variable for where the JSONArray will be stored.
+     * 
+     * @param variable The variable name
+     */
     public void setVar(String variable)
     {
         this.variable = variable;
     }
 
+    /**
+     * Gets the scope for where this will be stored.
+     * 
+     * @return The scope
+     */
     public String getScope()
     {
         return scope;
     }
 
+    /**
+     * Sets the scope for where this will be stored.
+     * This changes its access level.
+     * <pre>
+     * Valid options are:
+     * - page
+     * - request
+     * - session
+     * - application
+     * </pre>
+     * 
+     * @param scope The scope location.
+     */
     public void setScope(String scope)
     {
         this.scope = scope;
     }
     
+    /**
+     * Returns JSON array managed by this tag.
+     * 
+     * @return The array.
+     */
     public Object getValue()
     {
         return this.array;
     }
     
+    /**
+     * Adds a value to the array. Called by child tags to contribute values.
+     * 
+     * @param value The value to add.
+     */
     public void setValue(Object value)
     {
         this.array.add(value);

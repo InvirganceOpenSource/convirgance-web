@@ -28,7 +28,11 @@ import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
 import javax.sql.DataSource;
 
 /**
- *
+ * For retrieving data from SQL database.
+ * QueryBinding executes parameterized SQL queries against a database and
+ * returns the results as JSON objects. It supports named parameter binding, 
+ * allowing request parameters to be safely used in SQL statements. 
+ * 
  * @author jbanes
  */
 public class QueryBinding implements Binding
@@ -36,21 +40,46 @@ public class QueryBinding implements Binding
     private String jndiName;
     private String sql;
 
+    /**
+     * The JNDI name used to look up the database connection.
+     * 
+     * <p>This property must reference a valid JNDI resource that returns a
+     * {@link DataSource}.</p>
+     *
+     * @return the JNDI name
+    */
     public String getJndiName()
     {
         return jndiName;
     }
 
+    /**
+     * Sets the JNDI name for the data source lookup.
+     * 
+     * @param jndiName The JDNI name.
+     */
     public void setJndiName(String jndiName)
     {
         this.jndiName = jndiName;
     }
 
+    /**
+     * Returns the SQL query that will be executed.
+     * 
+     * @return The SQL query.
+     */
     public String getSql()
     {
         return sql;
     }
 
+    /**
+     * Sets the query used to retrieve data. 
+     * Named bindings can be used, they will be bound by key, to the 
+     * parameters provided through through {@link #getBinding(JSONObject)}.
+     * 
+     * @param sql The new SQL query.
+     */
     public void setSql(String sql)
     {
         this.sql = sql;
@@ -65,6 +94,13 @@ public class QueryBinding implements Binding
         return new DBMS(source);
     }
 
+    /**
+     * Executes the SQL query with the provided parameters.
+     * Parameter values are bound to named parameters in the SQL query.
+     * 
+     * @param parameters JSON object containing parameter names and values
+     * @return Query results as an iterable of JSONObjects
+     */
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {

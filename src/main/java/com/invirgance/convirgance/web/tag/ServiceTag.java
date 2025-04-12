@@ -31,7 +31,11 @@ import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.BodyTagSupport;
 
 /**
- *
+ * A custom JSP tag that calls a service endpoint and stores the results.
+ * This tag invokes a service specified by a path and provides parameters to that
+ * service using key-value pairs. As an implementation of {@link KeyValueTypeTag}, 
+ * it allows parameters to be added through nested {@link KeyTag} elements.
+ * 
  * @author jbanes
  */
 public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
@@ -56,36 +60,72 @@ public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
         throw new JspException("Invalid scope: " + scope);
     }
     
+    /**
+     * Gets the variable name this is assigned to.
+     * 
+     * @return The name.
+     */
     public String getVar()
     {
         return variable;
     }
 
+    /**
+     * Sets the variable this is assigned to.
+     * 
+     * @param variable The name.
+     */
     public void setVar(String variable)
     {
         this.variable = variable;
     }
 
+    /**
+     * Gets the scope this is accessible in.
+     * 
+     * @return The scope.
+     */    
     public String getScope()
     {
         return scope;
     }
-
+    
+    /**
+     * Sets the scope this can be accessed from.
+     * 
+     * @param scope The scope.
+     */
     public void setScope(String scope)
     {
         this.scope = scope;
     }
     
+    /**
+     * Gets the service path that will be called.
+     * 
+     * @return The service path
+     */
     public String getPath()
     {
         return path;
     }
 
+    /**
+     * Sets the path for the service endpoint to call.
+     * 
+     * @param path The service path
+     */
     public void setPath(String path)
     {
         this.path = path;
     }
-
+    
+    /**
+     * Initializes the tag by creating a new parameter object.
+     * 
+     * @return EVAL_BODY_INCLUDE to process the tag body
+     * @throws JspException If initialization fails
+     */
     @Override
     public int doStartTag() throws JspException
     {
@@ -93,7 +133,14 @@ public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
         
         return EVAL_BODY_INCLUDE;
     }
-
+    
+    /**
+     * Calls the service endpoint with the collected parameters and 
+     * stores the results in the specified variable.
+     * 
+     * @return EVAL_PAGE to continue processing the page
+     * @throws JspException If the service call fails
+     */
     @Override
     public int doEndTag() throws JspException
     {
@@ -111,13 +158,27 @@ public class ServiceTag extends BodyTagSupport implements KeyValueTypeTag
         
         return EVAL_PAGE;
     }
-
+    
+    /**
+     * Gets a parameter value for the specified key.
+     * Implements the KeyValueTypeTag interface.
+     * 
+     * @param key The parameter name
+     * @return The parameter value
+     */
     @Override
     public Object get(String key)
     {
         return this.parameters.get(key);
     }
-
+    
+    /**
+     * Sets a parameter value for the specified key.
+     * These parameters are passed to the service endpoint.
+     * 
+     * @param key The parameter name
+     * @param value The parameter value
+     */
     @Override
     public void set(String key, Object value)
     {

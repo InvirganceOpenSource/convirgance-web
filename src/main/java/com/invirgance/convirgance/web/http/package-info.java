@@ -19,29 +19,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
-
-import com.invirgance.convirgance.web.http.HttpRequest;
-import com.invirgance.convirgance.web.http.HttpResponse;
 
 /**
- * Core interface for all web service implementations in the framework.
+ * This package provides wrapper classes that abstract away the differences
+ * between Java EE and Jakarta EE HTTP APIs.
  * 
- * <pre>
- * Primary implementations include:
- * - {@link SelectService}: Retrieves and returns data (GET operations)
- * - {@link InsertService}: Accepts and persists data (POST operations)
- * </pre>
+ * <p>Key components:</p>
+ * <ul>
+ *   <li>{@link HttpRequest} - A wrapper for HTTP request objects that provides 
+ *       access to request parameters, headers, and the request body.</li>
+ *   <li>{@link HttpResponse} - A wrapper for HTTP response objects that enables
+ *      setting headers, status codes, and writing to the response body.</li>
+ * </ul>
  * 
  * @author jbanes
  */
-public interface Service
-{
-    /**
-     * Executes the service, processing the HTTP request and generating a response.
-     *
-     * @param request The HTTP request to process
-     * @param response The HTTP response to populate
-     */    
-    public void execute(HttpRequest request, HttpResponse response);
-}
+package com.invirgance.convirgance.web.http;

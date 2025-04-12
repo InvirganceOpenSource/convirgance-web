@@ -27,10 +27,20 @@ import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 
 /**
- *
+ * Interface for components that persist JSON data to storage backends.
+ * Implementations handle storing data in databases, files, or other 
+ * persistence targets.
+ * 
  * @author jbanes
  */
 public interface Consumer
 {
+    /**
+     * Processes and persists a collection of JSON objects.
+     * 
+     * @param iterable The collection of objects to persist
+     * @param parameters Additional parameters that may influence the operation
+     * @return A JSONArray containing generated keys or other metadata from the operation
+     */
     public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters);
 }

@@ -40,6 +40,11 @@ class ServiceLoader
     
     private List<ServiceDescriptor> cache = new ArrayList<>();
     
+    /**
+     * Returns the current service loader or new instance.
+     * 
+     * @return The current or a new instance.
+     */
     public static ServiceLoader getInstance()
     {
         if(instance == null) instance = new ServiceLoader();
@@ -47,6 +52,13 @@ class ServiceLoader
         return instance;
     }
     
+    /**
+     * Returns a {@link ServiceDescriptor} for the request and path.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @param path The path.
+     * @return A ServiceDescriptor.
+     */
     public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request, String path)
     {
         ServiceDescriptor descriptor;
@@ -70,6 +82,12 @@ class ServiceLoader
         return descriptor;
     }
     
+    /**
+     * Returns a {@link ServiceDescriptor} for the request.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @return A ServiceDescriptor.
+     */    
     public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor descriptor;
@@ -93,7 +111,14 @@ class ServiceLoader
         
         return descriptor;
     }
-    
+
+    /**
+     * Returns a {@link Service} for the request and path.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @param path The path.
+     * @return A Service.
+     */    
     public Service get(jakarta.servlet.http.HttpServletRequest request, String path)
     {
         ServiceDescriptor loaded;
@@ -116,6 +141,12 @@ class ServiceLoader
         return loaded.getService();
     }
     
+    /**
+     * Returns a {@link Service} for the request.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @return A Service.
+     */        
     public Service get(jakarta.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor loaded;
@@ -139,6 +170,12 @@ class ServiceLoader
         return loaded.getService();
     }
     
+    /**
+     * Returns a {@link ServiceDescriptor} for the {@link javax.servlet.http.HttpServletRequest}
+     * 
+     * @param request The request.
+     * @return The {@link ServiceDescriptor}.
+     */
     public ServiceDescriptor load(javax.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor descriptor;
@@ -163,6 +200,12 @@ class ServiceLoader
         return descriptor;
     }
     
+    /**
+     * Returns a {@link Service} for the {@link javax.servlet.http.HttpServletRequest}
+     * 
+     * @param request The request.
+     * @return The {@link Service}.
+     */    
     public Service get(javax.servlet.http.HttpServletRequest request)
     {
         ServiceDescriptor loaded;

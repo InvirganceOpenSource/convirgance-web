@@ -19,29 +19,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
-
-import com.invirgance.convirgance.web.http.HttpRequest;
-import com.invirgance.convirgance.web.http.HttpResponse;
 
 /**
- * Core interface for all web service implementations in the framework.
+ * Provides servlet components and service management utilities for web 
+ * applications.
  * 
- * <pre>
- * Primary implementations include:
- * - {@link SelectService}: Retrieves and returns data (GET operations)
- * - {@link InsertService}: Accepts and persists data (POST operations)
- * </pre>
+ * 
+ * This package contains:
+ * <ul>
+ *   <li>Servlet implementations that serve as entry points for HTTP requests in both
+ *       Jakarta EE ({@link com.invirgance.convirgance.web.servlet.JakartaServicesServlet})
+ *       and Java EE ({@link com.invirgance.convirgance.web.servlet.JavaEEServicesServlet})
+ *       environments</li>
+ *   <li>Utility classes for invoking services ({@link ServiceCaller}) 
+ * programmatically from within web applications</li>
+ *   <li>Application initialization components ({@link ApplicationInitializer}) 
+ * for setting up database connections and performing startup tasks</li>
+ * </ul>
+ * 
  * 
  * @author jbanes
  */
-public interface Service
-{
-    /**
-     * Executes the service, processing the HTTP request and generating a response.
-     *
-     * @param request The HTTP request to process
-     * @param response The HTTP response to populate
-     */    
-    public void execute(HttpRequest request, HttpResponse response);
-}
+package com.invirgance.convirgance.web.servlet;

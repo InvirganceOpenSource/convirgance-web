@@ -24,7 +24,18 @@ package com.invirgance.convirgance.web.parameter;
 import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- *
+ * Parameter implementation that provides a fixed, predefined value.
+ * StaticParameter supplies a constant value that doesn't depend on the HTTP request.
+ * This is useful for providing configuration values, default settings, or context
+ * information that should be available to services and transformers.
+ * 
+ * <pre>
+ * Use this parameter type when you need to:
+ * - Include configuration constants in service processing
+ * - Add metadata that isn't part of the request
+ * - Provide environment or context information to services
+ * </pre>
+ * 
  * @author jbanes
  */
 public class StaticParameter implements Parameter
@@ -37,18 +48,34 @@ public class StaticParameter implements Parameter
     {
         return this.name;
     }
-
+    
+    /**
+     * Sets the parameter name.
+     * 
+     * @param name The name.
+     */
     public void setName(String name)
     {
         this.name = name;
     }
     
+    /**
+     * Returns the value regardless of the request.
+     * 
+     * @param request The request.
+     * @return The value.
+     */
     @Override
     public Object getValue(HttpRequest request)
     {
         return this.value;
     }
 
+    /**
+     * Sets the value.
+     * 
+     * @param value The value.
+     */
     public void setValue(Object value)
     {
         this.value = value;

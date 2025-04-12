@@ -24,13 +24,28 @@
 package com.invirgance.convirgance.web.tag;
 
 /**
- *
+ * An interface for tags that can store key-value pairs.
+ * This interface is implemented by tags that need to accept
+ * key-value pairs from child tags like {@link KeyTag}.
+ * 
  * @author jbanes
  */
 public interface KeyValueTypeTag
 {
-    
+    /**
+     * Gets the value associated with the specified key.
+     * 
+     * @param key The key name
+     * @return The value for the key
+     */
     public Object get(String key);
     
+    /**
+     * Sets a value for the specified key.
+     * This is typically called by child tags to contribute key-value pairs.
+     * 
+     * @param key The key name
+     * @param value The value to associate with the key
+     */
     public void set(String key, Object value);
 }

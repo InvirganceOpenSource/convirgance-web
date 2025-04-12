@@ -34,11 +34,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Utility class for invoking {@link SelectService} instances and returning
+ * their results as {@link JSONObject}s.
+ * 
  * @author jbanes
  */
 public class ServiceCaller
 {
+    /**
+     * Uses the service at path, processing the request and returning data.
+     * The service will utilize any relevant request parameters.
+     * 
+     * @param request A {@link HttpServletRequest}
+     * @param path A path to a service.
+     * @param parameters The requests parameters that will be used by the service.
+     * @return An iterable response from the service.
+     * @throws IllegalArgumentException if a select service doesn't exist for the path.
+     */
     public static Iterable<JSONObject> select(HttpServletRequest request, String path, JSONObject parameters)
     {
         ServiceLoader loader = ServiceLoader.getInstance();

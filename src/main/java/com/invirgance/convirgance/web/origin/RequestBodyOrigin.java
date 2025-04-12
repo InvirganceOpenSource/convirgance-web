@@ -29,11 +29,29 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import java.io.InputStream;
 
 /**
- *
+ * Provides direct access to the HTTP request body.
+ * RequestBodyOrigin creates a Source that wraps the input stream of the HTTP request,
+ * allowing direct access to the raw request body content.
+ * 
+ * <pre>
+ * Use this origin when you need to:
+ * - Process JSON or XML data sent in request bodies
+ * - Handle file uploads or binary content
+ * - Create REST API endpoints for data submission
+ * </pre>
+ * 
  * @author jbanes
  */
 public class RequestBodyOrigin implements Origin
 {
+    
+    /**
+     * Gets a {@link Source} that provides access to the request's {@link InputStream}.
+     * 
+     * @param request The {@link HttpRequest} containing the body content
+     * @param parameters Required by the Origin interface but not used in this implementation
+     * @return A Source wrapping the request's input stream
+     */
     @Override
     public Source getOrigin(HttpRequest request, JSONObject parameters)
     {

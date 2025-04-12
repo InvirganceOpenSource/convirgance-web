@@ -21,15 +21,13 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.web.servlet;
 
-import com.invirgance.convirgance.web.http.HttpResponse;
-import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.service.Service;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,7 +36,11 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- *
+ * Servlet implementation for Java EE environments that routes HTTP 
+ * requests to services. * This servlet acts as the entry point for web 
+ * requests in Java EE applications HTTP method support can be configured via
+ * initialization parameters.
+ * 
  * @author jbanes
  */
 public class JavaEEServicesServlet extends HttpServlet
@@ -88,6 +90,11 @@ public class JavaEEServicesServlet extends HttpServlet
         }
     }
     
+    /**
+     * Initializes the servlet with the configuration.
+     * 
+     * @throws ServletException If the initialization fails.
+     */
     @Override
     public void init() throws ServletException
     {
@@ -105,6 +112,14 @@ public class JavaEEServicesServlet extends HttpServlet
         }
     }
     
+    /**
+     * Handles/loads the request.
+     * 
+     * @param request A {@link HttpServletRequest}
+     * @param response a {@link HttpServletResponse}
+     * @throws ServletException If the request cannot be executed correctly.
+     * @throws IOException Missing service XML.
+     */
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Service service = loader.get(request);

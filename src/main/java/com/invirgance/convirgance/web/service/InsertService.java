@@ -27,7 +27,6 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.input.Input;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
-import com.invirgance.convirgance.json.JSONWriter;
 import com.invirgance.convirgance.transform.Transformer;
 import com.invirgance.convirgance.web.consumer.Consumer;
 import com.invirgance.convirgance.web.http.HttpRequest;
@@ -35,13 +34,28 @@ import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.origin.Origin;
 import com.invirgance.convirgance.web.parameter.Parameter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Service implementation for receiving and persisting data from HTTP requests.
+ * InsertService processes data submission operations (typically POST requests) by
+ * extracting data from HTTP requests, applying transformations, and persisting
+ * the results.
+ * 
+ * <pre>
+ * The service follows:
+ * - Extract parameters from the request
+ * - Obtain raw data using an Origin component
+ * - Parse the data with an Input processor
+ * - Apply optional transformations
+ * - Persist the data through a Consumer
+ * - Return any generated keys or results
+ * </pre>
+ * 
+ * Use this service when you need to create endpoints for data submission,
+ * form processing, or implementing POST/PUT operations in REST APIs.
+ * 
  * @author jbanes
  */
 public class InsertService implements Service
@@ -51,52 +65,103 @@ public class InsertService implements Service
     private Origin origin;
     private List<Transformer> transformers;
     private Consumer consumer;
-
+    
+    
+    /**
+     * Gets the list of parameters to extract from the request.
+     *
+     * @return The parameters list
+     */
     public List<Parameter> getParameters()
     {
         return parameters;
     }
-
+    
+    /**
+     * Sets the list of parameters to extract from the request.
+     *
+     * @param parameters The parameters list
+     */
     public void setParameters(List<Parameter> parameters)
     {
         this.parameters = parameters;
     }
-
+    
+    /**
+     * Gets the input parser for the request data.
+     *
+     * @return The input parser
+     */
     public Input getInput()
     {
         return input;
     }
-
+    
+    /**
+     * Sets the input parser for the request data.
+     *
+     * @param input The input parser
+     */
     public void setInput(Input input)
     {
         this.input = input;
     }
-
+    
+    /**
+     * Gets the origin of the data to be processed.
+     *
+     * @return The data origin
+     */
     public Origin getOrigin()
     {
         return origin;
     }
-
+    
+    /**
+     * Sets the origin of the data to be processed.
+     *
+     * @param origin The data origin
+     */
     public void setOrigin(Origin origin)
     {
         this.origin = origin;
     }
-
+    
+    /**
+     * Gets the list of transformers to apply to the data.
+     *
+     * @return The transformers list
+     */
     public List<Transformer> getTransformers()
     {
         return transformers;
     }
-
+    
+    /**
+     * Sets the list of transformers to apply to the data.
+     *
+     * @param transformers The transformers list
+     */
     public void setTransformers(List<Transformer> transformers)
     {
         this.transformers = transformers;
     }
-
+    
+    /**
+     * Gets the consumer that will persist the processed data.
+     *
+     * @return The consumer
+     */
     public Consumer getConsumer()
     {
         return consumer;
     }
-
+    
+    /**
+     * Sets the consumer that will persist the processed data.
+     *
+     * @param consumer The consumer
+     */
     public void setConsumer(Consumer consumer)
     {
         this.consumer = consumer;
@@ -105,6 +170,13 @@ public class InsertService implements Service
     // TODO: Validate the data with errors to stop insert. Failure should be trapped and returned as JSON?
     // TODO: Need to support sequences and return the keys
     
+    /**
+     * Executes the insert service, processing and persisting data from the HTTP request.
+     * 
+     * @param request The HTTP request containing the data to process
+     * @param response The HTTP response to write results to
+     * @throws ConvirganceException If an error occurs during processing
+     */    
     @Override
     public void execute(HttpRequest request, HttpResponse response)
     {

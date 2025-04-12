@@ -19,29 +19,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
-
-import com.invirgance.convirgance.web.http.HttpRequest;
-import com.invirgance.convirgance.web.http.HttpResponse;
 
 /**
- * Core interface for all web service implementations in the framework.
+ * Parameter extraction and binding API.
+ * This package provides interfaces and implementations for extracting values 
+ * from HTTP requests and making them available to services. Parameters act as 
+ * the bridge between HTTP requests and the framework's data processing components.
  * 
+ * <p>Key components:</p>
+ * <ul>
+ *   <li>{@link Parameter} - Core interface for components that extract values 
+ *       from HTTP requests</li>
+ *   <li>{@link RequestParameter} - Extracts single values from request 
+ *        parameters with optional default values</li>
+ *   <li>{@link RequestArrayParameter} - Extracts multiple values as arrays from
+ *        request parameters</li>
+ *   <li>{@link StaticParameter} - Provides fixed values that don't depend on 
+ *       the request</li>
+ * </ul>
+ *
  * <pre>
- * Primary implementations include:
- * - {@link SelectService}: Retrieves and returns data (GET operations)
- * - {@link InsertService}: Accepts and persists data (POST operations)
+ * Typical usage scenarios:
+ * - Extracting query parameters for database operations
+ * - Mapping request values to binding parameters
+ * - Providing default values for optional parameters
+ * - Combining request values with fixed configuration values
  * </pre>
  * 
  * @author jbanes
  */
-public interface Service
-{
-    /**
-     * Executes the service, processing the HTTP request and generating a response.
-     *
-     * @param request The HTTP request to process
-     * @param response The HTTP response to populate
-     */    
-    public void execute(HttpRequest request, HttpResponse response);
-}
+package com.invirgance.convirgance.web.parameter;

@@ -27,7 +27,12 @@ import com.invirgance.convirgance.source.FileSource;
 import java.io.File;
 
 /**
- *
+ * Retrieves files from the file system.
+ * FileSystemInputBinding allows services to access JSON files stored on the 
+ * server's file system. This is useful for data that may change without 
+ * redeploying the application, such as configuration files,
+ * external data feeds, or shared resources.
+ * 
  * @author jbanes
  */
 public class FileSystemInputBinding implements Binding
@@ -35,26 +40,55 @@ public class FileSystemInputBinding implements Binding
     private Input<JSONObject> input;
     private String path;
 
+    /**
+     * Returns the current {@link Input} of the {@link JSONObject}
+     * 
+     * @return The {@link Input} to the JSONObject.
+     */
     public Input<JSONObject> getInput()
     {
         return input;
     }
 
+    /**
+     * Sets the {@link JSONObject}'s {@link Input}
+     * 
+     * @param input The input type.
+     */
     public void setInput(Input<JSONObject> input)
     {
         this.input = input;
     }
 
+    /**
+     * Gets the current path of the bound JSONObject.
+     * 
+     * @return The path.
+     */
     public String getPath()
     {
         return path;
     }
 
+    /**
+     * Sets the file system path.
+     * Spring expressions can be used.
+     * 
+     * Example: value="#{systemProperties['database.root']}/data/customers.json"
+     * 
+     * @param path The location.
+     */
     public void setPath(String path)
     {
         this.path = path;
     }
-
+    
+    /**
+     * Retrieves and parses the file from the configured file system path.
+     * 
+     * @param parameters Required by the Binding interface but not used in this implementation
+     * @return An {@link Iterable} of {@link JSONObject}s from the file
+     */
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {

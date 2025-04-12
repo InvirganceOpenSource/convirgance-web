@@ -26,13 +26,30 @@ import com.invirgance.convirgance.output.Output;
 import com.invirgance.convirgance.target.OutputStreamTarget;
 import com.invirgance.convirgance.transform.Transformer;
 import com.invirgance.convirgance.web.binding.Binding;
-import com.invirgance.convirgance.web.parameter.Parameter;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
+import com.invirgance.convirgance.web.parameter.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
+ * Service implementation for retrieving and returning data in response to 
+ * HTTP requests. SelectService processes data retrieval operations (typically GET requests) by
+ * extracting parameters from requests, retrieving data through a Binding,
+ * applying transformations, and formatting the results for the response.
+ * 
+ * <pre>
+ * The service follows a configurable pipeline:
+ * - Extract parameters from the request
+ * - Store parameters in thread-local storage for filter access
+ * - Retrieve data using a configured Binding
+ * - Apply optional transformations
+ * - Format and return the results using an Output
+ * </pre>
+ * 
+ * Use this service when you need to create endpoints for data retrieval,
+ * search interfaces, or implementing GET operations in REST APIs.
  *
  * @author jbanes
  */
@@ -43,46 +60,102 @@ public class SelectService implements Service
     private List<Transformer> transformers;
     private Output output;
 
+    /**
+     * Gets the list of parameters to extract from the request.
+     *
+     * @return The parameters list
+     */
     public List<Parameter> getParameters()
     {
         return parameters;
     }
-
+    
+    /**
+     * Sets the list of parameters to extract from the request.
+     *
+     * @param parameters The parameters list
+     */
     public void setParameters(List<Parameter> parameters)
     {
         this.parameters = parameters;
     }
     
+    /**
+     * Gets the binding that provides the data source.
+     *
+     * @return The binding
+     */    
     public Binding getBinding()
     {
         return binding;
     }
-
+    
+    /**
+     * Sets the binding that provides the data source.
+     *
+     * @param binding The binding
+     */
     public void setBinding(Binding binding)
     {
         this.binding = binding;
     }
-
+    
+    /**
+     * Gets the list of transformers to apply to the retrieved data.
+     *
+     * @return The transformers list
+     */
     public List<Transformer> getTransformers()
     {
         return transformers;
     }
-
+    
+    /**
+     * Sets the list of transformers to apply to the retrieved data.
+     *
+     * @param transformers The transformers list
+     */
     public void setTransformers(List<Transformer> transformers)
     {
         this.transformers = transformers;
     }
-
+    
+    /**
+     * Gets the output formatter for the response.
+     *
+     * @return The output formatter
+     */
     public Output getOutput()
     {
         return output;
     }
-
+    
+    /**
+     * Sets the output formatter for the response.
+     *
+     * @param output The output formatter
+     */
     public void setOutput(Output output)
     {
         this.output = output;
     }
     
+    /**
+     * Processes an HTTP request to retrieve data without generating a response.
+     * <p>
+     * This method implements the core data retrieval pipeline and can be used
+     * by other components that need access to the data without writing to a response.
+     * </p>
+     * <ol>
+     *   <li>Extract parameters from the HTTP request</li>
+     *   <li>Store parameters in thread-local storage for access by other components</li>
+     *   <li>Use the configured binding to retrieve data based on the parameters</li>
+     *   <li>Apply any configured transformers to the data</li>
+     * </ol>
+     *
+     * @param request The HTTP request containing the parameters
+     * @return An iterable of JSONObjects containing the retrieved and transformed data
+     */
     public Iterable<JSONObject> process(HttpRequest request)
     {
         JSONObject params = new JSONObject();
@@ -112,6 +185,13 @@ public class SelectService implements Service
         return iterable;
     }
     
+    /**
+     * Executes the select service, retrieving and returning data in 
+     * response to an HTTP request.
+     *
+     * @param request The HTTP request containing the parameters
+     * @param response The HTTP response to write results to
+     */
     @Override
     public void execute(HttpRequest request, HttpResponse response)
     {
