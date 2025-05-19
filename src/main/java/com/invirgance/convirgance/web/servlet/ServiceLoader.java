@@ -23,12 +23,12 @@
  */
 package com.invirgance.convirgance.web.servlet;
 
+import com.invirgance.convirgance.source.FileSource;
 import com.invirgance.convirgance.web.service.Service;
+import com.invirgance.convirgance.wiring.XMLWiringParser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.context.support.GenericXmlApplicationContext;
-import org.springframework.core.io.FileSystemResource;
 
 /**
  *
@@ -248,7 +248,7 @@ class ServiceLoader
             if(this.service == null || this.timestamp < file.lastModified())
             {
                 this.timestamp = file.lastModified();
-                this.service = new GenericXmlApplicationContext(new FileSystemResource(file)).getBean(Service.class);
+                this.service = (Service)new XMLWiringParser(new FileSource(file)).getRoot();
             }
             
             return this.service;
