@@ -56,12 +56,19 @@ jdbc.init.sql.data=/sql/init/data.sql
 
 The ```schema``` and ```data``` properties are optional. If provided, these files will be pulled from the classpath (i.e. ```src/main/resources```) and executed in the database on startup. This is primarily for demo and self-contained applications.
 
+Try to avoid picking a JNDI name that is already in use. Whatever you set here you will be able to use in your Spring XML configuration files.
+
 
 ## Documentation
 
 - [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-web/) (Work in Progress)
 - [TLDDocs](https://docs.invirgance.com/tlddocs/convirgance-web/) (Work in Progress)
 
+
+## Examples
+
+- [Spring Pet Clinic](https://github.com/InvirganceExampleCode/ConvirgancePetClinic/)
+- [Online examples](https://examples.convirgance.com)
 
 ## License
 
