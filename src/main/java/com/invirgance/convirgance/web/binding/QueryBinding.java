@@ -25,6 +25,7 @@ import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import javax.sql.DataSource;
 
 /**
@@ -35,6 +36,7 @@ import javax.sql.DataSource;
  * 
  * @author jbanes
  */
+@Wiring
 public class QueryBinding implements Binding
 {
     private String jndiName;

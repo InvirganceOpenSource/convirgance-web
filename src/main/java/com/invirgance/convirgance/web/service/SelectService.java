@@ -29,6 +29,7 @@ import com.invirgance.convirgance.web.binding.Binding;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.parameter.Parameter;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ import java.util.List;
  *
  * @author jbanes
  */
+@Wiring
 public class SelectService implements Service
 {
     private List<Parameter> parameters;
