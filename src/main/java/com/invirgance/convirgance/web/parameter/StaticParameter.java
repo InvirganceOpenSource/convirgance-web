@@ -22,6 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.web.parameter;
 
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  * Parameter implementation that provides a fixed, predefined value.
@@ -38,6 +39,7 @@ import com.invirgance.convirgance.web.http.HttpRequest;
  * 
  * @author jbanes
  */
+@Wiring
 public class StaticParameter implements Parameter
 {
     private String name;

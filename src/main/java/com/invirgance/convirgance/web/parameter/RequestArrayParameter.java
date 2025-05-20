@@ -23,6 +23,7 @@ package com.invirgance.convirgance.web.parameter;
 
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.Arrays;
 
 /**
@@ -37,6 +38,7 @@ import java.util.Arrays;
  * 
  * @author jbanes
  */
+@Wiring
 public class RequestArrayParameter implements Parameter
 {
     private String name;

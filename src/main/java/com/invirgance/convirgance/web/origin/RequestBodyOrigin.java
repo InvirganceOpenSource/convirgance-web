@@ -26,6 +26,7 @@ package com.invirgance.convirgance.web.origin;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.Source;
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.io.InputStream;
 
 /**
@@ -42,6 +43,7 @@ import java.io.InputStream;
  * 
  * @author jbanes
  */
+@Wiring
 public class RequestBodyOrigin implements Origin
 {
     

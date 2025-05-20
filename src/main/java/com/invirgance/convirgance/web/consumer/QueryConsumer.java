@@ -33,6 +33,7 @@ import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.IdentityTransformer;
 import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import javax.sql.DataSource;
 
 /**
@@ -46,6 +47,7 @@ import javax.sql.DataSource;
  * 
  * @author jbanes
  */
+@Wiring
 public class QueryConsumer implements Consumer
 {
     private String jndiName;

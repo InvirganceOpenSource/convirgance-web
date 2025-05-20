@@ -28,6 +28,7 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.ByteArraySource;
 import com.invirgance.convirgance.source.Source;
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.io.IOException;
 
 /**
@@ -43,6 +44,7 @@ import java.io.IOException;
  * 
  * @author jbanes
  */
+@Wiring
 public class ParameterOrigin implements Origin
 {
     private String name;
