@@ -24,11 +24,13 @@
 package com.invirgance.convirgance.web.validation;
 
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  *
  * @author jbanes
  */
+@Wiring
 public class SizeValidation implements Validation
 {
     public static final int NO_MIN = 0;

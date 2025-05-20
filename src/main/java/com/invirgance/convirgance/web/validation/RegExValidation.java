@@ -24,6 +24,7 @@
 package com.invirgance.convirgance.web.validation;
 
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
  *
  * @author jbanes
  */
+@Wiring
 public class RegExValidation implements Validation
 {
     private String key;

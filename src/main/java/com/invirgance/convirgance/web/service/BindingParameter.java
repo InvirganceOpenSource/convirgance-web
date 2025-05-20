@@ -23,6 +23,7 @@ package com.invirgance.convirgance.web.service;
 
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.filter.CoerciveComparator;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  * Provides access to request parameters within the data processing pipeline.
@@ -38,6 +39,7 @@ import com.invirgance.convirgance.transform.filter.CoerciveComparator;
  * 
  * @author jbanes
  */
+@Wiring
 public class BindingParameter implements Comparable
 {
     static final CoerciveComparator comparator = new CoerciveComparator();

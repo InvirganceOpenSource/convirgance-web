@@ -23,6 +23,7 @@ package com.invirgance.convirgance.web.service;
 
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.filter.Filter;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  * Filter implementation that evaluates conditions against request parameters.
@@ -40,6 +41,7 @@ import com.invirgance.convirgance.transform.filter.Filter;
  * 
  * @author jbanes
  */
+@Wiring
 public class BindingFilter implements Filter
 {
     private Filter filter;
