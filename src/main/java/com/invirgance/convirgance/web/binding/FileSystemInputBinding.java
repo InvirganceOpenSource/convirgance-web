@@ -34,6 +34,9 @@ import java.io.File;
  * redeploying the application, such as configuration files,
  * external data feeds, or shared resources.
  * 
+ * Supports <code>${<i>property</i>}</code> variables for using Java 
+ * environment variables in the path.
+ * 
  * @author jbanes
  */
 @Wiring
@@ -94,6 +97,21 @@ public class FileSystemInputBinding implements Binding
     @Override
     public Iterable<JSONObject> getBinding(JSONObject parameters)
     {
+        int start;
+        int end;
+        String property;
+        
+        while(path.contains("${"))
+        {
+            start = path.indexOf("${");
+            end = path.indexOf("}", start);
+            
+            if(end < start) break;
+            
+            property = System.getProperty(path.substring(start+2, end), "");
+            path = path.substring(0, start) + property + path.substring(end+1);
+        }
+        
         return input.read(new FileSource(new File(path)));
     }
     
