@@ -24,6 +24,7 @@ package com.invirgance.convirgance.web.binding;
 import com.invirgance.convirgance.input.Input;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.ClasspathSource;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  * Retrieves files from within the applications class path.
@@ -32,6 +33,7 @@ import com.invirgance.convirgance.source.ClasspathSource;
  * 
  * @author jbanes
  */
+@Wiring
 public class ClasspathInputBinding implements Binding
 {
     private Input<JSONObject> input;

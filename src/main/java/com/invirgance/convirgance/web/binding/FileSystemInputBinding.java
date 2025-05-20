@@ -24,6 +24,7 @@ package com.invirgance.convirgance.web.binding;
 import com.invirgance.convirgance.input.Input;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.FileSource;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.io.File;
 
 /**
@@ -35,6 +36,7 @@ import java.io.File;
  * 
  * @author jbanes
  */
+@Wiring
 public class FileSystemInputBinding implements Binding
 {
     private Input<JSONObject> input;
