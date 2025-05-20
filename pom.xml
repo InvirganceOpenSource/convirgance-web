@@ -58,11 +58,13 @@
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <version>6.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>convirgance-jdbc</artifactId>
             <version>0.3.0</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
