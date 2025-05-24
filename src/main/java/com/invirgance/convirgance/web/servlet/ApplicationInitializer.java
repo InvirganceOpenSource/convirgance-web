@@ -5,7 +5,6 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
-import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.ClasspathSource;
 import javax.sql.DataSource;
 import jakarta.servlet.ServletContextEvent;
@@ -70,7 +69,21 @@ public class ApplicationInitializer implements ServletContextListener
         String url = props.getProperty("jdbc.database.url");
         String username = props.getProperty("jdbc.database.username", "");
         String password = props.getProperty("jdbc.database.password", "");
+        
+        try
+        {
+            Class.forName("com.invirgance.convirgance.jdbc.datasource.DriverDataSource");
+        }
+        catch(Exception e)
+        {
+            throw new ConvirganceException("You must add convirgance-jdbc as a dependency to this project if you wish to use application.properties", e);
+        }
+        
+        return getDataSource(url, username, password);
+    }
 
+    private DataSource getDataSource(String url, String username, String password)
+    {
         return DriverDataSource.getDataSource(url, username, password);
     }
     
