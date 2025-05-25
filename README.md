@@ -2,7 +2,7 @@
 
 ![Version](https://img.shields.io/badge/Version-pre&dash;release-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Repository](https://img.shields.io/badge/Platform-Java-gold) <a href="https://central.sonatype.com/artifact/com.invirgance/convirgance-web">![Repository](https://img.shields.io/badge/Repository-Maven_Central-red)</a>
 
-Low-code / No-code solution for developing web applications, allowing capable software engineers to focus only the difficult parts of the system. Brings Convirgance technology to web services using IoC containers for rapid development and deployment.
+Low-code / No-code solution for developing web applications, allowing capable software engineers to focus only the difficult parts of the system. Brings Convirgance technology to web services using [wiring files](https://github.com/InvirganceOpenSource/convirgance-wiring/) for rapid development and deployment of services.
 
 ## Installation
 
@@ -29,7 +29,7 @@ Setup the Convirgance (Web Services) servlet to load configured services by addi
 </servlet-mapping>
 ```
 
-This will expect your Spring XML files to be placed under ```/services/```. If you only plan to have services in this project, you can change the ```url-pattern``` to ```/``` instead.
+This will expect your Wiring XML files to be placed under ```/services/```. If you only plan to have services in this project, you can change the ```url-pattern``` to ```/``` instead.
 
 ## Application Properties
 
@@ -40,6 +40,16 @@ If you want to configure your web application's database with an ```application.
     <description>ServletContextListener</description>
     <listener-class>com.invirgance.convirgance.web.servlet.ApplicationInitializer</listener-class>
 </listener>
+```
+
+Then add Convirgance (JDBC) to your `pom.xml` file:
+
+```xml
+<dependency>
+    <groupId>com.invirgance</groupId>
+    <artifactId>convirgance-jdbc</artifactId>
+    <version>0.3.0</version>
+</dependency>
 ```
 
 You can then place a file called ```application.properties``` in your ```src/main/resources``` directory. Here is an example of such a file:
@@ -56,7 +66,7 @@ jdbc.init.sql.data=/sql/init/data.sql
 
 The ```schema``` and ```data``` properties are optional. If provided, these files will be pulled from the classpath (i.e. ```src/main/resources```) and executed in the database on startup. This is primarily for demo and self-contained applications.
 
-Try to avoid picking a JNDI name that is already in use. Whatever you set here you will be able to use in your Spring XML configuration files.
+Try to avoid picking a JNDI name that is already in use. Whatever you set here you will be able to use in your Wiring XML configuration files.
 
 
 ## Documentation
