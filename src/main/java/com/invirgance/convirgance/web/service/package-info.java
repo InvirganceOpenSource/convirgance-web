@@ -33,10 +33,6 @@ SOFTWARE.
  *       data (e.g., GET operations)</li>
  *   <li>{@link InsertService} - Implementation for accepting and persisting 
  *       data (e.g., POST operations)</li>
- *   <li>{@link BindingParameter} - Utility for sharing parameter values during
- *       request processing</li>
- *   <li>{@link BindingFilter} - Filter implementation that uses request 
- *       parameters in filtering operations</li>
  * </ul>
  * 
  * <pre>
