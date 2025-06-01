@@ -35,6 +35,14 @@ public class ServiceState
 {
     private static final ThreadLocal<JSONObject> local = new ThreadLocal<>();
     
+    /**
+     * Get the key configured by the current Service. e.g. "parameters" is often
+     * a JSONObject containing parameters collected from the request, session, and
+     * other locations.
+     * 
+     * @param key the key to look up
+     * @return the value of the key if found, null otherwise
+     */
     public static Object get(String key)
     {
         JSONObject state = local.get();
@@ -44,6 +52,12 @@ public class ServiceState
         return state.get(key);
     }
     
+    /**
+     * Sets the key/value pair on the thread local
+     * 
+     * @param key the key to set
+     * @param value the value to set for the key
+     */
     public static void set(String key, Object value)
     {
         JSONObject state = local.get();
@@ -59,6 +73,10 @@ public class ServiceState
         state.put(key, value);
     }
     
+    /**
+     * Clears the thread local of information to prepare the thread for reuse,
+     * prevent leaking of information, and avoid memory leaks
+     */
     public static void release()
     {
         local.remove();

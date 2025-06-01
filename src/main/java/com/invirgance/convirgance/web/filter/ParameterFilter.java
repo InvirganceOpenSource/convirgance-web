@@ -29,7 +29,10 @@ import com.invirgance.convirgance.web.service.ServiceState;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
- *
+ * Filter on parameter values. In most contexts, filtering happens on a stream
+ * of records. This class interrupts the stream and sends the parameters record
+ * to the wrapped filter instead of the record stream.
+ * 
  * @author jbanes
  */
 @Wiring
@@ -46,11 +49,21 @@ public class ParameterFilter implements Filter
         this.filter = filter;
     }
 
+    /**
+     * Return the wrapped filter
+     * 
+     * @return the wrapped filter 
+     */
     public Filter getFilter()
     {
         return filter;
     }
 
+    /**
+     * Set the filter to wrap and call with the parameters record
+     * 
+     * @param filter the filter to wrap
+     */
     public void setFilter(Filter filter)
     {
         this.filter = filter;
