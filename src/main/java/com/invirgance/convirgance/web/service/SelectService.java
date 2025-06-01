@@ -173,7 +173,7 @@ public class SelectService implements Service
         }
         
         // Record the bindings to a thread local so it can be referenced deep in the heirarchy
-        BindingParameter.bindings.set(params);
+        ServiceState.set("parameters", params);
         
         // Generate the source of information by binding the parameters
         iterable = binding.getBinding(params);
@@ -205,6 +205,6 @@ public class SelectService implements Service
         output.write(new OutputStreamTarget(response.getOutputStream()), iterable);
         
         // Clean up after ourselves
-        BindingParameter.bindings.remove();
+        ServiceState.release();
     }
 }

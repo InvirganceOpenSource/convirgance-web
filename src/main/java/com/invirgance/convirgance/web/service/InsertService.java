@@ -197,6 +197,9 @@ public class InsertService implements Service
             params.put(parameter.getName(), parameter.getValue(request));
         }
         
+        // Record the bindings to a thread local so it can be referenced deep in the heirarchy
+        ServiceState.set("parameters", params);
+        
         // Get Source and Input to parse Iterable stream
         iterable = input.read(origin.getOrigin(request, params));
 
@@ -219,5 +222,8 @@ public class InsertService implements Service
             }
         }
         catch(IOException e) { throw new ConvirganceException(e); }
+        
+        // Clean up after ourselves
+        ServiceState.release();
     }
 }
