@@ -67,7 +67,7 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
-        if(path.endsWith("/")) path += "spring.xml";
+        if(path.endsWith("/")) path += "wiring.xml";
         else if(!path.endsWith(".xml")) path += ".xml";
 
         // Transform URI path to file path
@@ -97,7 +97,7 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
-        if(path.endsWith("/")) path += "spring.xml";
+        if(path.endsWith("/")) path += "wiring.xml";
         else path += ".xml";
         
         // Transform URI path to file path
@@ -126,7 +126,7 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
-        if(path.endsWith("/")) path += "spring.xml";
+        if(path.endsWith("/")) path += "wiring.xml";
         else path += ".xml";
         
         for(ServiceDescriptor descriptor : this.cache)
@@ -155,7 +155,7 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
-        if(path.endsWith("/")) path += "spring.xml";
+        if(path.endsWith("/")) path += "wiring.xml";
         else path += ".xml";
         
         for(ServiceDescriptor descriptor : this.cache)
@@ -185,7 +185,7 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
-        if(path.endsWith("/")) path += "spring.xml";
+        if(path.endsWith("/")) path += "wiring.xml";
         else path += ".xml";
         
         // Transform URI path to file path
@@ -214,7 +214,7 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
-        if(path.endsWith("/")) path += "spring.xml";
+        if(path.endsWith("/")) path += "wiring.xml";
         else path += ".xml";
         
         for(ServiceDescriptor descriptor : this.cache)

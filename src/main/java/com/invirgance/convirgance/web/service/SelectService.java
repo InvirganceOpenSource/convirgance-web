@@ -174,6 +174,7 @@ public class SelectService implements Service
         
         // Record the bindings to a thread local so it can be referenced deep in the heirarchy
         ServiceState.set("parameters", params);
+        ServiceState.set("request", request);
         
         // Generate the source of information by binding the parameters
         iterable = binding.getBinding(params);
@@ -197,7 +198,12 @@ public class SelectService implements Service
     @Override
     public void execute(HttpRequest request, HttpResponse response)
     {
-        Iterable<JSONObject> iterable = process(request);
+        Iterable<JSONObject> iterable;
+        
+        ServiceState.set("request", request);
+        ServiceState.set("response", response);
+        
+        iterable = process(request);
         
         // Write out the response
         response.setContentType(output.getContentType());

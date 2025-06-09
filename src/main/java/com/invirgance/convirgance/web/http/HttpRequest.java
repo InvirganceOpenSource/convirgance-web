@@ -22,6 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.web.http;
 
 import com.invirgance.convirgance.ConvirganceException;
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -53,6 +54,20 @@ public class HttpRequest
     public HttpRequest(Object request)
     {
         this.request = request;
+    }
+    
+    private Object execMethod(Object obj, String methodName, Object... parameters)
+    {
+        Class clazz = obj.getClass();
+        Class[] types = new Class[parameters.length];
+        
+        for(int i=0; i<parameters.length; i++) types[i] = parameters[i].getClass();
+        
+        try
+        {
+            return clazz.getMethod(methodName, types).invoke(obj, parameters);
+        }
+        catch(Exception e) { throw new ConvirganceException(e); }
     }
     
     private Object execRequestMethod(String methodName, Object... parameters)
@@ -466,4 +481,22 @@ public class HttpRequest
     }
     
     //TODO: getServletContext()
+    
+    
+    /**
+     * Returns the local path for the specified path
+     * 
+     * @param path path to 
+     * @return 
+     */
+    public File getFileByPath(String path)
+    {
+        String context = getContextPath();
+        Object servletContext = execRequestMethod("getServletContext");
+        String filePath = (String)execMethod(servletContext, "getRealPath", path);
+        
+        if(filePath == null) return null;
+        
+        return new File(filePath);
+    }
 }

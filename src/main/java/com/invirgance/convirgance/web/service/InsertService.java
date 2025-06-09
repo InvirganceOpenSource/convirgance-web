@@ -188,6 +188,9 @@ public class InsertService implements Service
         JSONObject result = new JSONObject("{\"success\":true}");
         JSONArray keys;
         
+        ServiceState.set("request", request);
+        ServiceState.set("response", response);
+        
         if(this.parameters == null) this.parameters = new ArrayList<>();
         if(this.transformers == null) this.transformers = new ArrayList<>();
         
