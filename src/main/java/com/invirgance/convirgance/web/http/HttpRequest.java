@@ -247,8 +247,12 @@ public class HttpRequest
         return (String)execRequestMethod("getServletPath");
     }
     
+    public Session getSession()
+    {
+        return new Session(execRequestMethod("getSession"));
+    }
+    
     // TODO: getSession(boolean create)
-    // TODO: getSession()
     // TODO: isRequestedSessionIdValid()
     // TODO: isRequestedSessionIdFromCookie()
     // TODO: isRequestedSessionIdFromURL()
