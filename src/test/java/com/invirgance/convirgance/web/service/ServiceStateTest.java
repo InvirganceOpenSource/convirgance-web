@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.web.service;
 
+import com.invirgance.convirgance.web.servlet.ServiceState;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
