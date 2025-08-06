@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.web.service;
 
+import com.invirgance.convirgance.web.servlet.ServiceState;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.input.Input;
 import com.invirgance.convirgance.json.JSONArray;
@@ -188,9 +189,6 @@ public class InsertService implements Service
         JSONObject result = new JSONObject("{\"success\":true}");
         JSONArray keys;
         
-        ServiceState.set("request", request);
-        ServiceState.set("response", response);
-        
         if(this.parameters == null) this.parameters = new ArrayList<>();
         if(this.transformers == null) this.transformers = new ArrayList<>();
         
@@ -225,8 +223,5 @@ public class InsertService implements Service
             }
         }
         catch(IOException e) { throw new ConvirganceException(e); }
-        
-        // Clean up after ourselves
-        ServiceState.release();
     }
 }

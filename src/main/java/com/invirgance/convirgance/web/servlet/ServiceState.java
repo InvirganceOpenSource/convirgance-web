@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
+package com.invirgance.convirgance.web.servlet;
 
 import com.invirgance.convirgance.json.JSONObject;
 

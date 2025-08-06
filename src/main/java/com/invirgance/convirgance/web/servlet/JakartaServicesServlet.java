@@ -112,32 +112,51 @@ public class JakartaServicesServlet extends HttpServlet
         }
     }
     
-    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    /**
+     * Handles/loads the request.
+     * 
+     * @param servletRequest A {@link HttpServletRequest}
+     * @param servletResponse a {@link HttpServletResponse}
+     * @throws ServletException If the request cannot be executed correctly.
+     * @throws IOException Missing service XML.
+     */
+    public void handleRequest(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws ServletException, IOException
     {
-        Service service = loader.get(request);
+        HttpRequest request = new HttpRequest(servletRequest);
+        HttpResponse response = new HttpResponse(servletResponse);
+        
+        ServiceState.set("request", request);
+        ServiceState.set("response", response);
+            
+        Service service = loader.get(servletRequest);
         
         if(service == null)
         {
-            System.err.println("Unable to find service XML file at " + request.getPathInfo() + ".xml");
-            response.sendError(404, "Service not found");
+            System.err.println("Unable to find service XML file at " + servletRequest.getPathInfo() + ".xml");
+            servletResponse.sendError(404, "Service not found");
+            ServiceState.release();
             return;
         }
         
         try
         {
-            service.execute(new HttpRequest(request), new HttpResponse(response));
+            service.execute(request, response);
         }
         catch(Throwable t)
         {
             t.printStackTrace();
             
-            if(!response.isCommitted()) 
+            if(!servletResponse.isCommitted()) 
             {
-                response.resetBuffer();
-                response.reset();
+                servletResponse.resetBuffer();
+                servletResponse.reset();
             }
             
             throw new ServletException(t);
+        }
+        finally
+        {
+            ServiceState.release();
         }
     }
     

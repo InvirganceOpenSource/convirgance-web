@@ -25,7 +25,7 @@ package com.invirgance.convirgance.web.filter;
 
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.filter.Filter;
-import com.invirgance.convirgance.web.service.ServiceState;
+import com.invirgance.convirgance.web.servlet.ServiceState;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**

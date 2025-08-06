@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.web.service;
 
+import com.invirgance.convirgance.web.servlet.ServiceState;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.output.Output;
 import com.invirgance.convirgance.target.OutputStreamTarget;
@@ -174,7 +175,6 @@ public class SelectService implements Service
         
         // Record the bindings to a thread local so it can be referenced deep in the heirarchy
         ServiceState.set("parameters", params);
-        ServiceState.set("request", request);
         
         // Generate the source of information by binding the parameters
         iterable = binding.getBinding(params);
@@ -198,19 +198,11 @@ public class SelectService implements Service
     @Override
     public void execute(HttpRequest request, HttpResponse response)
     {
-        Iterable<JSONObject> iterable;
-        
-        ServiceState.set("request", request);
-        ServiceState.set("response", response);
-        
-        iterable = process(request);
+        Iterable<JSONObject> iterable = process(request);
         
         // Write out the response
         response.setContentType(output.getContentType());
         
         output.write(new OutputStreamTarget(response.getOutputStream()), iterable);
-        
-        // Clean up after ourselves
-        ServiceState.release();
     }
 }
