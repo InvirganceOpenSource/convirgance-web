@@ -24,11 +24,13 @@
 package com.invirgance.convirgance.web.parameter;
 
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  *
  * @author jbanes
  */
+@Wiring
 public class SessionParameter implements Parameter
 {
     private String name;
