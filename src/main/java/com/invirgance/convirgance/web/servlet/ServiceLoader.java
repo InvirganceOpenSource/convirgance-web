@@ -67,6 +67,101 @@ class ServiceLoader
         
         if(path.startsWith(context)) path = path.substring(context.length());
         
+        if(path.endsWith("/")) filePath = path + "wiring.xml";
+        else if(!path.endsWith(".xml")) filePath = path + ".xml";
+        else filePath = path;
+
+        // Transform URI path to file path
+        filePath = request.getServletContext().getRealPath(filePath);
+
+        if(filePath == null || !new File(filePath).exists()) return null;
+        if(path.endsWith("/wiring.xml")) path = path.substring(0, path.length() - "/wiring.xml".length());
+        if(path.endsWith(".xml"))  path = path.substring(0, path.length() - ".xml".length());
+
+        descriptor = new ServiceDescriptor(new File(filePath), path);
+        
+        this.cache.add(descriptor);
+        
+        return descriptor;
+    }
+    
+    
+    /**
+     * Returns a {@link ServiceDescriptor} for the request and path.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @return A ServiceDescriptor.
+     */
+    public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request)
+    {
+        return load(request, request.getRequestURI());
+    }
+
+    /**
+     * Returns a {@link Service} for the request and path.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @param path The path.
+     * @return A Service.
+     */    
+    public Service get(jakarta.servlet.http.HttpServletRequest request, String path)
+    {
+        ServiceDescriptor loaded;
+        String context = request.getContextPath();
+
+        if(path.startsWith(context)) path = path.substring(context.length());
+
+        do
+        {
+            for(ServiceDescriptor descriptor : this.cache)
+            {
+                if(descriptor.path.equals(path)) return descriptor.getService();
+                if(descriptor.path.equals(path + ".xml")) return descriptor.getService();
+                if(path.endsWith("/") && descriptor.path.equals(path + "wiring.xml")) return descriptor.getService();
+            }
+
+            loaded = load(request, path);
+
+            if(loaded == null && path.contains("/")) 
+            {
+                if(path.endsWith("/")) path = path.substring(0, path.lastIndexOf('/'));
+                else path = path.substring(0, path.lastIndexOf('/')+1);
+            }
+        }
+        while(loaded == null && path.length() > 0 && path.contains("/"));
+
+        if(loaded == null) return null;
+
+        return loaded.getService();
+    }
+    
+    /**
+     * Returns a {@link Service} for the request.
+     * 
+     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
+     * @param path The path.
+     * @return A Service.
+     */        
+    public Service get(jakarta.servlet.http.HttpServletRequest request)
+    {
+        return get(request, request.getRequestURI());
+    }
+    
+    /**
+     * Returns a {@link ServiceDescriptor} for the {@link javax.servlet.http.HttpServletRequest}
+     * 
+     * @param request The request.
+     * @param path The path.
+     * @return The {@link ServiceDescriptor}.
+     */
+    public ServiceDescriptor load(javax.servlet.http.HttpServletRequest request, String path)
+    {
+        ServiceDescriptor descriptor;
+        String context = request.getContextPath();
+        String filePath;
+        
+        if(path.startsWith(context)) path = path.substring(context.length());
+        
         if(path.endsWith("/")) path += "wiring.xml";
         else if(!path.endsWith(".xml")) path += ".xml";
 
@@ -82,122 +177,53 @@ class ServiceLoader
         return descriptor;
     }
     
-    /**
-     * Returns a {@link ServiceDescriptor} for the request.
-     * 
-     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
-     * @return A ServiceDescriptor.
-     */    
-    public ServiceDescriptor load(jakarta.servlet.http.HttpServletRequest request)
-    {
-        ServiceDescriptor descriptor;
-        String path = request.getRequestURI();
-        String context = request.getContextPath();
-        String filePath;
-        
-        if(path.startsWith(context)) path = path.substring(context.length());
-        
-        if(path.endsWith("/")) path += "wiring.xml";
-        else path += ".xml";
-        
-        // Transform URI path to file path
-        filePath = request.getServletContext().getRealPath(path);
-
-        if(filePath == null || !new File(filePath).exists()) return null;
-        
-        descriptor = new ServiceDescriptor(new File(filePath), path);
-        
-        this.cache.add(descriptor);
-        
-        return descriptor;
-    }
-
-    /**
-     * Returns a {@link Service} for the request and path.
-     * 
-     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
-     * @param path The path.
-     * @return A Service.
-     */    
-    public Service get(jakarta.servlet.http.HttpServletRequest request, String path)
-    {
-        ServiceDescriptor loaded;
-        String context = request.getContextPath();
-        
-        if(path.startsWith(context)) path = path.substring(context.length());
-        
-        if(path.endsWith("/")) path += "wiring.xml";
-        else path += ".xml";
-        
-        for(ServiceDescriptor descriptor : this.cache)
-        {
-            if(descriptor.path.equals(path)) return descriptor.getService();
-        }
-        
-        loaded = load(request, path);
-
-        if(loaded == null) return null;
-
-        return loaded.getService();
-    }
-    
-    /**
-     * Returns a {@link Service} for the request.
-     * 
-     * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
-     * @return A Service.
-     */        
-    public Service get(jakarta.servlet.http.HttpServletRequest request)
-    {
-        ServiceDescriptor loaded;
-        String path = request.getRequestURI();
-        String context = request.getContextPath();
-        
-        if(path.startsWith(context)) path = path.substring(context.length());
-        
-        if(path.endsWith("/")) path += "wiring.xml";
-        else path += ".xml";
-        
-        for(ServiceDescriptor descriptor : this.cache)
-        {
-            if(descriptor.path.equals(path)) return descriptor.getService();
-        }
-        
-        loaded = load(request);
-
-        if(loaded == null) return null;
-
-        return loaded.getService();
-    }
     
     /**
      * Returns a {@link ServiceDescriptor} for the {@link javax.servlet.http.HttpServletRequest}
      * 
      * @param request The request.
+     * @param path The path.
      * @return The {@link ServiceDescriptor}.
      */
     public ServiceDescriptor load(javax.servlet.http.HttpServletRequest request)
     {
-        ServiceDescriptor descriptor;
-        String path = request.getRequestURI();
+        return load(request, request.getRequestURI());
+    }
+    
+    /**
+     * Returns a {@link Service} for the {@link javax.servlet.http.HttpServletRequest}
+     * 
+     * @param request The request.
+     * @param path The path.
+     * @return The {@link Service}.
+     */    
+    public Service get(javax.servlet.http.HttpServletRequest request, String path)
+    {
+        ServiceDescriptor loaded;
         String context = request.getContextPath();
-        String filePath;
-        
-        if(path.startsWith(context)) path = path.substring(context.length());
-        
-        if(path.endsWith("/")) path += "wiring.xml";
-        else path += ".xml";
-        
-        // Transform URI path to file path
-        filePath = request.getServletContext().getRealPath(path);
 
-        if(filePath == null || !new File(filePath).exists()) return null;
-        
-        descriptor = new ServiceDescriptor(new File(filePath), path);
-        
-        this.cache.add(descriptor);
-        
-        return descriptor;
+        if(path.startsWith(context)) path = path.substring(context.length());
+
+        do
+        {
+            for(ServiceDescriptor descriptor : this.cache)
+            {
+                if(descriptor.path.equals(path)) return descriptor.getService();
+            }
+
+            loaded = load(request, path);
+
+            if(loaded == null && path.contains("/")) 
+            {
+                if(path.endsWith("/")) path = path.substring(0, path.lastIndexOf('/'));
+                else path = path.substring(0, path.lastIndexOf('/')+1);
+            }
+        }
+        while(loaded == null && path.length() > 0 && path.contains("/"));
+
+        if(loaded == null) return null;
+
+        return loaded.getService();
     }
     
     /**
@@ -208,25 +234,7 @@ class ServiceLoader
      */    
     public Service get(javax.servlet.http.HttpServletRequest request)
     {
-        ServiceDescriptor loaded;
-        String path = request.getRequestURI();
-        String context = request.getContextPath();
-        
-        if(path.startsWith(context)) path = path.substring(context.length());
-        
-        if(path.endsWith("/")) path += "wiring.xml";
-        else path += ".xml";
-        
-        for(ServiceDescriptor descriptor : this.cache)
-        {
-            if(descriptor.path.equals(path)) return descriptor.getService();
-        }
-        
-        loaded = load(request);
-
-        if(loaded == null) return null;
-
-        return loaded.getService();
+        return get(request, request.getRequestURI());
     }
     
     private class ServiceDescriptor
