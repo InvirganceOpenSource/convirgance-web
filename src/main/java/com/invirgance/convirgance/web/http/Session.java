@@ -56,12 +56,19 @@ public class Session
     
     public Object getAttribute(String name)
     {
-        return execSessionMethod("getAttribute");
+        return execSessionMethod("getAttribute", name);
     }
     
     public void setAttribute(String name, Object value)
     {
-        execSessionMethod("setAttribute", name, value);
+        Class clazz = session.getClass();
+        Class[] types = {String.class, Object.class};
+        
+        try
+        {
+            clazz.getMethod("setAttribute", types).invoke(session, new Object[]{name, value});
+        }
+        catch(Exception e) { throw new ConvirganceException(e); }
     }
     
     public Iterable<String> getAttributeNames()
