@@ -28,7 +28,16 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
- *
+ * Extracts a variable from the URL path. This parameter can only extract a 
+ * single parameter, so multiple parameters will need to be configured to
+ * extract multiple values. Parameter names are identified in the path with
+ * curly braces. e.g. <code>/path/{id}</code> defines a variable called
+ * <code>id</code> that can be extracted from the path.<br>
+ * <br>
+ * A <code>*</code> can be used whenever a dynamic path component needs to be
+ * defined but not extracted by this parameter. e.g. <code>/path/%2A/subpath/{id}</code>
+ * defines a dynamic path component between <code>path</code> and <code>subpath</code>.
+ * 
  * @author jbanes
  */
 @Wiring
@@ -36,11 +45,21 @@ public class PathVariable implements Parameter
 {
     private String path;
 
+    /**
+     * The path pattern that has been set
+     * 
+     * @return the parameterized path
+     */
     public String getPath()
     {
         return path;
     }
 
+    /**
+     * Set the path pattern
+     * 
+     * @param path the parameterized path
+     */
     public void setPath(String path)
     {
         this.path = path;
@@ -98,5 +117,4 @@ public class PathVariable implements Parameter
         
         return null;
     }
-    
 }
