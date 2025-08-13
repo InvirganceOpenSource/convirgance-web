@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.web.servlet;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import javax.servlet.http.HttpServletRequest;
@@ -41,13 +42,32 @@ public class JavaEEParameterizedRequest extends HttpServletRequestWrapper
 {
     private HttpServletRequest request;
     private JSONObject parameters;
+    private String path;
+    private byte[] input;
 
+    
     public JavaEEParameterizedRequest(Object request, JSONObject parameters)
+    {
+        this(request, parameters, null);
+    }
+    
+    public JavaEEParameterizedRequest(Object request, JSONObject parameters, String path)
+    {
+        this(request, parameters, path, null);
+    }
+
+    public JavaEEParameterizedRequest(Object request, JSONObject parameters, String path, JSONObject data)
     {
         super((HttpServletRequest)request);
         
         this.request = (HttpServletRequest)request;
         this.parameters = parameters;
+        this.path = path;
+        
+        if(data != null)
+        {
+            try { this.input = data.toString().getBytes("UTF-8"); } catch(Exception e) { throw new ConvirganceException(e); }
+        }
     }
 
     @Override
@@ -114,5 +134,16 @@ public class JavaEEParameterizedRequest extends HttpServletRequestWrapper
         }
         
         return map;
+    }
+
+    @Override
+    public String getRequestURI()
+    {
+        var path = this.path;
+        
+        if(path == null) return super.getRequestURI();
+        if(!path.startsWith("/")) path = "/" + path;
+        
+        return getContextPath() + path;
     }
 }

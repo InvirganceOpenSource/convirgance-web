@@ -23,10 +23,16 @@
  */
 package com.invirgance.convirgance.web.servlet;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
+import jakarta.servlet.ReadListener;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -41,13 +47,44 @@ public class JakartaParameterizedRequest extends HttpServletRequestWrapper
 {
     private HttpServletRequest request;
     private JSONObject parameters;
-
+    private String path;
+    private String method;
+    private byte[] input;
+    
     public JakartaParameterizedRequest(Object request, JSONObject parameters)
+    {
+        this(request, parameters, null);
+    }
+    
+    public JakartaParameterizedRequest(Object request, JSONObject parameters, String path)
+    {
+        this(request, parameters, path, null);
+    }
+    
+    public JakartaParameterizedRequest(Object request, JSONObject parameters, String path, String method)
+    {
+        this(request, parameters, path, method, null);
+    }
+
+    public JakartaParameterizedRequest(Object request, JSONObject parameters, String path, String method, JSONObject data)
     {
         super((HttpServletRequest)request);
         
         this.request = (HttpServletRequest)request;
         this.parameters = parameters;
+        this.path = path;
+        this.method = (method == null) ? this.request.getMethod() : method;
+        
+        if(data != null)
+        {
+            try { this.input = data.toString().getBytes("UTF-8"); } catch(Exception e) { throw new ConvirganceException(e); }
+        }
+    }
+
+    @Override
+    public String getMethod()
+    {
+        return method;
     }
 
     @Override
@@ -114,5 +151,83 @@ public class JakartaParameterizedRequest extends HttpServletRequestWrapper
         }
         
         return map;
+    }
+
+    @Override
+    public String getRequestURI()
+    {
+        var path = this.path;
+        
+        if(path == null) return super.getRequestURI();
+        if(!path.startsWith("/")) path = "/" + path;
+        
+        return getContextPath() + path;
+    }
+
+    @Override
+    public ServletInputStream getInputStream() throws IOException
+    {
+        if(input == null) return super.getInputStream();
+        
+        return new ServletInputStreamWrapper();
+    }
+
+    @Override
+    public BufferedReader getReader() throws IOException
+    {
+        if(input == null) return super.getReader();
+        
+        return new BufferedReader(new InputStreamReader(getInputStream()));
+    }
+        
+    private class ServletInputStreamWrapper extends ServletInputStream
+    {
+        private int offset = 0;
+        
+        @Override
+        public boolean isFinished()
+        {
+            return (offset < input.length);
+        }
+
+        @Override
+        public boolean isReady()
+        {
+            return !isFinished();
+        }
+
+        @Override
+        public void setReadListener(ReadListener rl)
+        {
+            throw new UnsupportedOperationException("Not supported.");
+        }
+
+        @Override
+        public int read() throws IOException
+        {
+            if(offset >= input.length) return -1;
+            
+            return input[offset++];
+        }
+
+        @Override
+        public int read(byte[] b) throws IOException
+        {
+            return read(b, 0, b.length);
+        }
+        
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException
+        {
+            int actual = Math.min(input.length - offset, len);
+            
+            if(offset >= input.length) return -1;
+
+            System.arraycopy(input, offset, b, off, actual);
+            
+            offset += actual;
+            
+            return actual;
+        }
     }
 }

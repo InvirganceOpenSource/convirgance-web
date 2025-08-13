@@ -23,12 +23,14 @@
  */
 package com.invirgance.convirgance.web.service;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.parameter.Parameter;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +45,10 @@ public class HypermediaService implements Service
     // Service to handle POST/PUT/DELETE, should automatically transform form submission into record
     // Optional header/footer composition
     private List<Parameter> parameters;
+    private List<HypermediaVerb> verbs;
     private String page;
-    private Map<String,String> verbs;
+    
+    private Map<String,HypermediaVerb> lookup;
 
     public List<Parameter> getParameters()
     {
@@ -66,14 +70,50 @@ public class HypermediaService implements Service
         this.page = page;
     }
 
-    public Map<String, String> getVerbs()
+    public List<HypermediaVerb> getVerbs()
     {
         return verbs;
     }
 
-    public void setVerbs(Map<String, String> verbs)
+    public void setVerbs(List<HypermediaVerb> verbs)
     {
         this.verbs = verbs;
+        this.lookup = new HashMap<>();
+        
+        for(var verb : verbs) lookup.put(verb.getName(), verb);
+    }
+    
+    private String constructPath(String path, JSONObject parameters)
+    {
+        StringBuffer buffer = new StringBuffer(path.length() * 2);
+        String name;
+        String value;
+        int start;
+        int end;
+        
+        for(var component : path.split("/"))
+        {
+            if(component.trim().length() < 1) continue;
+
+            buffer.append('/');
+            
+            while((start = component.indexOf('{')) >= 0)
+            {
+                end = component.indexOf('}', start);
+                
+                if(end < 0) throw new ConvirganceException("Unbalanced curly braces in " + path);
+                
+                name = component.substring(start+1, end);
+                value = parameters.getString(name);
+                
+                if(value == null) throw new ConvirganceException("Parameter " + name + " has not been configured and cannot be replaced in " + path);
+                else component = component.replace("{" + name + "}", value);
+            }
+            
+            buffer.append(component);
+        }
+        
+        return buffer.toString();
     }
     
     @Override
@@ -81,10 +121,14 @@ public class HypermediaService implements Service
     {
         var parameters = new JSONObject();
         var path = request.getRequestURI();
+        var method = request.getMethod().toUpperCase();
+        
+        var data = new JSONObject();
         var verb = path.substring(path.lastIndexOf('/')+1);
         var page = this.page;
         
         if(this.parameters == null) this.parameters = new ArrayList<>();
+        if(this.lookup == null) this.lookup = new HashMap<>();
         
         // Obtain the parameters for binding
         for(Parameter parameter : this.parameters)
@@ -92,7 +136,19 @@ public class HypermediaService implements Service
             parameters.put(parameter.getName(), parameter.getValue(request));
         }
         
-        if(verbs.containsKey(verb)) page = verbs.get(verb);
+        if(method.equals("POST"))
+        {
+            if(!lookup.containsKey(verb)) throw new ConvirganceException("No service handler for verb /" + verb + " on path " + path);
+            
+            for(String name : request.getParameterNames()) data.put(name, request.getParameter(name));
+
+            request.call(constructPath(lookup.get(verb).getService(), parameters), lookup.get(verb).getMethod(), data, response);
+            response.sendRedirect(path.substring(0, path.length() - verb.length() - 1));
+            return;
+        }
+        
+        if(lookup.containsKey(verb)) page = lookup.get(verb).getPage();
+        if(page == null) throw new ConvirganceException("No handler for /" + verb + " and no default view page to render for " + path);
         
         request.forward(page, parameters, response);
     }

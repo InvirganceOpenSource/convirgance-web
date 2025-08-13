@@ -23,6 +23,7 @@ package com.invirgance.convirgance.web.http;
 
 import com.invirgance.convirgance.ConvirganceException;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -64,14 +65,17 @@ public class HttpResponse
     
     private Object execResponseMethod(String methodName, Object... parameters)
     {
-        Class clazz = response.getClass();
-        Class[] types = new Class[parameters.length];
-        
-        for(int i=0; i<parameters.length; i++) types[i] = parameters[i].getClass();
-        
         try
         {
-            return clazz.getMethod(methodName, types).invoke(response, parameters);
+            for(var method : response.getClass().getMethods())
+            {
+                if(!method.getName().equals(methodName)) continue;
+                if(method.getParameterCount() != parameters.length) continue;
+                
+                return method.invoke(response, parameters);
+            }
+            
+            throw new ConvirganceException("Method " + methodName + " with " + parameters.length + " parameters not found");
         }
         catch(Exception e) { throw new ConvirganceException(e); }
     }
