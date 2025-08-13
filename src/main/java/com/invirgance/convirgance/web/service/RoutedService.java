@@ -25,6 +25,7 @@ package com.invirgance.convirgance.web.service;
 
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import java.util.Map;
  *
  * @author jbanes
  */
+@Wiring
 public class RoutedService implements Service, Routable
 {
     private Map<String,Service> routes;
@@ -48,8 +50,16 @@ public class RoutedService implements Service, Routable
         this.routes = routes;
         
         // Ensure the keys are sorted to check longer paths first
-        if(routes == null) sortedKeys = null;
-        else sortedKeys = new ArrayList<>(routes.keySet());
+        if(routes == null) 
+        {
+            sortedKeys = null;
+        }
+        else 
+        {
+            sortedKeys = new ArrayList<>(routes.keySet());
+
+            sortedKeys.sort((String left, String right) -> right.length() - left.length());
+        }
     }
     
     private String trimContext(String path, String context)
