@@ -22,6 +22,9 @@ SOFTWARE.
 package com.invirgance.convirgance.web.http;
 
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.web.servlet.JakartaParameterizedRequest;
+import com.invirgance.convirgance.web.servlet.JavaEEParameterizedRequest;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
@@ -62,6 +65,17 @@ public class HttpRequest
         Class[] types = new Class[parameters.length];
         
         for(int i=0; i<parameters.length; i++) types[i] = parameters[i].getClass();
+        
+        try
+        {
+            return clazz.getMethod(methodName, types).invoke(obj, parameters);
+        }
+        catch(Exception e) { throw new ConvirganceException(e); }
+    }
+    
+    private Object execMethod(Object obj, String methodName, Class[] types, Object... parameters)
+    {
+        Class clazz = obj.getClass();
         
         try
         {
@@ -502,5 +516,41 @@ public class HttpRequest
         if(filePath == null) return null;
         
         return new File(filePath);
+    }
+    
+    private Object getParameterizedWrapper(JSONObject parameters)
+    {
+        if(request.getClass().getName().startsWith("javax.")) return new JavaEEParameterizedRequest(request, parameters);
+        else return new JakartaParameterizedRequest(request, parameters);
+    }
+    
+    private Class getRequestType()
+    {
+        if(request.getClass().getName().startsWith("javax.")) return javax.servlet.ServletRequest.class;
+        else return jakarta.servlet.ServletRequest.class;
+    }
+    
+    private Class getResponseType()
+    {
+        if(request.getClass().getName().startsWith("javax.")) return javax.servlet.ServletResponse.class;
+        else return jakarta.servlet.ServletResponse.class;
+    }
+
+    public void include(String path, JSONObject parameters, HttpResponse response)
+    {
+        var dispatcher = execRequestMethod("getRequestDispatcher", path);
+        var request = getParameterizedWrapper(parameters);
+        var types = new Class[]{ getRequestType(), getResponseType() };
+        
+        execMethod(dispatcher, "include", types, request, response.getResponse());
+    }
+
+    public void forward(String path, JSONObject parameters, HttpResponse response)
+    {
+        var dispatcher = execRequestMethod("getRequestDispatcher", path);
+        var request = getParameterizedWrapper(parameters);
+        var types = new Class[]{ getRequestType(), getResponseType() };
+        
+        execMethod(dispatcher, "forward", types, request, response.getResponse());
     }
 }

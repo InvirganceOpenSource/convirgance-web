@@ -52,6 +52,16 @@ public class HttpResponse
         this.response = response;
     }
     
+    /**
+     * Returns the wrapped object implementing the HttpServletResponse API
+     * 
+     * @return the wrapped object
+     */
+    Object getResponse()
+    {
+        return this.response;
+    }
+    
     private Object execResponseMethod(String methodName, Object... parameters)
     {
         Class clazz = response.getClass();

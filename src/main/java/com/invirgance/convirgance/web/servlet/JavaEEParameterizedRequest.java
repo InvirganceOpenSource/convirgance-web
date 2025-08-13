@@ -1,0 +1,118 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2025 jbanes.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.invirgance.convirgance.web.servlet;
+
+import com.invirgance.convirgance.json.JSONArray;
+import com.invirgance.convirgance.json.JSONObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
+/**
+ *
+ * @author jbanes
+ */
+public class JavaEEParameterizedRequest extends HttpServletRequestWrapper
+{
+    private HttpServletRequest request;
+    private JSONObject parameters;
+
+    public JavaEEParameterizedRequest(Object request, JSONObject parameters)
+    {
+        super((HttpServletRequest)request);
+        
+        this.request = (HttpServletRequest)request;
+        this.parameters = parameters;
+    }
+
+    @Override
+    public String getParameter(String name)
+    {
+        if(parameters.containsKey(name)) return parameters.getString(name);
+        
+        return super.getParameter(name);
+    }
+
+    @Override
+    public String[] getParameterValues(String name)
+    {
+        JSONArray values;
+        String[] result;
+        int index = 0;
+        
+        if(!parameters.containsKey(name)) return super.getParameterValues(name);
+        
+        if(parameters.get(name) instanceof JSONArray)
+        {
+            values = parameters.getJSONArray(name);
+            result = new String[values.size()];
+            
+            for(Object value : values) result[index++] = String.valueOf(value);
+            
+            return result;
+        }
+        
+        return new String[]{ getParameter(name) };
+    }
+    
+    private List<String> getParameterNameList()
+    {
+        var list = new ArrayList<String>(parameters.keySet());
+        var enumeration = super.getParameterNames();
+        
+        String name;
+        
+        while(enumeration.hasMoreElements())
+        {
+            name = enumeration.nextElement();
+            
+            if(!list.contains(name)) list.add(name);
+        }
+        
+        return list;
+    }
+    
+    @Override
+    public Enumeration<String> getParameterNames()
+    {
+        return Collections.enumeration(getParameterNameList());
+    }
+
+    @Override
+    public Map<String,String[]> getParameterMap()
+    {
+        Map map = new JSONObject(true);
+        
+        for(String name : getParameterNameList())
+        {
+            map.put(name, getParameterValues(name));
+        }
+        
+        return map;
+    }
+}
