@@ -28,6 +28,7 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.input.Input;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.transform.IdentityTransformer;
 import com.invirgance.convirgance.transform.Transformer;
 import com.invirgance.convirgance.web.consumer.Consumer;
 import com.invirgance.convirgance.web.http.HttpRequest;
@@ -66,6 +67,7 @@ public class InsertService implements Service
     private List<Parameter> parameters;
     private Input input;
     private Origin origin;
+    private List<String> injectParameters;
     private List<Transformer> transformers;
     private Consumer consumer;
     
@@ -129,6 +131,16 @@ public class InsertService implements Service
     {
         this.origin = origin;
     }
+
+    public List<String> getInjectParameters()
+    {
+        return injectParameters;
+    }
+
+    public void setInjectParameters(List<String> injectParameters)
+    {
+        this.injectParameters = injectParameters;
+    }
     
     /**
      * Gets the list of transformers to apply to the data.
@@ -184,9 +196,7 @@ public class InsertService implements Service
     public void execute(HttpRequest request, HttpResponse response)
     {
         JSONObject params = new JSONObject();
-        Iterable<JSONObject> iterable;
-        
-        JSONObject result = new JSONObject("{\"success\":true}");
+        Iterable<JSONObject> iterable; 
         JSONArray keys;
         
         if(this.parameters == null) this.parameters = new ArrayList<>();
@@ -203,16 +213,33 @@ public class InsertService implements Service
         
         // Get Source and Input to parse Iterable stream
         iterable = input.read(origin.getOrigin(request, params));
+        
+        // Inject keys from Parameters if needed
+        if(injectParameters != null)
+        {
+            iterable = new IdentityTransformer() {
+                @Override
+                public JSONObject transform(JSONObject record) throws ConvirganceException
+                {
+                    for(String injectKey : injectParameters)
+                    {
+                        record.put(injectKey, params.get(injectKey));
+                    }
+
+                    return record;
+                }
+            }.transform(iterable);
+        }
 
         // Perform tranformations on the data
         for(Transformer transformer : transformers)
         {
             iterable = transformer.transform(iterable);
         }
-        
+
         // Consume the uploaded stream of data
         keys = consumer.consume(iterable, params);
-        
+
         // Write out keys if they exist
         try 
         {

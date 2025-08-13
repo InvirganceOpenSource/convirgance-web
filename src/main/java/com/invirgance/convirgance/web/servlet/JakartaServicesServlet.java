@@ -47,8 +47,8 @@ public class JakartaServicesServlet extends HttpServlet
 {
     private boolean allowGet = true;
     private boolean allowPost = true;
-    private boolean allowPut = false;
-    private boolean allowDelete = false;
+    private boolean allowPut = true;
+    private boolean allowDelete = true;
     
     private ServiceLoader loader = ServiceLoader.getInstance();
     

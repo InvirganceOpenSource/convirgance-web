@@ -26,7 +26,7 @@ package com.invirgance.convirgance.web.servlet;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.http.HttpRequest;
-import com.invirgance.convirgance.web.service.RESTService;
+import com.invirgance.convirgance.web.service.Routable;
 import com.invirgance.convirgance.web.service.SelectService;
 import com.invirgance.convirgance.web.service.Service;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,24 +56,29 @@ public class ServiceCaller
     {
         ServiceLoader loader = ServiceLoader.getInstance();
         Service service = loader.get(request, path);
+        ParameterizedHttpRequest wrapper = new ParameterizedHttpRequest(request, path, parameters);
         
-        if(service instanceof RESTService) service = ((RESTService)service).getService(request.getMethod());
+        while(service instanceof Routable) service = ((Routable)service).getDestinationService(wrapper);
 
         if(service == null) throw new IllegalArgumentException(path + " is not found.");
         if(!(service instanceof SelectService)) throw new IllegalArgumentException(path + " is not a Select Service and thus cannot return data.");
         
-        return ((SelectService)service).process(new RequestHttpService(request, parameters));
+        return ((SelectService)service).process(wrapper);
     }
     
-    private static class RequestHttpService extends HttpRequest
+    private static class ParameterizedHttpRequest extends HttpRequest
     {
         private JSONObject parameters;
+        private String path;
 
-        public RequestHttpService(HttpServletRequest request, JSONObject parameters)
+        public ParameterizedHttpRequest(HttpServletRequest request, String path, JSONObject parameters)
         {
             super(request);
             
+            this.path = path;
             this.parameters = parameters;
+            
+            if(!path.startsWith("/")) this.path = "/" + path;
         }
 
         @Override
@@ -112,6 +117,12 @@ public class ServiceCaller
             JSONArray<String> array = new JSONArray<>(this.parameters.values());
             
             return array.toArray(String[]::new);
+        }
+
+        @Override
+        public String getRequestURI()
+        {
+            return super.getContextPath() + path;
         }
     }
 }
