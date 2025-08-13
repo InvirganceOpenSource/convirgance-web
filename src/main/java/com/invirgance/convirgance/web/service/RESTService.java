@@ -110,7 +110,7 @@ public class RESTService implements Service, Routable
     public void execute(HttpRequest request, HttpResponse response)
     {
         Service service = getDestinationService(request);
-System.out.println("Routing: " + request.getMethod()+":"+service);
+
         if(service != null) service.execute(request, response);
         else response.sendError(404, "Not Found");
     }
