@@ -123,7 +123,7 @@ public class HypermediaService implements Service
         var parameters = new JSONObject();
         var path = request.getRequestURI();
         var method = request.getMethod().toUpperCase();
-        
+
         var data = new JSONObject();
         var verb = path.substring(path.lastIndexOf('/')+1);
         var page = this.page;
@@ -152,7 +152,9 @@ public class HypermediaService implements Service
             if(lookup.get(verb).getRedirect() != null) 
             {
                 iterator = results.iterator();
-                parameters = iterator.hasNext() ? iterator.next() : new JSONObject();
+                
+                if(iterator.hasNext()) parameters.putAll(iterator.next());
+
                 path = constructPath(lookup.get(verb).getRedirect(), parameters);
                 
                 if(!path.startsWith("/")) path = "/" + path;
