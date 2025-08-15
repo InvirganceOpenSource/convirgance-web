@@ -31,6 +31,7 @@ import com.invirgance.convirgance.web.parameter.Parameter;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -127,6 +128,9 @@ public class HypermediaService implements Service
         var verb = path.substring(path.lastIndexOf('/')+1);
         var page = this.page;
         
+        Iterable<JSONObject> results;
+        Iterator<JSONObject> iterator;
+        
         if(this.parameters == null) this.parameters = new ArrayList<>();
         if(this.lookup == null) this.lookup = new HashMap<>();
         
@@ -141,9 +145,22 @@ public class HypermediaService implements Service
             if(!lookup.containsKey(verb)) throw new ConvirganceException("No service handler for verb /" + verb + " on path " + path);
             
             for(String name : request.getParameterNames()) data.put(name, request.getParameter(name));
-
-            request.call(constructPath(lookup.get(verb).getService(), parameters), lookup.get(verb).getMethod(), data, response);
-            response.sendRedirect(path.substring(0, path.length() - verb.length() - 1));
+            
+            results = request.call(constructPath(lookup.get(verb).getService(), parameters), lookup.get(verb).getMethod(), data, response);
+            path = path.substring(0, path.length() - verb.length() - 1);
+            
+            if(lookup.get(verb).getRedirect() != null) 
+            {
+                iterator = results.iterator();
+                parameters = iterator.hasNext() ? iterator.next() : new JSONObject();
+                path = constructPath(lookup.get(verb).getRedirect(), parameters);
+                
+                if(!path.startsWith("/")) path = "/" + path;
+                
+                path = request.getContextPath() + path;
+            }
+            
+            response.sendRedirect(path);
             return;
         }
         

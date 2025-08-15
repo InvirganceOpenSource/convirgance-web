@@ -26,8 +26,10 @@ package com.invirgance.convirgance.web.service;
 import com.invirgance.convirgance.web.servlet.ServiceState;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.input.Input;
-import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.output.JSONOutput;
+import com.invirgance.convirgance.output.Output;
+import com.invirgance.convirgance.target.OutputStreamTarget;
 import com.invirgance.convirgance.transform.IdentityTransformer;
 import com.invirgance.convirgance.transform.Transformer;
 import com.invirgance.convirgance.web.consumer.Consumer;
@@ -36,7 +38,6 @@ import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.origin.Origin;
 import com.invirgance.convirgance.web.parameter.Parameter;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ import java.util.List;
  * @author jbanes
  */
 @Wiring
-public class InsertService implements Service
+public class InsertService implements Service, Processable
 {
     private List<Parameter> parameters;
     private Input input;
@@ -70,6 +71,7 @@ public class InsertService implements Service
     private List<String> injectParameters;
     private List<Transformer> transformers;
     private Consumer consumer;
+    private Output output = new JSONOutput();
     
     
     /**
@@ -181,23 +183,22 @@ public class InsertService implements Service
     {
         this.consumer = consumer;
     }
-    
-    // TODO: Validate the data with errors to stop insert. Failure should be trapped and returned as JSON?
-    // TODO: Need to support sequences and return the keys
-    
-    /**
-     * Executes the insert service, processing and persisting data from the HTTP request.
-     * 
-     * @param request The HTTP request containing the data to process
-     * @param response The HTTP response to write results to
-     * @throws ConvirganceException If an error occurs during processing
-     */    
-    @Override
-    public void execute(HttpRequest request, HttpResponse response)
+
+    public Output getOutput()
     {
+        return output;
+    }
+
+    public void setOutput(Output output)
+    {
+        this.output = output;
+    }
+    
+    public Iterable<JSONObject> process(HttpRequest request)
+    {
+        
         JSONObject params = new JSONObject();
         Iterable<JSONObject> iterable; 
-        JSONArray keys;
         
         if(this.parameters == null) this.parameters = new ArrayList<>();
         if(this.transformers == null) this.transformers = new ArrayList<>();
@@ -238,17 +239,27 @@ public class InsertService implements Service
         }
 
         // Consume the uploaded stream of data
-        keys = consumer.consume(iterable, params);
+        return consumer.consume(iterable, params);
+    }
+    
+    /**
+     * Executes the insert service, processing and persisting data from the HTTP request.
+     * 
+     * @param request The HTTP request containing the data to process
+     * @param response The HTTP response to write results to
+     * @throws ConvirganceException If an error occurs during processing
+     */    
+    @Override
+    public void execute(HttpRequest request, HttpResponse response)
+    {
+        Iterable<JSONObject> iterable = process(request);
 
         // Write out keys if they exist
-        try 
+        if(iterable != null && output != null)
         {
-            if(keys != null)
-            {
-                response.setContentType("application/json");
-                response.getOutputStream().write(keys.toString().getBytes("UTF-8"));
-            }
+            response.setContentType(output.getContentType());
+
+            output.write(new OutputStreamTarget(response.getOutputStream()), iterable);
         }
-        catch(IOException e) { throw new ConvirganceException(e); }
     }
 }

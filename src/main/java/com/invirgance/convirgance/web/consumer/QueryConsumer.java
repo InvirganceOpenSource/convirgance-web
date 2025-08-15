@@ -57,6 +57,7 @@ public class QueryConsumer implements Consumer
     private String sequenceId;
     
     private String cachedKey;
+    private String returnKey = "id";
 
     /**
      * Returns the JDNI name.
@@ -138,6 +139,16 @@ public class QueryConsumer implements Consumer
     {
         this.sequenceId = sequenceId;
     }
+
+    public String getReturnKey()
+    {
+        return returnKey;
+    }
+
+    public void setReturnKey(String returnKey)
+    {
+        this.returnKey = returnKey;
+    }
     
     private String getKey(JSONObject next)
     {
@@ -213,14 +224,24 @@ public class QueryConsumer implements Consumer
      * is set without sequenceId
      */    
     @Override
-    public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters)
+    public Iterable<JSONObject> consume(Iterable<JSONObject> iterable, JSONObject parameters)
     {
         DBMS dbms = lookup();
         JSONArray keys = new JSONArray();
+        JSONArray<JSONObject> results = new JSONArray<>();
+        JSONObject record;
         
         dbms.update(getOperation(iterable, dbms, keys));
+
+        for(Object key : keys)
+        {
+            record = new JSONObject();
+            
+            record.put(returnKey, key);
+            results.add(record);
+        }
         
-        return keys;
+        return results;
     }
     
 }

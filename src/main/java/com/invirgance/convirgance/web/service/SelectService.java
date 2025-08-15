@@ -56,7 +56,7 @@ import java.util.List;
  * @author jbanes
  */
 @Wiring
-public class SelectService implements Service
+public class SelectService implements Service, Processable
 {
     private List<Parameter> parameters;
     private Binding binding;
@@ -159,6 +159,7 @@ public class SelectService implements Service
      * @param request The HTTP request containing the parameters
      * @return An iterable of JSONObjects containing the retrieved and transformed data
      */
+    @Override
     public Iterable<JSONObject> process(HttpRequest request)
     {
         JSONObject params = new JSONObject();

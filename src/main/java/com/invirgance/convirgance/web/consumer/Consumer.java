@@ -42,5 +42,5 @@ public interface Consumer
      * @param parameters Additional parameters that may influence the operation
      * @return A JSONArray containing generated keys or other metadata from the operation
      */
-    public JSONArray consume(Iterable<JSONObject> iterable, JSONObject parameters);
+    public Iterable<JSONObject> consume(Iterable<JSONObject> iterable, JSONObject parameters);
 }

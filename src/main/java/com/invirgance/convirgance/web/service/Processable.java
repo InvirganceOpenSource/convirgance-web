@@ -23,68 +23,30 @@
  */
 package com.invirgance.convirgance.web.service;
 
-import com.invirgance.convirgance.wiring.annotation.Wiring;
+import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
  *
  * @author jbanes
  */
-@Wiring("verb")
-public class HypermediaVerb
+public interface Processable
 {
-    private String name;
-    private String page;
-    private String service;
-    private String method;
-    private String redirect;
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getPage()
-    {
-        return page;
-    }
-
-    public void setPage(String page)
-    {
-        this.page = page;
-    }
-
-    public String getService()
-    {
-        return service;
-    }
-
-    public void setService(String service)
-    {
-        this.service = service;
-    }
-
-    public String getMethod()
-    {
-        return method;
-    }
-
-    public void setMethod(String method)
-    {
-        this.method = method;
-    }
-
-    public String getRedirect()
-    {
-        return redirect;
-    }
-
-    public void setRedirect(String redirect)
-    {
-        this.redirect = redirect;
-    }
+    /**
+     * Processes an HTTP request to retrieve data without generating a response.
+     * <p>
+     * This method implements the core data retrieval pipeline and can be used
+     * by other components that need access to the data without writing to a response.
+     * </p>
+     * <ol>
+     *   <li>Extract parameters from the HTTP request</li>
+     *   <li>Store parameters in thread-local storage for access by other components</li>
+     *   <li>Use the configured binding to retrieve data based on the parameters</li>
+     *   <li>Apply any configured transformers to the data</li>
+     * </ol>
+     *
+     * @param request The HTTP request containing the parameters
+     * @return An iterable of JSONObjects containing the retrieved and transformed data
+     */
+    public Iterable<JSONObject> process(HttpRequest request);
 }

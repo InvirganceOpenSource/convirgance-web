@@ -23,10 +23,14 @@ package com.invirgance.convirgance.web.http;
 
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.web.service.Processable;
+import com.invirgance.convirgance.web.service.Routable;
+import com.invirgance.convirgance.web.service.Service;
 import com.invirgance.convirgance.web.servlet.JakartaParameterizedRequest;
 import com.invirgance.convirgance.web.servlet.JakartaRedirectedResponse;
 import com.invirgance.convirgance.web.servlet.JavaEEParameterizedRequest;
 import com.invirgance.convirgance.web.servlet.JavaEERedirectedResponse;
+import com.invirgance.convirgance.web.servlet.ServiceLoader;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
@@ -63,14 +67,17 @@ public class HttpRequest
     
     private Object execMethod(Object obj, String methodName, Object... parameters)
     {
-        Class clazz = obj.getClass();
-        Class[] types = new Class[parameters.length];
-        
-        for(int i=0; i<parameters.length; i++) types[i] = parameters[i].getClass();
-        
         try
         {
-            return clazz.getMethod(methodName, types).invoke(obj, parameters);
+            for(var method : obj.getClass().getMethods())
+            {
+                if(!method.getName().equals(methodName)) continue;
+                if(method.getParameterCount() != parameters.length) continue;
+
+                return method.invoke(obj, parameters);
+            }
+            
+            throw new ConvirganceException("Method " + methodName + " with " + parameters.length + " parameters not found");
         }
         catch(Exception e) { throw new ConvirganceException(e); }
     }
@@ -78,7 +85,7 @@ public class HttpRequest
     private Object execMethod(Object obj, String methodName, Class[] types, Object... parameters)
     {
         Class clazz = obj.getClass();
-        
+
         try
         {
             return clazz.getMethod(methodName, types).invoke(obj, parameters);
@@ -543,14 +550,25 @@ public class HttpRequest
         if(request.getClass().getName().startsWith("javax.")) return new JavaEERedirectedResponse(response.getResponse());
         else return new JakartaRedirectedResponse(response.getResponse());
     }
-
-    public void call(String path, String method, JSONObject data, HttpResponse response)
+    
+    private Service loadService(Object request, String path)
     {
-        var dispatcher = execRequestMethod("getRequestDispatcher", path);
-        var request = getParameterizedWrapper(new JSONObject(), path, method, data);
-        var types = new Class[]{ getRequestType(), getResponseType() };
+        ServiceLoader loader = ServiceLoader.getInstance();
         
-        execMethod(dispatcher, "include", types, request, getRedirectedResponse(response));
+        if(request.getClass().getName().startsWith("javax.")) return loader.get((javax.servlet.http.HttpServletRequest)request);
+        else return loader.get((jakarta.servlet.http.HttpServletRequest)request);
+    }
+
+    public Iterable<JSONObject> call(String path, String method, JSONObject data, HttpResponse response)
+    {
+        var request = getParameterizedWrapper(new JSONObject(), path, method, data);
+        var wrapped = new HttpRequest(request);
+        var service = loadService(request, path);
+
+        while(service instanceof Routable) service = ((Routable)service).getDestinationService(wrapped);
+        if(!(service instanceof Processable)) throw new ConvirganceException("Service at " + path + " must implement Processable");
+        
+        return ((Processable)service).process(wrapped);
     }
 
     public void include(String path, JSONObject parameters, HttpResponse response)

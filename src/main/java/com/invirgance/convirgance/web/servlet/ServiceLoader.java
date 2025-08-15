@@ -34,7 +34,7 @@ import java.util.List;
  *
  * @author jbanes
  */
-class ServiceLoader
+public class ServiceLoader
 {
     private static ServiceLoader instance;
     
