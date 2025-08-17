@@ -139,7 +139,6 @@ public class ServiceLoader
      * Returns a {@link Service} for the request.
      * 
      * @param request The jakarta {@link jakarta.servlet.http.HttpServletRequest}.
-     * @param path The path.
      * @return A Service.
      */        
     public Service get(jakarta.servlet.http.HttpServletRequest request)
@@ -182,7 +181,6 @@ public class ServiceLoader
      * Returns a {@link ServiceDescriptor} for the {@link javax.servlet.http.HttpServletRequest}
      * 
      * @param request The request.
-     * @param path The path.
      * @return The {@link ServiceDescriptor}.
      */
     public ServiceDescriptor load(javax.servlet.http.HttpServletRequest request)
