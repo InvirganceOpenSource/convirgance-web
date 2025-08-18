@@ -26,6 +26,8 @@ package com.invirgance.convirgance.web.parameter;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * Extracts a variable from the URL path. This parameter can only extract a 
@@ -97,6 +99,20 @@ public class PathVariable implements Parameter
         
         return path;
     }
+    
+    private String decode(String value)
+    {
+        try
+        {
+            if(value == null) return null;
+            
+            return URLDecoder.decode(value, "UTF-8");
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            throw new ConvirganceException(e);
+        }
+    }
 
     @Override
     public Object getValue(HttpRequest request)
@@ -111,7 +127,7 @@ public class PathVariable implements Parameter
         for(int i=0; i<length; i++)
         {
             if(components[i].equals("*")) continue;
-            if(components[i].contains(token)) return normalize(actual[i], components[i]);
+            if(components[i].contains(token)) return decode(normalize(actual[i], components[i]));
             if(!actual[i].equals(components[i])) return null;
         }
         
