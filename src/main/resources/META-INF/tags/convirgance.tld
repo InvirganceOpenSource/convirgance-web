@@ -271,6 +271,32 @@
           <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>if</name>
+        <tag-class>com.invirgance.convirgance.web.tag.IfTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>
+        <![CDATA[
+            Tests a value and includes the inner content only if the test is true
+        ]]>
+        </description>
+        <attribute>
+          <name>test</name>
+          <type>boolean</type>
+          <description>The value to test if true or false</description>
+          <required>true</required>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>var</name>
+          <description>Variable to assign the result of the test to</description>
+          <required>false</required>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
+        </attribute>
+    </tag>
     <function>
         <name>json</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
