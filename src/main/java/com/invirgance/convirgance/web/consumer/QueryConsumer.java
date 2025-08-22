@@ -35,18 +35,13 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.IdentityTransformer;
 import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
-import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
 
 /**
- * Persists JSON data to a database using SQL. 
- * <pre>
- * Use this when you need to:
- * - Insert web service data directly to a database
- * - Auto-generate sequence IDs during insertion
- * - Connect via JNDI with minimal configuration
- * </pre>
+ * Inserts stream of data into a SQL database. Supports the use of sequences to
+ * allow for inserts of children in the same flow. Each object is bound to a
+ * batch SQL operation with named parameters.
  * 
  * @author jbanes
  */
@@ -58,7 +53,6 @@ public class QueryConsumer implements Consumer
     
     private Query sequenceSql;
     private String sequenceId;
-    private String returnKey = "id";
     
     private Map<String,QueryConsumer> children;
     
@@ -148,21 +142,25 @@ public class QueryConsumer implements Consumer
         this.sequenceId = sequenceId;
     }
 
-    public String getReturnKey()
-    {
-        return returnKey;
-    }
-
-    public void setReturnKey(String returnKey)
-    {
-        this.returnKey = returnKey;
-    }
-
+    /**
+     * Child records to include as part of the insertion. The key must refer to
+     * a JSONArray in the incoming data. The specified QueryConsumer will handle
+     * the records found in the JSONArray.
+     * 
+     * @return The mapping of keys to consumers of child records
+     */
     public Map<String,QueryConsumer> getChildren()
     {
         return children;
     }
 
+    /**
+     * Child records to include as part of the insertion. The key must refer to
+     * a JSONArray in the incoming data. The specified QueryConsumer will handle
+     * the records found in the JSONArray.
+     * 
+     * @param children The mapping of keys to consumers of child records
+     */
     public void setChildren(Map<String,QueryConsumer> children)
     {
         this.children = children;
@@ -215,8 +213,7 @@ public class QueryConsumer implements Consumer
                         Object value = next.get(key);
                         
                         record.put(sequenceId, value);
-                        
-                        keyRecord.put(returnKey, value);
+                        keyRecord.put(sequenceId, value);
                         keys.add(keyRecord);
                     }
                     catch(Exception e) { throw new ConvirganceException(e); }
@@ -234,7 +231,7 @@ public class QueryConsumer implements Consumer
                             @Override
                             public JSONObject transform(JSONObject record) throws ConvirganceException
                             {
-                                record.put(returnKey, value);
+                                record.put(sequenceId, value);
                                 
                                 return record;
                             }
@@ -266,8 +263,7 @@ public class QueryConsumer implements Consumer
                         Object value = next.get(key);
                         
                         record.put(sequenceId, value);
-                        
-                        returnRecord.put(returnKey, value);
+                        returnRecord.put(sequenceId, value);
                         keys.add(returnRecord);
                         
                         return record;
