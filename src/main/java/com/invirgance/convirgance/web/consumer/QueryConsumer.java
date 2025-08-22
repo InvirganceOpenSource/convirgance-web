@@ -29,11 +29,14 @@ import com.invirgance.convirgance.dbms.AtomicOperation;
 import com.invirgance.convirgance.dbms.BatchOperation;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
+import com.invirgance.convirgance.dbms.TransactionOperation;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.transform.IdentityTransformer;
 import com.invirgance.convirgance.web.servlet.ApplicationInitializer;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
+import java.util.HashMap;
+import java.util.Map;
 import javax.sql.DataSource;
 
 /**
@@ -55,9 +58,14 @@ public class QueryConsumer implements Consumer
     
     private Query sequenceSql;
     private String sequenceId;
+    private String returnKey = "id";
+    
+    private Map<String,QueryConsumer> children;
     
     private String cachedKey;
-    private String returnKey = "id";
+    
+    //TODO: Allow failure on no records
+    //private boolean required;
 
     /**
      * Returns the JDNI name.
@@ -149,6 +157,16 @@ public class QueryConsumer implements Consumer
     {
         this.returnKey = returnKey;
     }
+
+    public Map<String,QueryConsumer> getChildren()
+    {
+        return children;
+    }
+
+    public void setChildren(Map<String,QueryConsumer> children)
+    {
+        this.children = children;
+    }
     
     private String getKey(JSONObject next)
     {
@@ -170,9 +188,67 @@ public class QueryConsumer implements Consumer
      * @return An {@link BatchOperation} with the transformed data to add to the database.
      * @throws ConvirganceException if sequenceSql is set but sequenceId is not
      */
-    public AtomicOperation getOperation(Iterable<JSONObject> iterable, DBMS dbms, JSONArray keys)
+    public AtomicOperation getOperation(Iterable<JSONObject> iterable, DBMS dbms, JSONArray<JSONObject> keys)
     {
         Query query = new Query(sql);
+        JSONArray<JSONObject> records = new JSONArray<>();
+        TransactionOperation transaction = new TransactionOperation();
+        
+        Iterable<JSONObject> child;
+        
+        if(children != null && children.size() > 0)
+        {
+            transaction.add(new BatchOperation(query, records));
+            
+            for(JSONObject record : iterable)
+            {
+                JSONObject keyRecord = new JSONObject();
+                
+                records.add(record);
+                
+                if(sequenceId != null)
+                {
+                    try(var result = (CloseableIterator<JSONObject>)dbms.query(sequenceSql).iterator())
+                    {
+                        JSONObject next = result.next();
+                        String key = getKey(next);
+                        Object value = next.get(key);
+                        
+                        record.put(sequenceId, value);
+                        
+                        keyRecord.put(returnKey, value);
+                        keys.add(keyRecord);
+                    }
+                    catch(Exception e) { throw new ConvirganceException(e); }
+                }
+                
+                for(String key : children.keySet())
+                {
+                    JSONArray childKeys = new JSONArray();
+                    child = record.getJSONArray(key);
+                    
+                    if(sequenceId != null)
+                    {
+                        Object value = record.get(sequenceId);
+                        child = new IdentityTransformer() {
+                            @Override
+                            public JSONObject transform(JSONObject record) throws ConvirganceException
+                            {
+                                record.put(returnKey, value);
+                                
+                                return record;
+                            }
+                        }.transform(child);
+                    }
+                    
+                    transaction.add(children.get(key).getOperation(child, dbms, childKeys));
+                    keyRecord.put(key, childKeys);
+                }
+            }
+            
+            return transaction;
+        }
+
         
         if(sequenceSql != null)
         {
@@ -184,12 +260,15 @@ public class QueryConsumer implements Consumer
                 {
                     try(var result = (CloseableIterator<JSONObject>)dbms.query(sequenceSql).iterator())
                     {
+                        JSONObject returnRecord = new JSONObject();
                         JSONObject next = result.next();
                         String key = getKey(next);
                         Object value = next.get(key);
                         
                         record.put(sequenceId, value);
-                        keys.add(value);
+                        
+                        returnRecord.put(returnKey, value);
+                        keys.add(returnRecord);
                         
                         return record;
                     }
@@ -197,10 +276,10 @@ public class QueryConsumer implements Consumer
                 }
             }.transform(iterable);
         }
-
+        
         return new BatchOperation(query, iterable);
     }
-    
+            
     private DBMS lookup()
     {
         DataSource source = ApplicationInitializer.lookup(this.jndiName);
@@ -227,21 +306,11 @@ public class QueryConsumer implements Consumer
     public Iterable<JSONObject> consume(Iterable<JSONObject> iterable, JSONObject parameters)
     {
         DBMS dbms = lookup();
-        JSONArray keys = new JSONArray();
-        JSONArray<JSONObject> results = new JSONArray<>();
-        JSONObject record;
+        JSONArray<JSONObject> keys = new JSONArray<>();
         
         dbms.update(getOperation(iterable, dbms, keys));
-
-        for(Object key : keys)
-        {
-            record = new JSONObject();
-            
-            record.put(returnKey, key);
-            results.add(record);
-        }
         
-        return results;
+        return keys;
     }
     
 }
