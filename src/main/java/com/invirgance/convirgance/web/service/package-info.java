@@ -21,30 +21,20 @@ SOFTWARE.
  */
 
 /**
- * Core web service implementations.
- * Services handle HTTP requests and responses,
+ * Core web service implementations. Services handle HTTP requests and responses, 
  * orchestrating data retrieval, transformation, and persistence operations.
  * 
- * <p>Key components:</p>
+ * Typical usage scenarios:<br>
  * <ul>
- *   <li>{@link Service} - Core interface defining the contract for all service
- *       implementations</li>
- *   <li>{@link SelectService} - Implementation for retrieving and returning
- *       data (e.g., GET operations)</li>
- *   <li>{@link InsertService} - Implementation for accepting and persisting 
- *       data (e.g., POST operations)</li>
+ * <li>RESTful data access endpoints</li>
+ * <li>Hypermedia Application (HDA) endpoints</li>
+ * <li>Building data submission endpoints</li>
+ * <li>Implementing CRUD operations for web applications</li>
+ * <li>Configuring declarative web services with minimal code</li>
  * </ul>
  * 
- * <pre>
- * Typical usage scenarios:
- * - Creating RESTful data access endpoints
- * - Building data submission endpoints
- * - Implementing CRUD operations for web applications
- * - Configuring declarative web services with minimal code
- * </pre>
- * 
- * <p>Services are typically configured in Spring XML files and loaded by the framework's
- * servlet components. Each service coordinates multiple components including parameters,
+ * <p>Services are configured using Convirgance (Wiring) XML files that are loaded by the framework's
+ * servlet components. Each service is constructed from pluggable components including parameters,
  * bindings, transformers, and consumers to process HTTP requests and generate responses.</p>
  * 
  * @author jbanes
