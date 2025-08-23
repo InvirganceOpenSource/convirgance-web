@@ -27,7 +27,11 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- *
+ * Implemented by services that can be called directly to return a stream of
+ * data without generating an HTTP response. Primarily used internally to allow
+ * internal service calls to work. (e.g. <code>virge:service</code> tag and 
+ * <code>HypermediaVerb</code> service calls.
+ * 
  * @author jbanes
  */
 public interface Processable

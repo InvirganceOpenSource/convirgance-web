@@ -31,7 +31,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Routes requests between multiples services based on the request URL. URLs
+ * can contain <code>*</code> to handle cases where the component of the URL
+ * is not known ahead of time. e.g. <code>/owner/32/pet/12</code> would match
+ * <code>/owner/&#42;/pet</code>.<br>
+ * <br>
+ * Longer paths are checked before shorter paths, so <code>/owner/32/pet/12</code>
+ * would match <code>/owner/&#42;/pet</code> instead of <code>/owner</code>.<br>
+ * <br>
+ * Conversely <code>/owner/32/edit</code> would match <code>/owner</code>.
+ * 
  * @author jbanes
  */
 @Wiring
@@ -40,12 +49,23 @@ public class RoutedService implements Service, Routable
     private Map<String,Service> routes;
     private List<String> sortedKeys;
 
+    /**
+     * The list of paths for routing and the service configured to handle each
+     * route. 
+     * 
+     * @return a map of routes
+     */
     public Map<String,Service> getRoutes()
     {
         return routes;
     }
 
-    public void setRoutes(Map<String, Service> routes)
+    /**
+     * Set the list of paths and the associated services to handle those paths
+     * 
+     * @param routes a map of routes 
+     */
+    public void setRoutes(Map<String,Service> routes)
     {
         this.routes = routes;
         
