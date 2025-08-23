@@ -29,7 +29,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
- *
+ * The value in a record must match a regular expression
+ * 
  * @author jbanes
  */
 @Wiring

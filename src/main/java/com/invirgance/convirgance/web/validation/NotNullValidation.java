@@ -27,7 +27,8 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
- *
+ * The value in a record is not null
+ * 
  * @author jbanes
  */
 @Wiring

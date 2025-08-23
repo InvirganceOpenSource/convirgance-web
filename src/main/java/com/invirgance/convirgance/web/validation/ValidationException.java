@@ -26,7 +26,8 @@ package com.invirgance.convirgance.web.validation;
 import com.invirgance.convirgance.ConvirganceException;
 
 /**
- *
+ * Thrown if a validation fails
+ * 
  * @author jbanes
  */
 public class ValidationException extends ConvirganceException

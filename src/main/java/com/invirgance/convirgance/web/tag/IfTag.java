@@ -28,7 +28,9 @@ import jakarta.servlet.jsp.PageContext;
 import jakarta.servlet.jsp.tagext.BodyTagSupport;
 
 /**
- *
+ * A custom JSP tag that only renders the content if the <code>test</code> is
+ * true.
+ * 
  * @author jbanes
  */
 public class IfTag extends BodyTagSupport

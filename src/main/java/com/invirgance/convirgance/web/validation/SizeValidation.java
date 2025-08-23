@@ -27,7 +27,8 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
- *
+ * Checks the minimum number of characters and maximum number of characters in a string
+ * 
  * @author jbanes
  */
 @Wiring
