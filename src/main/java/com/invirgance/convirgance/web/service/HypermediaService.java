@@ -36,46 +36,90 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Provides a Hypermedia view for a resource, including handling of REST-like
+ * calls routed through verbs to account for only GET/POST being supported by
+ * HTML forms. Verbs are computed as the last component of the path and optionally
+ * provide both a view and a service handler. POST requests to a verb will call
+ * a configured service to handle the request and then redirect to a GET request to 
+ * complete the Hypermedia rendering.<br>
+ * <br>
+ * Parameters configured by this service will be received by pages called as
+ * regular HTTP request parameters. This allows configured parameters to be
+ * accessed by JSP pages as if they were in the url query string. e.g. <code>${param.id}</code>,
+ * &lt;%= request.getParameter("id") %&gt;, etc.
+ * 
  * @author jbanes
  */
 @Wiring
 public class HypermediaService implements Service
 {
-    // Parameter extraction that will be turned into request parameters
-    // Service to handle POST/PUT/DELETE, should automatically transform form submission into record
-    // Optional header/footer composition
+    // TODO: Optional header/footer composition
     private List<Parameter> parameters;
     private List<HypermediaVerb> verbs;
     private String page;
     
     private Map<String,HypermediaVerb> lookup;
 
+    /**
+     * Gets the list of parameters to extract from the request.
+     *
+     * @return The parameters list
+     */
     public List<Parameter> getParameters()
     {
         return parameters;
     }
 
+    /**
+     * Sets the list of parameters to extract from the request.
+     *
+     * @param parameters The parameters list
+     */
     public void setParameters(List<Parameter> parameters)
     {
         this.parameters = parameters;
     }
 
+    /**
+     * The default JSP or Servlet path to render for GET requests. The page will
+     * receive all parameters configured by this service as request parameters.
+     * 
+     * @return the path to the JSP or servlet or null if no page has been set
+     */
     public String getPage()
     {
         return page;
     }
 
+    /**
+     * Set a path to the default JSP or Servlet to render for GET requests. The 
+     * page will receive all parameters configured by this service as request 
+     * parameters.
+     * 
+     * @param page the path to a JSP or servlet
+     */
     public void setPage(String page)
     {
         this.page = page;
     }
 
+    /**
+     * List of configured verbs for handling special requests like editing and
+     * creating records.
+     * 
+     * @return list of configured verbs
+     */
     public List<HypermediaVerb> getVerbs()
     {
         return verbs;
     }
 
+    /**
+     * Set a list of configured verbs for handling special requests like editing
+     * and creating records.
+     * 
+     * @param verbs list of verbs
+     */
     public void setVerbs(List<HypermediaVerb> verbs)
     {
         this.verbs = verbs;

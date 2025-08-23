@@ -21,23 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.invirgance.convirgance.web.service;
-
-import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- * Implemented by services that route requests to other services. Provides APIs
- * for finding the final service that is routed to.
+ * Collection of filters specific to the Web Services APIs
  * 
  * @author jbanes
  */
-public interface Routable
-{
-    /**
-     * Obtain the service that will handle this request.
-     * 
-     * @param request the object representing the http request
-     * @return the service that will handle this request, or null if it cannot be routed
-     */
-    public Service getDestinationService(HttpRequest request);
-}
+package com.invirgance.convirgance.web.filter;
