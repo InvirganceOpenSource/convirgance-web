@@ -559,6 +559,16 @@ public class HttpRequest
         else return loader.get((jakarta.servlet.http.HttpServletRequest)request);
     }
 
+    /**
+     * Call a service at the specified path and return the resulting stream of
+     * data.
+     * 
+     * @param path url path of the service to call
+     * @param method the HTTP method to use when calling the service
+     * @param data input data for the call
+     * @param response http response object
+     * @return a stream of data returned by the service
+     */
     public Iterable<JSONObject> call(String path, String method, JSONObject data, HttpResponse response)
     {
         var request = getParameterizedWrapper(new JSONObject(), path, method, data);
@@ -571,6 +581,13 @@ public class HttpRequest
         return ((Processable)service).process(wrapped);
     }
 
+    /**
+     * Include a page in the flow of processing
+     * 
+     * @param path path to the page or servlet
+     * @param parameters override request parameters with these values
+     * @param response http response object 
+     */
     public void include(String path, JSONObject parameters, HttpResponse response)
     {
         var dispatcher = execRequestMethod("getRequestDispatcher", path);
@@ -580,6 +597,13 @@ public class HttpRequest
         execMethod(dispatcher, "include", types, request, response.getResponse());
     }
 
+    /**
+     * Forward the flow of processing to another page or servlet
+     * 
+     * @param path path to the page or servlet
+     * @param parameters override request parameters with these values
+     * @param response http response object 
+     */
     public void forward(String path, JSONObject parameters, HttpResponse response)
     {
         var dispatcher = execRequestMethod("getRequestDispatcher", path);

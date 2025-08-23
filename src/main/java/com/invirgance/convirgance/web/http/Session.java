@@ -28,7 +28,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 
 /**
- *
+ * Provides access to user's HTTP session information
+ * 
  * @author jbanes
  */
 public class Session
@@ -54,11 +55,27 @@ public class Session
         catch(Exception e) { throw new ConvirganceException(e); }
     }
     
+    /**
+     * Returns the object bound with the specified name in this session, or 
+     * <code>null</code> if no object is bound under the name.
+     * 
+     * @param name a string specifying the name of the object
+     * @return the object with the specified name
+     * @exception IllegalStateException if this method is called on an invalidated session
+     */
     public Object getAttribute(String name)
     {
         return execSessionMethod("getAttribute", name);
     }
     
+    /**
+     * Binds an object to this session, using the name specified. If an object
+     * of the same name is already bound to the session, the object is replaced.
+     * 
+     * @param name the name to which the object is bound
+     * @param value the object to be bound
+     * @exception IllegalStateException if this method is called on an invalidated session
+     */
     public void setAttribute(String name, Object value)
     {
         Class clazz = session.getClass();
@@ -71,6 +88,13 @@ public class Session
         catch(Exception e) { throw new ConvirganceException(e); }
     }
     
+    /**
+     * Returns an <code>Iterator</code> of String objects containing the names of all the 
+     * objects bound to this session.
+     * 
+     * @return an <code>Iterator</code> of String objects specifying the names of all the objects bound to this session
+     * @exception IllegalStateException if this method is called on an invalidated session
+     */
     public Iterable<String> getAttributeNames()
     {
         Enumeration<String> enumeration = (Enumeration<String>)execSessionMethod("getAttributeNames");
