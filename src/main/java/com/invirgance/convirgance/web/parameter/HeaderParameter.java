@@ -26,7 +26,10 @@ package com.invirgance.convirgance.web.parameter;
 import com.invirgance.convirgance.web.http.HttpRequest;
 
 /**
- *
+ * Retrieve the value of an HTTP Header. The returned key defaults to the same
+ * name as the header if <code>headerName</code> is not set, but can be overridden 
+ * by setting the <code>name</code> parameter.
+ * 
  * @author jbanes
  */
 public class HeaderParameter implements Parameter
@@ -35,6 +38,11 @@ public class HeaderParameter implements Parameter
     private String headerName;
     private String defaultValue;
 
+    /**
+     * Name of the parameter. Defaults to <code>headerName</code> if not set.
+     * 
+     * @return name of the parameter
+     */
     @Override
     public String getName()
     {
@@ -43,29 +51,55 @@ public class HeaderParameter implements Parameter
         return headerName;
     }
 
+    /**
+     * Sets the name of the parameter. Also sets <code>headerName</code> if
+     * not set.
+     * 
+     * @param name name of the parameter
+     */
     public void setName(String name)
     {
         this.name = name;
         
-        // Fallback to name if the user doesn't set the SessionKey
+        // Fallback to name if the user doesn't set the header name
         if(this.headerName == null) this.headerName = name;
     }
 
+    /**
+     * The header to retrieve from the HTTP request
+     * 
+     * @return name of the header
+     */
     public String getHeaderName()
     {
         return headerName;
     }
 
+    /**
+     * Set the header to retrieve from the HTTP request
+     * 
+     * @param headerName name of the header
+     */
     public void setHeaderName(String headerName)
     {
         this.headerName = headerName;
     }
 
+    /**
+     * The value to return if the header is not found
+     * 
+     * @return default value to return
+     */
     public String getDefaultValue()
     {
         return defaultValue;
     }
 
+    /**
+     * Set the value to return if the header is not found
+     * 
+     * @param defaultValue default value to return
+     */
     public void setDefaultValue(String defaultValue)
     {
         this.defaultValue = defaultValue;

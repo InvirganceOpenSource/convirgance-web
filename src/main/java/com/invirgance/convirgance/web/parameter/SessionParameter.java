@@ -27,7 +27,8 @@ import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
- *
+ * Retrieves a value from the http session
+ * 
  * @author jbanes
  */
 @Wiring
@@ -37,6 +38,11 @@ public class SessionParameter implements Parameter
     private String sessionKey;
     private String defaultValue;
 
+    /**
+     * The name of the parameter or the session key if name has not been set
+     * 
+     * @return name of the parameter
+     */
     @Override
     public String getName()
     {
@@ -45,6 +51,11 @@ public class SessionParameter implements Parameter
         return sessionKey;
     }
     
+    /**
+     * Set the name of the parameter
+     * 
+     * @param name name of the parameter
+     */
     public void setName(String name)
     {
         this.name = name;
@@ -53,21 +64,41 @@ public class SessionParameter implements Parameter
         if(this.sessionKey == null) this.sessionKey = name;
     }
 
+    /**
+     * The key to retrieve from the session
+     * 
+     * @return key to retrieve from session
+     */
     public String getSessionKey()
     {
         return sessionKey;
     }
 
+    /**
+     * Set the key to retrieve from the session
+     * 
+     * @param key key to retrieve from session
+     */
     public void setSessionKey(String key)
     {
         this.sessionKey = key;
     }
 
+    /**
+     * Set the value to return if the session value is null
+     * 
+     * @return default value to return
+     */
     public String getDefaultValue()
     {
         return defaultValue;
     }
 
+    /**
+     * Set the value to return if the session value is null
+     * 
+     * @param defaultValue default value to return
+     */
     public void setDefaultValue(String defaultValue)
     {
         this.defaultValue = defaultValue;
