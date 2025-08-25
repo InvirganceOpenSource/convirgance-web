@@ -299,4 +299,35 @@ public class HttpResponse
     {
         execResponseMethod("setLocale");
     }
+    
+    /**
+     * Forces any content in the buffer to be written to the client. A call to 
+     * this method automatically commits the response, meaning the status code 
+     * and headers will be written.
+     */
+    public void flushBuffer()
+    {
+        execResponseMethod("flushBuffer");
+    }
+    
+    /**
+     * Clears the content of the underlying buffer in the response without 
+     * clearing headers or status code. If the response has been committed, 
+     * this method throws an <code>IllegalStateException</code>.
+     */
+    public void resetBuffer()
+    {
+        execResponseMethod("resetBuffer");
+    }
+    
+    /**
+     * Returns a boolean indicating if the response has been committed. A 
+     * committed response has already had its status code and headers written.
+     * 
+     * @return a boolean indicating if the response has been committed
+     */
+    public boolean isCommitted()
+    {
+        return (Boolean)execResponseMethod("isCommitted");
+    }
 }
