@@ -12,7 +12,7 @@ Create a Java EE / Jakarta EE project that supports Servlet 3.0 or higher. Add t
 <dependency>
     <groupId>com.invirgance</groupId>
     <artifactId>convirgance-web</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
