@@ -21,6 +21,7 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.web.binding;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
@@ -77,8 +78,8 @@ public class QueryBinding implements Binding
 
     /**
      * Sets the query used to retrieve data. 
-     * Named bindings can be used, they will be bound by key, to the 
-     * parameters provided through through {@link #getBinding(JSONObject)}.
+     * Named bindings can be used. They will be bound by key to the 
+     * parameters provided through {@link #getBinding(JSONObject)}.
      * 
      * @param sql The new SQL query.
      */
@@ -91,6 +92,7 @@ public class QueryBinding implements Binding
     {
         DataSource source = ApplicationInitializer.lookup(this.jndiName);
         
+        if(jndiName == null) throw new ConvirganceException("jndiName property must be set!");
         if(source == null) return DBMS.lookup(jndiName);
         
         return new DBMS(source);
