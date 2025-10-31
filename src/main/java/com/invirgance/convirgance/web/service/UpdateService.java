@@ -44,8 +44,8 @@ import javax.sql.DataSource;
  * the ability to run multiple queries as a single transaction. If any of the queries
  * fails, the entire transaction will be rolled back.
  * <br>
- * For convenience, the {@link #setSql()} method is provided to configure a single
- * query. This is the same as calling {@link setStatements()} with a single list
+ * For convenience, the {@link #setSql(String)} method is provided to configure a single
+ * query. This is the same as calling {@link #setStatements(List)} with a single list
  * item.
  * @author jbanes
  */
