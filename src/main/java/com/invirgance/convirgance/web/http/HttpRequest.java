@@ -255,9 +255,9 @@ public class HttpRequest
      * 
      * @return The URL.
      */    
-    public String getRequestURL()
+    public StringBuffer getRequestURL()
     {
-        return (String)execRequestMethod("getRequestURL");
+        return (StringBuffer)execRequestMethod("getRequestURL");
     }
     
     /**

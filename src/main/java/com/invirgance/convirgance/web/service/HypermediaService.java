@@ -206,6 +206,8 @@ public class HypermediaService implements Service
                 path = request.getContextPath() + path;
             }
             
+            if(request.getQueryString() != null) path += "?" + request.getQueryString();
+            
             response.sendRedirect(path);
             return;
         }
