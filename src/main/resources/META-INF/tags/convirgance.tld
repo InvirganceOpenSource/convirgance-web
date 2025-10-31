@@ -297,6 +297,49 @@
           <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
     </tag>
+    <tag>
+        <name>for</name>
+        <tag-class>com.invirgance.convirgance.web.tag.ForTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>
+        <![CDATA[
+            Loops from begin (inclusive) to end (exclusive) incrementing by step.
+            <br><br>
+            Example:<br><br>
+            <code>
+            &lt;virge:for var="index" begin="0" end="4" step="2"&gt;<br>
+            &lt;div&gt;${index+1}&lt;/div&gt;<br>
+            &lt;/virge:for&gt;</code>
+        ]]>
+        </description>
+        <attribute>
+          <name>var</name>
+          <description>Variable to assign the index of the for loop to</description>
+          <required>true</required>
+        </attribute>
+        <attribute>
+          <name>scope</name>
+          <description>Scope of the variable (i.e. page, request, session, or application)</description>
+        </attribute>
+        <attribute>
+          <name>begin</name>
+          <type>int</type>
+          <description>The value to start the loop with</description>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>end</name>
+          <type>int</type>
+          <description>End the loop when the index reaches this number</description>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+          <name>step</name>
+          <type>int</type>
+          <description>Increment the index by this value each loop. Defaults to 1. Must be greater than 0.</description>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
     <function>
         <name>json</name>
         <function-class>com.invirgance.convirgance.web.tag.UtilityFunctions</function-class>
