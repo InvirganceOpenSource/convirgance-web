@@ -28,7 +28,6 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.service.Processable;
 import com.invirgance.convirgance.web.service.Routable;
-import com.invirgance.convirgance.web.service.SelectService;
 import com.invirgance.convirgance.web.service.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -36,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Utility class for invoking {@link SelectService} instances and returning
+ * Utility class for invoking {@link Processable} services and returning
  * their results as {@link JSONObject}s.
  * 
  * @author jbanes
