@@ -71,20 +71,20 @@ public class MathFunctions
     {
         if(value == null) return null;
         
-        return Math.floor(value.doubleValue());
+        return (long)Math.floor(value.doubleValue());
     }
     
     public static Number ceil(Number value)
     {
         if(value == null) return null;
         
-        return Math.ceil(value.doubleValue());
+        return (long)Math.ceil(value.doubleValue());
     }
     
     public static Number round(Number value)
     {
         if(value == null) return null;
         
-        return Math.round(value.doubleValue());
+        return (long)Math.round(value.doubleValue());
     }
 }
