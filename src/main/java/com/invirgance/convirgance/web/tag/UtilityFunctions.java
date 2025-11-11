@@ -96,7 +96,7 @@ public class UtilityFunctions
      */
     public static String html(Object value) 
     {
-        if(value == null) return "";
+        if(value == null) return null;
         
         return String.valueOf(value)
                      .replaceAll("&", "&amp;")
