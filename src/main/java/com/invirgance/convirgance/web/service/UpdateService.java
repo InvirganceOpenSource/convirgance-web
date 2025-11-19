@@ -37,6 +37,7 @@ import com.invirgance.convirgance.web.servlet.ServiceState;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 
 /**
@@ -55,6 +56,7 @@ public class UpdateService implements Service, Processable
     private List<Parameter> parameters;
     private String jndiName;
     private List<String> statements;
+    private Map<String,String> children;
 
     /**
      * Gets the list of parameters to extract from the request.
@@ -147,6 +149,16 @@ public class UpdateService implements Service, Processable
         
         this.statements.add(sql);
     }
+
+    public Map<String, String> getChildren()
+    {
+        return children;
+    }
+
+    public void setChildren(Map<String, String> children)
+    {
+        this.children = children;
+    }
     
     private DBMS lookup()
     {
@@ -158,6 +170,29 @@ public class UpdateService implements Service, Processable
         return new DBMS(source);
     }
 
+    private void addChildTransactions(TransactionOperation transaction, JSONObject parameters)
+    {
+        Query query;
+        
+        for(String key : children.keySet())
+        {
+            if(parameters.get(key) == null) continue;
+            
+            for(var child : (JSONArray<JSONObject>)parameters.getJSONArray(key, new JSONArray()))
+            {
+                query = new Query(children.get(key));
+            
+                for(String parameter : query.getParameterNames())
+                {
+                    if(child.containsKey(parameter)) query.setBinding(parameter, child.get(parameter));
+                    else query.setBinding(parameter, parameters.get(parameter));
+                }
+                
+                transaction.add(query);
+            }
+        }
+    }
+    
     @Override
     public Iterable<JSONObject> process(HttpRequest request)
     {
@@ -181,6 +216,9 @@ public class UpdateService implements Service, Processable
         {
             transaction.add(new Query(statement, params));
         }
+        
+        // Descend into children
+        if(children != null) addChildTransactions(transaction, params);
         
         // Execute the transaction
         dbms.update(transaction);
