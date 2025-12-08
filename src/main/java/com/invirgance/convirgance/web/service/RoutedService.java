@@ -82,17 +82,24 @@ public class RoutedService implements Service, Routable
 
             sortedKeys.sort((String left, String right) -> {
                 int diff = right.length() - left.length();
+                
                 boolean starLeft = left.contains("*");
                 boolean starRight = right.contains("*");
-                String splitLeft = left.split("\\*")[0];
-                String splitRight = right.split("\\*")[0];
+                
+                String[] splitLeft = left.split("\\*");
+                String[] splitRight = right.split("\\*");
+                String startLeft = left.split("\\*")[0];
+                String startRight = right.split("\\*")[0];
                 
                 if(!starLeft && !starRight) return diff;
-                if(starLeft && starRight && splitLeft.length() == splitRight.length()) return diff;
-                if(starLeft && starRight) return (splitRight.length() - splitLeft.length());
+                if(starLeft && starRight && startLeft.length() == startRight.length()) return diff;
+                if(starLeft && starRight) return (startRight.length() - startLeft.length());
                 
-                if(starLeft && right.startsWith(splitLeft)) return -1;
-                if(starRight && left.startsWith(splitRight)) return 1;
+                if(starLeft && right.startsWith(startLeft) && splitLeft.length == splitRight.length) return 1;
+                if(starLeft && right.startsWith(startLeft)) return -1;
+                
+                if(starRight && left.startsWith(startRight) && splitLeft.length == splitRight.length) return -1;
+                if(starRight && left.startsWith(startRight)) return 1;
 
                 return diff;
             });
