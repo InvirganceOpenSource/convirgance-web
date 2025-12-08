@@ -23,10 +23,12 @@
  */
 package com.invirgance.convirgance.web.service;
 
+import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +80,22 @@ public class RoutedService implements Service, Routable
         {
             sortedKeys = new ArrayList<>(routes.keySet());
 
-            sortedKeys.sort((String left, String right) -> right.length() - left.length());
+            sortedKeys.sort((String left, String right) -> {
+                int diff = right.length() - left.length();
+                boolean starLeft = left.contains("*");
+                boolean starRight = right.contains("*");
+                String splitLeft = left.split("\\*")[0];
+                String splitRight = right.split("\\*")[0];
+                
+                if(!starLeft && !starRight) return diff;
+                if(starLeft && starRight && splitLeft.length() == splitRight.length()) return diff;
+                if(starLeft && starRight) return (splitRight.length() - splitLeft.length());
+                
+                if(starLeft && right.startsWith(splitLeft)) return -1;
+                if(starRight && left.startsWith(splitRight)) return 1;
+
+                return diff;
+            });
         }
     }
     
@@ -96,7 +113,7 @@ public class RoutedService implements Service, Routable
     {
         String[] actual = trimContext(request.getRequestURI(), request.getContextPath()).split("/");
         String[] components;
-        
+
         routes: for(String path : sortedKeys)
         {
             components = trimContext(path, request.getContextPath()).split("/");
