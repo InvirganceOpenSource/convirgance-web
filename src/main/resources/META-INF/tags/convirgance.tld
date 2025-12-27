@@ -26,6 +26,11 @@
           <description>Variable to assign the parsed object to</description>
         </attribute>
         <attribute>
+          <name>parse</name>
+          <description>The JSON String to parse. This can be used to parse a variable as an alternative to a JSON body.</description>
+          <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
           <name>scope</name>
           <description>Scope of the variable (i.e. page, request, session, or application)</description>
         </attribute>
