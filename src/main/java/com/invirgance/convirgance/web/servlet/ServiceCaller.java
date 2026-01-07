@@ -26,6 +26,7 @@ package com.invirgance.convirgance.web.servlet;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.web.http.HttpResponse;
 import com.invirgance.convirgance.web.service.Processable;
 import com.invirgance.convirgance.web.service.Routable;
 import com.invirgance.convirgance.web.service.Service;
@@ -58,15 +59,24 @@ public class ServiceCaller
         Service service = loader.get(request, path);
         ParameterizedHttpRequest wrapper = new ParameterizedHttpRequest(request, path, parameters);
         
+        Object oldRequest = ServiceState.get("request");
+        Iterable<JSONObject> results;
+        
         while(service instanceof Routable) service = ((Routable)service).getDestinationService(wrapper);
 
         if(service == null) throw new IllegalArgumentException(path + " is not found.");
         if(!(service instanceof Processable)) throw new IllegalArgumentException(path + " does not implement Processable and thus cannot return data.");
         
-        return ((Processable)service).process(wrapper);
+        ServiceState.set("request", new HttpRequest(wrapper));
+        
+        results = ((Processable)service).process(wrapper);
+        
+        ServiceState.set("request", oldRequest);
+        
+        return results;
     }
     
-    private static class ParameterizedHttpRequest extends HttpRequest
+    public static class ParameterizedHttpRequest extends HttpRequest
     {
         private JSONObject parameters;
         private String path;
