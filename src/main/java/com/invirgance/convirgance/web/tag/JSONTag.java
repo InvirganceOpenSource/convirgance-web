@@ -100,11 +100,23 @@ public class JSONTag implements BodyTag
         this.variable = variable;
     }
 
+    /**
+     * Gets the JSON string to be parsed instead of using the body of the tag.
+     * 
+     * @return the json string
+     */
     public String getParse()
     {
         return parse;
     }
 
+    /**
+     * Sets a JSON string to be parsed instead of using the contents of the tag
+     * body. This is useful when a data record contains a JSON string which needs
+     * to be parsed as the body only allows static JSON.
+     * 
+     * @param parse the json string to parse
+     */
     public void setParse(String parse)
     {
         this.parse = parse;

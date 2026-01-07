@@ -150,11 +150,26 @@ public class UpdateService implements Service, Processable
         this.statements.add(sql);
     }
 
+    /**
+     * A mapping of child records to SQL statements to execute for each child
+     * record.
+     * 
+     * @return a map with the key names of JSONArrays for the key, and SQL statements for the value
+     */
     public Map<String, String> getChildren()
     {
         return children;
     }
 
+    /**
+     * A mapping of child records to SQL statements to execute for each child
+     * record. The key of the map must point to a JSONArray in the data. For
+     * each entry in the JSONArray, the SQL statement provided will be executed.
+     * Each SQL statement will be part of the same transaction as the statement
+     * list.
+     * 
+     * @param children a map with the key names of JSONArrays for the key, and SQL statements for the value
+     */
     public void setChildren(Map<String, String> children)
     {
         this.children = children;

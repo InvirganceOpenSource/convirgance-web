@@ -4,7 +4,9 @@
     <short-name>convirgance</short-name>
     <uri>convirgance:math</uri>
     <description>
-        Tags and functions for exposing Math functions to JSP pages
+        Tags and functions for exposing Math functions to JSP pages. These functions
+        automatically coerce the numbers between different types like integers and 
+        doubles.
     </description>
     <function>
         <name>abs</name>
