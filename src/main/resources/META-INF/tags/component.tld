@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+    <tlib-version>2.0</tlib-version>
+    <short-name>component</short-name>
+    <uri>convirgance:component</uri>
+    <description>
+        ...
+    </description>
+    <tag>
+        <name>include</name>
+        <tag-class>com.invirgance.convirgance.web.tag.IncludeTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>Include a component page</description>
+        <attribute>
+            <name>page</name>
+            <description>
+            <![CDATA[
+                Path of page to include in the webapp directory
+            ]]>
+            </description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>flush</name>
+            <description>
+            <![CDATA[
+                Flush the current output before including the component
+            ]]>
+            </description>
+        </attribute>
+    </tag>
+    <tag>
+        <name>arg</name>
+        <tag-class>com.invirgance.convirgance.web.tag.ArgTag</tag-class>
+        <body-content>scriptless</body-content>
+        <description>Pass an argument to the component</description>
+        <attribute>
+            <name>name</name>
+            <description>Name of the argument</description>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <description>Value of the argument. Expressions can be used to pass a value of any type.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>
+
