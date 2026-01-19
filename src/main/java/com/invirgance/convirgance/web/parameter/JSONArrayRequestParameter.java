@@ -34,7 +34,8 @@ import com.invirgance.convirgance.web.service.UpdateService;
 
 /**
  * A mechanism for converting multiple HTML form input elements with the same name
- * into an array of objects that can be processed by Convirgance.<br>
+ * into an array of objects that can be processed by Convirgance.
+ * <br>
  * <br>
  * For example, a sequence of suggested scheduling dates might look like this:<br>
  * <code><pre>
