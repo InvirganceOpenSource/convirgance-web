@@ -28,8 +28,55 @@ import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.web.http.HttpRequest;
 import com.invirgance.convirgance.wiring.annotation.Wiring;
 
+// JavaDoc imports
+import com.invirgance.convirgance.web.consumer.QueryConsumer;
+import com.invirgance.convirgance.web.service.UpdateService;
+
 /**
- *
+ * A mechanism for converting multiple HTML form input elements with the same name
+ * into an array of objects that can be processed by Convirgance.<br>
+ * <br>
+ * For example, a sequence of suggested scheduling dates might look like this:<br>
+ * <code><pre>
+ * &lt;div>
+ *     &lt;input type="date" name="available_date" value="2025-02-10">
+ *     &lt;select name="time_of_day">
+ *         &lt;option selected>Morning&lt;/option>
+ *         &lt;option>Afternoon&lt;/option>
+ *         &lt;option>Evening&lt;/option>
+ *     &lt;/select>
+ * &lt;/div>
+ * &lt;div>
+ *     &lt;input type="date" name="available_date" value="2025-02-12">
+ *     &lt;select name="time_of_day">
+ *         &lt;option>Morning&lt;/option>
+ *         &lt;option>Afternoon&lt;/option>
+ *         &lt;option selected>Evening&lt;/option>
+ *     &lt;/select>
+ * &lt;/div>
+ * </pre></code>
+ * The submitted form would contain the values in order, like this:<br>
+ * <code><pre>
+ * available_date=2025-02-10&amp;time_of_day=Morning&amp;available_date=2025-02-12&amp;time_of_day=Evening
+ * </pre></code>
+ * Using this <code>Parameter</code> with the <code>available_date</code>
+ * and <code>time_of_day</code> keys like this:<br>
+ * <code><pre>
+ * &lt;JSONArrayRequestParameter>
+ *     &lt;name>fields&lt;/name>
+ *     &lt;keys>available_date,time_of_day&lt;/keys>
+ * &lt;/JSONArrayRequestParameter>
+ * </pre></code>
+ * ...results in the following value being returned:<br>
+ * <code><pre>
+ * [
+ *     {"available_date": "2025-02-10", "time_of_day": "Morning"},
+ *     {"available_date": "2025-02-12", "time_of_day": "Evening"}
+ * ]
+ * </pre></code>
+ * This list of records could then be processed using the &lt;children> feature
+ * in the {@link QueryConsumer} or {@link UpdateService} features.
+ * 
  * @author jbanes
  */
 @Wiring
@@ -44,16 +91,34 @@ public class JSONArrayRequestParameter implements Parameter
         return name;
     }
 
+    /**
+     * Sets the name of the parameter to return
+     * 
+     * @param name the name of the parameter
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * Get the array of parameter names that will be read into the array
+     * 
+     * @return an array of parameter names
+     */
     public String[] getKeys()
     {
         return keys;
     }
 
+    /**
+     * Set a list of request parameter names that will be included in the array.
+     * Note that the parameter names must appear the same number of times in the
+     * correct order to ensure that the values are correctly decoded into the 
+     * correct object in the {@link JSONArray}.
+     * 
+     * @param keys 
+     */
     public void setKeys(String[] keys)
     {
         this.keys = keys;
