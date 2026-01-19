@@ -38,7 +38,7 @@ import com.invirgance.convirgance.web.service.UpdateService;
  * <br>
  * <br>
  * For example, a sequence of suggested scheduling dates might look like this:<br>
- * <code><pre>
+ * <pre><code>
  * &lt;div>
  *     &lt;input type="date" name="available_date" value="2025-02-10">
  *     &lt;select name="time_of_day">
@@ -55,26 +55,26 @@ import com.invirgance.convirgance.web.service.UpdateService;
  *         &lt;option selected>Evening&lt;/option>
  *     &lt;/select>
  * &lt;/div>
- * </pre></code>
+ * </code></pre>
  * The submitted form would contain the values in order, like this:<br>
- * <code><pre>
+ * <pre><code>
  * available_date=2025-02-10&amp;time_of_day=Morning&amp;available_date=2025-02-12&amp;time_of_day=Evening
- * </pre></code>
+ * </code></pre>
  * Using this <code>Parameter</code> with the <code>available_date</code>
  * and <code>time_of_day</code> keys like this:<br>
- * <code><pre>
+ * <pre><code>
  * &lt;JSONArrayRequestParameter>
  *     &lt;name>fields&lt;/name>
  *     &lt;keys>available_date,time_of_day&lt;/keys>
  * &lt;/JSONArrayRequestParameter>
- * </pre></code>
+ * </code></pre>
  * ...results in the following value being returned:<br>
- * <code><pre>
+ * <pre><code>
  * [
  *     {"available_date": "2025-02-10", "time_of_day": "Morning"},
  *     {"available_date": "2025-02-12", "time_of_day": "Evening"}
  * ]
- * </pre></code>
+ * </code></pre>
  * This list of records could then be processed using the &lt;children> feature
  * in the {@link QueryConsumer} or {@link UpdateService} features.
  * 

@@ -4,7 +4,19 @@
     <short-name>component</short-name>
     <uri>convirgance:component</uri>
     <description>
-        ...
+    <![CDATA[
+        Provides a componentization library for JSP pages. While the 
+        <code>&lt;jsp:include></code> tag is capable of taking parameters, those
+        parameters are limited to string values. This library allows parameters
+        of any type to be passed using EL expressions in the value.
+        <br>
+        <br>
+        Importantly, arguments can then be accessed using the <code>${args}</code>
+        object rather than overriding the contents of the <code>${params}</code>
+        object.<br>
+        This allows for sophisticated and reusable server-side components to be 
+        constructed quickly and easily.
+    ]]>
     </description>
     <tag>
         <name>include</name>
