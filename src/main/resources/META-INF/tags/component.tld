@@ -22,7 +22,17 @@
         <name>include</name>
         <tag-class>com.invirgance.convirgance.web.tag.IncludeTag</tag-class>
         <body-content>scriptless</body-content>
-        <description>Include a component page</description>
+        <description>
+        <![CDATA[
+    Include a component page. The path to the page can include EL expressions
+    allowing for dynamic includes.
+    <br><br>
+    Example:
+    <pre><code>
+    &lt;component:include page="/WEB-INF/components/header_${site_section}.jsp" />
+    </code></pre>
+        ]]>
+        </description>
         <attribute>
             <name>page</name>
             <description>
@@ -46,7 +56,19 @@
         <name>arg</name>
         <tag-class>com.invirgance.convirgance.web.tag.ArgTag</tag-class>
         <body-content>scriptless</body-content>
-        <description>Pass an argument to the component</description>
+        <description>
+        <![CDATA[
+    Pass an argument to the component
+    <br><br>
+    Example:
+    <pre><code>
+    &lt;component:include page="/WEB-INF/components/header.jsp">
+        &lt;component:arg name="current_page" value="Home" />
+        &lt;component:arg name="user_info" value="${user_info}" />
+    &lt;/component:include>
+    </code></pre>
+        ]]>
+        </description>
         <attribute>
             <name>name</name>
             <description>Name of the argument</description>
