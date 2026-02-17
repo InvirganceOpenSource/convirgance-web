@@ -12,7 +12,7 @@ Create a Java EE / Jakarta EE project that supports Servlet 3.0 or higher. Add t
 <dependency>
     <groupId>com.invirgance</groupId>
     <artifactId>convirgance-web</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
 
@@ -71,8 +71,8 @@ Try to avoid picking a JNDI name that is already in use. Whatever you set here y
 
 ## Documentation
 
-- [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-web/) (Work in Progress)
-- [TLDDocs](https://docs.invirgance.com/tlddocs/convirgance-web/) (Work in Progress)
+- [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-web/) 
+- [TLDDocs](https://docs.invirgance.com/tlddocs/convirgance-web/) 
 
 
 ## Examples
