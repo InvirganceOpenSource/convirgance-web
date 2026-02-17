@@ -151,10 +151,9 @@ public class ForTag extends BodyTagSupport
     @Override
     public int doAfterBody() throws JspException
     {
-        if(index >= end) return SKIP_BODY;
-        
-        
         index += step;
+        
+        if(index >= end) return SKIP_BODY;
         
         if(variable != null)
         {
