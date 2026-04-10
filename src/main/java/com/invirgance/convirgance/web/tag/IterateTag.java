@@ -211,6 +211,8 @@ public class IterateTag extends BodyTagSupport
     @Override
     public int doStartTag() throws JspException
     {
+        if(items == null) return SKIP_BODY;
+        
         iterator = items.iterator();
         index = 0;
         count = 0;
