@@ -184,12 +184,12 @@ public class HypermediaService implements Service
             parameters.put(parameter.getName(), parameter.getValue(request));
         }
         
-        if(method.equals("POST"))
+        if(!method.equals("GET"))
         {
             if(!lookup.containsKey(verb)) throw new ConvirganceException("No service handler for verb /" + verb + " on path " + path);
             
             for(String name : request.getParameterNames()) data.put(name, request.getParameter(name));
-            
+
             results = request.call(constructPath(lookup.get(verb).getService(), parameters), lookup.get(verb).getMethod(), data, response);
             path = path.substring(0, path.length() - verb.length() - 1);
             
@@ -208,7 +208,8 @@ public class HypermediaService implements Service
             
             if(request.getQueryString() != null) path += "?" + request.getQueryString();
             
-            response.sendRedirect(path);
+            response.setHeader("Location", path);
+            response.setStatus(303);
             return;
         }
         
