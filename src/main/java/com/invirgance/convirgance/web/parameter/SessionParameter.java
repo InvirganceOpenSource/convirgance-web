@@ -107,7 +107,7 @@ public class SessionParameter implements Parameter
     @Override
     public Object getValue(HttpRequest request)
     {
-        Object result = request.getSession().getAttribute(name);
+        Object result = request.getSession().getAttribute(sessionKey);
         
         if(result == null) return defaultValue;
         
