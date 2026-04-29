@@ -216,6 +216,7 @@ public class UpdateService implements Service, Processable
         var transaction = new TransactionOperation();
         
         if(this.parameters == null) this.parameters = new ArrayList<>();
+        if(this.statements == null) this.statements = new ArrayList<>();
         
         // Obtain the parameters for binding
         for(Parameter parameter : this.parameters)

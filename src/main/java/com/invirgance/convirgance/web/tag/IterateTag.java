@@ -266,7 +266,7 @@ public class IterateTag extends BodyTagSupport
     @Override
     public int doEndTag() throws JspException
     {
-        if(iterator.hasNext() && iterator instanceof AutoCloseable)
+        if(iterator != null && iterator.hasNext() && iterator instanceof AutoCloseable)
         {
             try
             {
