@@ -24,6 +24,7 @@
 package com.invirgance.convirgance.web.parameter;
 
 import com.invirgance.convirgance.web.http.HttpRequest;
+import com.invirgance.convirgance.wiring.annotation.Wiring;
 
 /**
  * Retrieve the value of an HTTP Header. The returned key defaults to the same
@@ -32,6 +33,7 @@ import com.invirgance.convirgance.web.http.HttpRequest;
  * 
  * @author jbanes
  */
+@Wiring
 public class HeaderParameter implements Parameter
 {
     private String name;
