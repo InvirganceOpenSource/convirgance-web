@@ -568,8 +568,50 @@ public class HttpRequest
      * @param data input data for the call
      * @param response http response object
      * @return a stream of data returned by the service
+     * @deprecated HttpResponse is never used, so this version is deprecated
      */
+    @Deprecated
     public Iterable<JSONObject> call(String path, String method, JSONObject data, HttpResponse response)
+    {
+        return call(path, method, data);
+    }
+    
+    /**
+     * Call a service at the specified path and return the resulting stream of
+     * data. The call to the service will use the same HTTP method as the current
+     * request.
+     * 
+     * @param path url path of the service to call
+     * @return a stream of data returned by the service
+     */
+    public Iterable<JSONObject> call(String path)
+    {
+        return call(path, getMethod(), null);
+    }
+    
+    /**
+     * Call a service at the specified path and return the resulting stream of
+     * data.
+     * 
+     * @param path url path of the service to call
+     * @param method the HTTP method to use when calling the service
+     * @return a stream of data returned by the service
+     */
+    public Iterable<JSONObject> call(String path, String method)
+    {
+        return call(path, method, null);
+    }
+    
+    /**
+     * Call a service at the specified path and return the resulting stream of
+     * data.
+     * 
+     * @param path url path of the service to call
+     * @param method the HTTP method to use when calling the service
+     * @param data input data for the call
+     * @return a stream of data returned by the service
+     */
+    public Iterable<JSONObject> call(String path, String method, JSONObject data)
     {
         var request = getParameterizedWrapper(new JSONObject(), path, method, data);
         var wrapped = new HttpRequest(request);
